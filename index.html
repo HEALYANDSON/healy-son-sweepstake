@@ -1006,7 +1006,7 @@ function renderAll() {
   renderMgTrack();
   renderMgAdminControls();
   state.lastRefreshTime = new Date();
-  document.getElementById('lastRefresh').textContent = state.rapidApiKey ? 'Updated ' + new Date().toLocaleTimeString() : 'Demo scores';
+  // lastRefresh updated by manualRefresh()
 }
 
 // ========= LEADERBOARD =========
@@ -1414,9 +1414,9 @@ async function manualRefresh() {
     if (apiStatus) {
       apiStatus.className = 'status-msg err';
       apiStatus.style.display = 'block';
-      apiStatus.textContent = '❌ ' + e.message + ' — showing demo scores';
+      apiStatus.textContent = '❌ ' + e.message + ' — retrying next refresh';
     }
-    document.getElementById('lastRefresh').textContent = 'Demo scores';
+    document.getElementById('lastRefresh').textContent = 'Retrying...';
   } finally {
     btns.forEach(b => { b.textContent = '🔄 Refresh Now'; b.disabled = false; });
   }

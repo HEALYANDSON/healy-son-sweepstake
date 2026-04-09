@@ -903,16 +903,14 @@ function fmtScore(score) {
   return String(score);
 }
 
-// Convert raw strokes to relative-to-par (Augusta par = 72)
-const COURSE_PAR = 72;
-function roundToPar(strokes) {
-  if (strokes === null || strokes === undefined) return null;
-  if (Math.abs(strokes) <= 15) return strokes; // already to-par
-  return strokes - COURSE_PAR;
+// Rounds are already to-par from scores.js
+function roundToPar(val) {
+  if (val === null || val === undefined) return null;
+  return val;
 }
-function fmtRound(strokes) {
-  if (strokes === null || strokes === undefined) return '-';
-  return fmtScore(roundToPar(strokes));
+function fmtRound(val) {
+  if (val === null || val === undefined) return '-';
+  return fmtScore(val);
 }
 
 function calcEntryScore(entry) {

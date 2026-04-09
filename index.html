@@ -178,14 +178,14 @@
   .mg-major-status { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; margin-top:0.2rem; }
 
   /* ROLL OF HONOUR TABLE */
-  .roh-table { width:100%; border-collapse:collapse; table-layout:fixed; }
-  .roh-table th { background:rgba(201,168,76,0.1); color:var(--gold); font-size:0.55rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.4rem 0.2rem; text-align:left; border-bottom:1px solid rgba(201,168,76,0.2); }
-  .roh-table td { font-size:0.6rem; padding:0.35rem 0.2rem; text-align:left; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .roh-year-col { width:34px; }
-  .roh-year { font-family:'Bebas Neue',sans-serif; font-size:0.85rem; color:var(--gold); white-space:nowrap; }
+  .roh-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .roh-table { border-collapse:collapse; table-layout:auto; white-space:nowrap; }
+  .roh-table th { background:rgba(201,168,76,0.1); color:var(--gold); font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.45rem 0.6rem; text-align:left; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .roh-table td { font-size:0.72rem; padding:0.4rem 0.6rem; text-align:left; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--cream); white-space:nowrap; }
+  .roh-year { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--gold); }
   .roh-current td { background:rgba(201,168,76,0.06); }
   .roh-current .roh-year { color:var(--gold-light); }
-  .roh-dnp { color:var(--muted) !important; }
+  .roh-dnp { color:var(--muted) !important; font-size:0.65rem !important; }
   .roh-tbd { color:var(--gold) !important; font-style:italic; }
   .roh-table tr:hover td { background:rgba(255,255,255,0.03); }
 
@@ -433,7 +433,7 @@
   <div class="tab-content" id="tab-rollofhonour">
     <div class="section-title">Roll of Honour</div>
     <div class="section-sub">HEALY&amp;SON Productions · Major Sweepstakes Champions</div>
-    <div id="honor-cards" style="margin-top:1rem;"></div>
+    <div class="roh-wrap" style="margin-top:1rem;"><div id="honor-cards"></div></div>
   </div>
 
   <!-- T&Cs TAB -->

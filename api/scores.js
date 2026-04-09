@@ -14,16 +14,11 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    if (!response.ok) {
-      throw new Error('ESPN returned ' + response.status);
-    }
+    if (!response.ok) throw new Error('ESPN returned ' + response.status);
 
     const data = await response.json();
-
     const events = data && data.events && data.events[0];
-    if (!events) {
-      return res.status(200).json({ players: [], status: 'no_data' });
-    }
+    if (!events) return res.status(200).json({ players: [], status: 'no_data' });
 
     const competition = events.competitions && events.competitions[0];
     const competitors = (competition && competition.competitors) || [];
@@ -32,34 +27,47 @@ module.exports = async function handler(req, res) {
 
     const leaderboard = competitors.map(function(comp) {
       const athlete = comp.athlete || {};
-      const linescores = comp.linescores || [];
 
-      // totalToPar and todayScore come from ESPN already relative to par
+      // These come from ESPN already relative to par — trust them completely
       const scoreStr = comp.score || 'E';
       const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
 
       const todayStr = comp.today || 'E';
       const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
 
-      // Build per-round to-par scores by diffing cumulative totals
-      // linescores[i].value is raw strokes — but we can derive to-par per round
-      // from the cumulative total and today's score:
-      // e.g. after R2: totalToPar = R1_par + R2_par
-      // so R1_par = totalToPar - todayScore (if currently in R2)
-      // For completed rounds, ESPN linescores also contain a toPar field
-      const roundScores = linescores.map(function(ls) {
-        // Try toPar field first (most reliable)
-        if (ls.toPar !== undefined && ls.toPar !== null) {
-          return ls.toPar === 'E' ? 0 : parseInt(ls.toPar) || 0;
+      // Derive per-round to-par by diffing the cumulative total
+      // totalToPar = R1 + R2 + R3 + R4 (completed rounds) + today (in progress)
+      // So previous rounds = totalToPar - todayScore
+      // For multiple completed rounds we split evenly (best we can without hole data)
+      // But actually: completed round scores are in linescores as strokes
+      // We use: completedRoundPar = totalToPar - todayScore, spread across completed rounds
+      const linescores = comp.linescores || [];
+      const completedRounds = round > 1 ? round - 1 : 0;
+      const completedTotalToPar = totalToPar - todayScore;
+
+      // Build round scores array - all relative to par
+      const roundScores = [null, null, null, null];
+
+      if (completedRounds >= 1 && linescores.length >= 1) {
+        // We know total of all completed rounds = completedTotalToPar
+        // Get individual round strokes from linescores and convert each
+        // Par per completed round = 72 (Augusta full round)
+        for (let i = 0; i < completedRounds && i < linescores.length; i++) {
+          const strokes = parseInt(linescores[i].value);
+          if (!isNaN(strokes) && strokes > 20) {
+            // Raw strokes — convert to par
+            roundScores[i] = strokes - 72;
+          } else if (!isNaN(strokes)) {
+            // Already to-par somehow
+            roundScores[i] = strokes;
+          }
         }
-        // Fall back: raw strokes - par (Augusta = 72)
-        const val = ls.value;
-        if (val === undefined || val === null || isNaN(val)) return null;
-        const strokes = parseInt(val);
-        // If it looks like it's already to-par (small number), use it directly
-        if (Math.abs(strokes) <= 15) return strokes;
-        return strokes - 72;
-      });
+      }
+
+      // Current round = todayScore (already to-par from ESPN)
+      if (round >= 1) {
+        roundScores[round - 1] = todayScore;
+      }
 
       const playerStatus = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
       const isCut = playerStatus.toLowerCase().includes('cut');
@@ -74,7 +82,7 @@ module.exports = async function handler(req, res) {
         totalToPar: totalToPar,
         todayScore: todayScore,
         thru: comp.thru || (isCut ? 'F' : '-'),
-        rounds: roundScores,  // now all relative to par
+        rounds: roundScores,
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
         sortOrder: comp.sortOrder || 999
       };
@@ -91,10 +99,6 @@ module.exports = async function handler(req, res) {
 
   } catch (err) {
     console.error('ESPN fetch error:', err);
-    return res.status(500).json({
-      error: err.message,
-      players: [],
-      status: 'error'
-    });
+    return res.status(500).json({ error: err.message, players: [], status: 'error' });
   }
 };

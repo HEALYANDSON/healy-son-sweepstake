@@ -28,39 +28,39 @@ module.exports = async function handler(req, res) {
     const leaderboard = competitors.map(function(comp) {
       const athlete = comp.athlete || {};
 
-      // totalToPar — the only number we fully trust from ESPN, already relative to par
+      // totalToPar
       const scoreStr = comp.score || 'E';
       const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
 
-      // todayScore — ESPN's "today" field, relative to par for current round
+      // todayScore
       const todayStr = comp.today || 'E';
       const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
 
-      // thru — how many holes completed today
-      const thru = comp.thru || '-';
+      // Position — try multiple ESPN field locations
+      const posDisplay =
+        (comp.status && comp.status.position && comp.status.position.displayName) ||
+        (comp.status && comp.status.position && comp.status.position.name) ||
+        (comp.sortOrder ? 'T' + comp.sortOrder : '-');
 
-      // Build per-round scores — all relative to par
-      // During Round 1: R1 = totalToPar (they are the same thing)
-      // During Round 2: R1 = totalToPar - todayScore, R2 = todayScore
-      // During Round 3: R1+R2 already final, R3 = todayScore
-      // During Round 4: R1+R2+R3 already final, R4 = todayScore
+      // Thru — try multiple field names ESPN uses
+      const thruRaw = comp.thru !== undefined ? comp.thru : (comp.holesPlayed !== undefined ? comp.holesPlayed : null);
+      const thru = thruRaw !== null && thruRaw !== undefined && thruRaw !== '' ? String(thruRaw) : '-';
+
+      // Build per-round scores
       const roundScores = [null, null, null, null];
 
       if (currentRound === 1) {
-        // R1 in progress — score = today = totalToPar
         roundScores[0] = totalToPar;
       } else {
-        // For completed rounds, derive from linescores (raw strokes - 72)
         const linescores = comp.linescores || [];
         for (let i = 0; i < currentRound - 1 && i < linescores.length; i++) {
           const strokes = parseInt(linescores[i].value);
           if (!isNaN(strokes) && strokes > 50) {
-            roundScores[i] = strokes - 72; // raw strokes to par
+            roundScores[i] = strokes - 72;
           } else if (!isNaN(strokes)) {
-            roundScores[i] = strokes; // already to par
+            roundScores[i] = strokes;
           }
         }
-        // Current round = todayScore
         roundScores[currentRound - 1] = todayScore;
       }
 
@@ -69,17 +69,25 @@ module.exports = async function handler(req, res) {
       const isWD = playerStatus.toLowerCase().includes('wd') || playerStatus.toLowerCase().includes('withdrew');
       const isDQ = playerStatus.toLowerCase().includes('dq');
 
+      // Also dump raw comp fields we might need for debugging
       return {
         name: athlete.displayName || '',
         lastName: athlete.lastName || '',
         firstName: athlete.firstName || '',
-        position: (comp.status && comp.status.position && comp.status.position.displayName) || String(comp.sortOrder || ''),
+        position: posDisplay,
         totalToPar: totalToPar,
-        todayScore: currentRound === 1 ? totalToPar : todayScore, // during R1, today = total
+        todayScore: currentRound === 1 ? totalToPar : todayScore,
         thru: thru,
         rounds: roundScores,
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
-        sortOrder: comp.sortOrder || 999
+        sortOrder: comp.sortOrder || 999,
+        // Debug: expose raw ESPN fields so we can see what's available
+        _raw: {
+          thru: comp.thru,
+          holesPlayed: comp.holesPlayed,
+          status: comp.status,
+          sortOrder: comp.sortOrder
+        }
       };
     });
 

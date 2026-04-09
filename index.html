@@ -1256,11 +1256,11 @@ function renderHonorTable() {
   if (!container) return;
 
   const majors = [
-    { key: 'masters',  short: 'Masters' },
-    { key: 'pga',      short: 'PGA' },
-    { key: 'us',       short: 'US Open' },
-    { key: 'open',     short: 'The Open' },
-    { key: 'players',  short: 'Players' }
+    { key: 'players', short: 'Players' },
+    { key: 'masters', short: 'Masters' },
+    { key: 'pga',     short: 'PGA' },
+    { key: 'us',      short: 'US Open' },
+    { key: 'open',    short: 'The Open' }
   ];
 
   const fmt = v => (!v || v === 'DNP' || v === '?') ? (v === 'DNP' ? 'DNP' : '?') : v;

@@ -23,50 +23,45 @@ module.exports = async function handler(req, res) {
     const competition = events.competitions && events.competitions[0];
     const competitors = (competition && competition.competitors) || [];
     const status = (events.status && events.status.type && events.status.type.description) || 'In Progress';
-    const round = (events.status && events.status.period) || 1;
+    const currentRound = (events.status && events.status.period) || 1;
 
     const leaderboard = competitors.map(function(comp) {
       const athlete = comp.athlete || {};
 
-      // These come from ESPN already relative to par — trust them completely
+      // totalToPar — the only number we fully trust from ESPN, already relative to par
       const scoreStr = comp.score || 'E';
       const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
 
+      // todayScore — ESPN's "today" field, relative to par for current round
       const todayStr = comp.today || 'E';
       const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
 
-      // Derive per-round to-par by diffing the cumulative total
-      // totalToPar = R1 + R2 + R3 + R4 (completed rounds) + today (in progress)
-      // So previous rounds = totalToPar - todayScore
-      // For multiple completed rounds we split evenly (best we can without hole data)
-      // But actually: completed round scores are in linescores as strokes
-      // We use: completedRoundPar = totalToPar - todayScore, spread across completed rounds
-      const linescores = comp.linescores || [];
-      const completedRounds = round > 1 ? round - 1 : 0;
-      const completedTotalToPar = totalToPar - todayScore;
+      // thru — how many holes completed today
+      const thru = comp.thru || '-';
 
-      // Build round scores array - all relative to par
+      // Build per-round scores — all relative to par
+      // During Round 1: R1 = totalToPar (they are the same thing)
+      // During Round 2: R1 = totalToPar - todayScore, R2 = todayScore
+      // During Round 3: R1+R2 already final, R3 = todayScore
+      // During Round 4: R1+R2+R3 already final, R4 = todayScore
       const roundScores = [null, null, null, null];
 
-      if (completedRounds >= 1 && linescores.length >= 1) {
-        // We know total of all completed rounds = completedTotalToPar
-        // Get individual round strokes from linescores and convert each
-        // Par per completed round = 72 (Augusta full round)
-        for (let i = 0; i < completedRounds && i < linescores.length; i++) {
+      if (currentRound === 1) {
+        // R1 in progress — score = today = totalToPar
+        roundScores[0] = totalToPar;
+      } else {
+        // For completed rounds, derive from linescores (raw strokes - 72)
+        const linescores = comp.linescores || [];
+        for (let i = 0; i < currentRound - 1 && i < linescores.length; i++) {
           const strokes = parseInt(linescores[i].value);
-          if (!isNaN(strokes) && strokes > 20) {
-            // Raw strokes — convert to par
-            roundScores[i] = strokes - 72;
+          if (!isNaN(strokes) && strokes > 50) {
+            roundScores[i] = strokes - 72; // raw strokes to par
           } else if (!isNaN(strokes)) {
-            // Already to-par somehow
-            roundScores[i] = strokes;
+            roundScores[i] = strokes; // already to par
           }
         }
-      }
-
-      // Current round = todayScore (already to-par from ESPN)
-      if (round >= 1) {
-        roundScores[round - 1] = todayScore;
+        // Current round = todayScore
+        roundScores[currentRound - 1] = todayScore;
       }
 
       const playerStatus = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
@@ -80,8 +75,8 @@ module.exports = async function handler(req, res) {
         firstName: athlete.firstName || '',
         position: (comp.status && comp.status.position && comp.status.position.displayName) || String(comp.sortOrder || ''),
         totalToPar: totalToPar,
-        todayScore: todayScore,
-        thru: comp.thru || (isCut ? 'F' : '-'),
+        todayScore: currentRound === 1 ? totalToPar : todayScore, // during R1, today = total
+        thru: thru,
         rounds: roundScores,
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
         sortOrder: comp.sortOrder || 999
@@ -93,7 +88,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       players: leaderboard,
       tournamentStatus: status,
-      round: round,
+      round: currentRound,
       lastUpdated: new Date().toISOString()
     });
 

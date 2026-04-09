@@ -1004,15 +1004,40 @@ function getAdjustedScore(playerKey) {
   return rawScore;
 }
 
+// Resolve a pick name to its canonical key in state.liveScores / state.prices
+// Handles diacritics, case differences, and partial matches
+function resolveKey(pickName) {
+  if (!pickName) return pickName;
+  const norm = s => stripDiacritics((s || '').toLowerCase().trim());
+  const pn = norm(pickName);
+  // 1. Exact match
+  if (state.liveScores[pickName] !== undefined) return pickName;
+  if (state.prices[pickName] !== undefined) return pickName;
+  // 2. Normalised match against liveScores keys
+  const lsKey = Object.keys(state.liveScores).find(k => norm(k) === pn);
+  if (lsKey) return lsKey;
+  // 3. Normalised match against price keys
+  const prKey = Object.keys(state.prices).find(k => norm(k) === pn);
+  if (prKey) return prKey;
+  // 4. Prefix match (normalised)
+  if (pn.length >= 4) {
+    const prefix = pn.substring(0, 5);
+    const fuzzy = Object.keys(state.liveScores).find(k => norm(k).startsWith(prefix))
+               || Object.keys(state.prices).find(k => norm(k).startsWith(prefix));
+    if (fuzzy) return fuzzy;
+  }
+  return pickName; // fallback — return original
+}
+
 function calcEntryScore(entry) {
   let total = 0;
-  entry.players.forEach(p => { total += getAdjustedScore(p); });
+  entry.players.forEach(p => { total += getAdjustedScore(resolveKey(p)); });
   return total;
 }
 function calcBudget(entry) {
   let total = 0;
   entry.players.forEach(p => {
-    total += state.prices[p] || 0;
+    total += state.prices[resolveKey(p)] || 0;
   });
   return parseFloat(total.toFixed(1));
 }
@@ -1044,18 +1069,20 @@ function buildLbEntry(e, pos) {
     : `<span class="lb-pos-num" style="color:var(--gold);">${pos}</span>`;
 
   const playersInline = e.players.map(p => {
-    const sc = state.liveScores[p] ? getAdjustedScore(p) : null;
+    const rk = resolveKey(p);
+    const sc = state.liveScores[rk] ? getAdjustedScore(rk) : null;
     const scFmt = sc !== null ? fmtScore(sc) : 'E';
     const scCol = sc === null ? 'color:var(--muted)' : sc < 0 ? 'color:var(--up)' : sc > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-    const status = state.liveScores[p] ? state.liveScores[p].status : '';
+    const status = state.liveScores[rk] ? state.liveScores[rk].status : '';
     const statusTag = status ? ` <span style="font-size:0.55rem;color:var(--gold);font-weight:600;">${status}</span>` : '';
     return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;">${p}&nbsp;<span style="${scCol};font-weight:700;">${scFmt}</span>${statusTag}</span>`;
   }).join('');
 
   const picks = e.players.map(p => {
-    const score = state.liveScores[p];
-    const price = state.prices[p];
-    const sc = score ? getAdjustedScore(p) : null;
+    const rk = resolveKey(p);
+    const score = state.liveScores[rk];
+    const price = state.prices[rk] || state.prices[p];
+    const sc = score ? getAdjustedScore(rk) : null;
     const status = score ? score.status : '';
     const chipCls = status === 'CUT' ? 'cut' : (status === 'WD' || status === 'DNF' || status === 'DQ') ? 'wd' : '';
     const scoreCls2 = sc === null ? 'even' : sc < 0 ? 'good' : sc > 0 ? 'bad' : 'even';
@@ -1522,13 +1549,29 @@ async function manualRefresh() {
   }
 }
 
+// Strip accents/diacritics from a string so e.g. "Åberg" === "Aberg"
+function stripDiacritics(str) {
+  if (!str) return '';
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u00f8/g,'o').replace(/\u00d8/g,'O').replace(/\u00e6/g,'ae').replace(/\u00c6/g,'Ae').replace(/\u00df/g,'ss');
+}
+
 function matchPlayerName(lastName, fullName) {
-  // Known aliases — ESPN display name variations → our price list keys
+  // Known aliases — full name or last name → our price list keys
+  // Includes diacritic variants so both "Aberg" and "Åberg" resolve correctly
   const aliases = {
-    'Min Woo Lee': 'LeeMW', 'Si Woo Kim': 'KimSW', 'Sungjae Im': 'Im',
-    'Tom Kim': 'KimSW', 'Byeong Hun An': 'An',
-    'Rasmus Hojgaard': 'HojgaardN', 'Nicolai Hojgaard': 'HojgaardN',
+    // Diacritic variants first
+    'Ludvig Åberg': 'Aberg', 'Åberg': 'Aberg', 'Ludvig Aberg': 'Aberg',
+    'Søren Kjeldsen': 'Kjeldsen', 'Rasmus Hojgåard': 'HojgaardR',
+    'Sébastien Gros': 'Gros', 'Adrián Otaegui': 'Otaegui',
+    'Rafa Cabrera Bello': 'Cabrera', 'Ángel Cabrera': 'Cabrera',
+    'Bernd Wiesberger': 'Wiesberger', 'Sébastien Gros': 'Gros',
+    // Full name aliases
+    'Min Woo Lee': 'LeeMW', 'Min-Woo Lee': 'LeeMW',
+    'Si Woo Kim': 'KimSW', 'Tom Kim': 'KimM',
+    'Byeong Hun An': 'An', 'Sungjae Im': 'Im',
+    'Rasmus Hojgaard': 'HojgaardR', 'Nicolai Hojgaard': 'HojgaardN',
     'Rasmus Neergaard-Petersen': 'NeergaardPetersen',
+    'Rasmus Neergaard Petersen': 'NeergaardPetersen',
     'Bryson DeChambeau': 'DeChambeau', 'Jon Rahm': 'Rahm',
     'Rory McIlroy': 'McIlroy', 'Robert MacIntyre': 'MacIntyre',
     'Scottie Scheffler': 'Scheffler', 'Xander Schauffele': 'Schauffele',
@@ -1536,68 +1579,74 @@ function matchPlayerName(lastName, fullName) {
     'Justin Rose': 'Rose', 'Danny Willett': 'Willett',
     'Lee Westwood': 'Westwood', 'Shane Lowry': 'Lowry',
     'Tyrrell Hatton': 'Hatton', 'Viktor Hovland': 'Hovland',
-    'Ludvig Aberg': 'Aberg', 'Akshay Bhatia': 'Bhatia',
-    'Wyndham Clark': 'Clark', 'Corey Conners': 'Conners',
-    'Chris Kirk': 'Kirk', 'Tom Hoge': 'Hoge',
-    'Sepp Straka': 'Straka', 'Chris Gotterup': 'Gotterup',
-    'Hideki Matsuyama': 'Matsuyama', 'Collin Morikawa': 'Morikawa',
-    'Brooks Koepka': 'Koepka', 'Jordan Spieth': 'Spieth',
-    'Justin Thomas': 'Thomas', 'Patrick Reed': 'Reed',
-    'Cameron Smith': 'Smith', 'Max Homa': 'Homa',
-    'Adam Scott': 'Scott', 'Jason Day': 'Day',
-    'Russell Henley': 'Henley', 'Harris English': 'English',
-    'Keegan Bradley': 'Bradley', 'Kurt Kitayama': 'Kitayama',
-    'Sahith Theegala': 'Theegala', 'Rickie Fowler': 'Fowler',
-    'Nico Echavarria': 'Echavarria', 'Cam Davis': 'Davis',
-    'Denny McCarthy': 'McCarthy', 'Nick Taylor': 'Taylor',
-    'Sam Burns': 'Burns', 'Patrick Cantlay': 'Cantlay',
-    'Sungjae Im': 'Im', 'Joaquin Niemann': 'Niemann',
-    'Taylor Moore': 'Moore', 'Austin Eckroat': 'Eckroat',
-    'Nicolai Hojgaard': 'HojgaardN', 'Rasmus Hojgaard': 'HojgaardN',
+    'Akshay Bhatia': 'Bhatia', 'Wyndham Clark': 'Clark',
+    'Corey Conners': 'Conners', 'Sepp Straka': 'Straka',
+    'Chris Gotterup': 'Gotterup', 'Hideki Matsuyama': 'Matsuyama',
+    'Collin Morikawa': 'Morikawa', 'Brooks Koepka': 'Koepka',
+    'Jordan Spieth': 'Spieth', 'Justin Thomas': 'Thomas',
+    'Patrick Reed': 'Reed', 'Cameron Smith': 'Smith',
+    'Max Homa': 'Homa', 'Adam Scott': 'Scott',
+    'Jason Day': 'Day', 'Russell Henley': 'Henley',
+    'Harris English': 'English', 'Keegan Bradley': 'Bradley',
+    'Kurt Kitayama': 'Kitayama', 'Sahith Theegala': 'Theegala',
+    'Rickie Fowler': 'Fowler', 'Nico Echavarria': 'Echavarria',
+    'Cam Davis': 'Davis', 'Denny McCarthy': 'McCarthy',
+    'Nick Taylor': 'Taylor', 'Sam Burns': 'Burns',
+    'Patrick Cantlay': 'Cantlay', 'Joaquin Niemann': 'Niemann',
     'Aldrich Potgieter': 'Potgieter', 'Neal Shipley': 'Shipley',
-    'Thriston Lawrence': 'Lawrence', 'Andy Ogletree': 'Ogletree',
     'Jose Maria Olazabal': 'Olazabal', 'Angel Cabrera': 'Cabrera',
     'Haotong Li': 'Li', 'Takumi Kanaya': 'Kanaya',
     'Naoyuki Kataoka': 'Kataoka', 'Sami Valimaki': 'Valimaki',
     'Adrien Dumont de Chassart': 'DumontDeChassart',
     'Stewart Cink': 'Cink', 'Zach Johnson': 'JohnsonZ',
     'Davis Riley': 'Riley', 'Will Zalatoris': 'Zalatoris',
-    'Luke List': 'List', 'Kevin Yu': 'Yu',
-    'Thomas Detry': 'Detry', 'Matt Wallace': 'Wallace',
-    'Grant Forrest': 'Forrest', 'Alex Noren': 'Noren',
-    'Jorge Campillo': 'Campillo', 'Min-Woo Lee': 'LeeMW'
+    'Alex Noren': 'Noren', 'Luke List': 'List',
+    'Matt Wallace': 'Wallace', 'Thomas Detry': 'Detry',
+    'Jorge Campillo': 'Campillo', 'Grant Forrest': 'Forrest',
+    'Kevin Yu': 'Yu', 'Bailey Tardy': 'Tardy',
+    'Sam Bairstow': 'Bairstow', 'Daniel Brown': 'Brown',
+    'Luke Donald': 'Donald', 'Paul Waring': 'Waring',
+    'Andrew Johnston': 'Johnston', 'Callum Shinkwin': 'Shinkwin',
+    'Thorbjorn Olesen': 'Olesen', 'Thomas Bjorn': 'Bjorn'
   };
 
-  // 1. Try full name alias first (most reliable)
-  if (fullName && aliases[fullName]) return aliases[fullName];
+  // Normalise a name: lowercase + strip diacritics
+  const norm = s => stripDiacritics((s || '').toLowerCase().trim());
 
-  // 2. Try last name alias
-  if (lastName && aliases[lastName]) return aliases[lastName];
+  // Build normalised alias lookup (so "Åberg" and "Aberg" both hit the same entry)
+  const normAliases = {};
+  Object.entries(aliases).forEach(([k,v]) => { normAliases[norm(k)] = v; });
 
-  const ln = (lastName || '').trim();
-  const fn = (fullName || '').trim();
+  const normFull = norm(fullName);
+  const normLast = norm(lastName);
 
-  // 3. Direct key match on lastName
-  if (ln && state.prices[ln] !== undefined) return ln;
+  // 1. Exact alias match on full name (normalised)
+  if (normFull && normAliases[normFull]) return normAliases[normFull];
 
-  // 4. Case-insensitive exact match on lastName
-  if (ln) {
-    const lnLower = ln.toLowerCase();
-    const exact = Object.keys(state.prices).find(k => k.toLowerCase() === lnLower);
+  // 2. Exact alias match on last name (normalised)
+  if (normLast && normAliases[normLast]) return normAliases[normLast];
+
+  // 3. Direct key match on lastName (normalised vs price list keys normalised)
+  const priceKeys = Object.keys(state.prices);
+  if (normLast) {
+    const exact = priceKeys.find(k => norm(k) === normLast);
     if (exact) return exact;
   }
 
-  // 5. Try last word of full name as last name
-  if (fn) {
-    const parts = fn.split(' ');
-    const lastWord = parts[parts.length - 1].toLowerCase();
-    const fromFull = Object.keys(state.prices).find(k => k.toLowerCase() === lastWord);
-    if (fromFull) return fromFull;
+  // 4. Normalised full-name last-word match against price keys
+  if (normFull) {
+    const parts = normFull.split(' ');
+    const lastWord = parts[parts.length - 1];
+    if (lastWord.length >= 3) {
+      const fromFull = priceKeys.find(k => norm(k) === lastWord);
+      if (fromFull) return fromFull;
+    }
   }
 
-  // 6. Prefix match as last resort
-  if (ln && ln.length >= 4) {
-    const partial = Object.keys(state.prices).find(k => k.toLowerCase().startsWith(ln.toLowerCase().substring(0, 5)));
+  // 5. Prefix match (normalised) as last resort
+  if (normLast && normLast.length >= 4) {
+    const prefix = normLast.substring(0, 5);
+    const partial = priceKeys.find(k => norm(k).startsWith(prefix));
     if (partial) return partial;
   }
 

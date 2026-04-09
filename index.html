@@ -345,7 +345,8 @@
     <div class="tab active" onclick="showTab('leaderboard',this)">🏆 Leaderboard</div>
     <div class="tab" onclick="showTab('livescores',this)">📊 Live Scores</div>
     <div class="tab" onclick="showTab('stats',this)">📈 Stats</div>
-    <div class="tab" onclick="showTab('majorgeneral',this)">🌍 Major General</div>
+    <div class="tab" onclick="showTab('sergeant',this)">🎖️ Sergeant of Majors</div>
+    <div class="tab" onclick="showTab('rollofhonour',this)">🏅 Roll of Honour</div>
     <div class="tab" onclick="showTab('tnc',this)">📋 T&Cs</div>
 
   </div>
@@ -407,26 +408,30 @@
   </div>
 
   <!-- MAJOR GENERAL TAB -->
-  <div class="tab-content" id="tab-majorgeneral">
-    <div class="section-title">Major General</div>
-    <div class="section-sub">Season standings across all 4 Majors</div>
+  <!-- SERGEANT OF MAJORS TAB -->
+  <div class="tab-content" id="tab-sergeant">
+    <div class="section-title">Sergeant of Majors</div>
+    <div class="section-sub">Season standings across all 4 Majors · Enter all 4 to be eligible</div>
     <div class="mg-track" id="mg-track"></div>
     <div id="mg-standings-wrap" style="display:none;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:1rem;letter-spacing:0.05em;">Overall Standings</div>
       <table class="mg-standings-table" id="mg-standings"></table>
     </div>
     <div id="mg-archives"></div>
-    <div style="margin-top:2rem;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:1rem;letter-spacing:0.05em;">Roll of Honour</div>
-      <div style="overflow-x:auto;">
-        <table class="honor-table">
-          <thead><tr><th>Year</th><th>The Players</th><th>The Masters</th><th>PGA Champ.</th><th>US Open</th><th>The Open</th></tr></thead>
-          <tbody id="honor-body"></tbody>
-        </table>
-      </div>
-    </div>
     <div id="winners-image-section" style="margin-top:1.5rem;display:none;">
       <img id="winners-image" src="" style="max-width:100%;border-radius:10px;" alt="Winners">
+    </div>
+  </div>
+
+  <!-- ROLL OF HONOUR TAB -->
+  <div class="tab-content" id="tab-rollofhonour">
+    <div class="section-title">Roll of Honour</div>
+    <div class="section-sub">HEALY&amp;SON Productions · Major Sweepstakes Champions</div>
+    <div style="overflow-x:auto;margin-top:0.5rem;">
+      <table class="honor-table">
+        <thead><tr><th>Year</th><th>The Players</th><th>The Masters</th><th>PGA Champ.</th><th>US Open</th><th>The Open</th></tr></thead>
+        <tbody id="honor-body"></tbody>
+      </table>
     </div>
   </div>
 
@@ -557,7 +562,7 @@
     </div>
 
     <div class="admin-section">
-      <h3>🏆 Major General Controls</h3>
+      <h3>🏆 Sergeant of Majors Controls</h3>
       <div id="mg-admin-controls"></div>
     </div>
 
@@ -721,7 +726,7 @@ If there is a tie, it will be decided as follows: Best score on Day 4. If still 
 Each entry has a £20m budget. All 4 player selections must not exceed this total combined price.
 
 6. MAJOR GENERAL ELIGIBILITY
-To qualify for the Major General season standings, you must enter all 4 Majors: The Masters, PGA Championship, US Open, and The Open Championship. The Players Championship is a warm-up event and does not count toward Major General standings.
+To qualify for the Sergeant of Majors season standings, you must enter all 4 Majors: The Masters, PGA Championship, US Open, and The Open Championship. The Players Championship is a warm-up event and does not count toward Sergeant of Majors standings.
 
 7. ADMIN DECISION
 Tiebreakers and disputes are handled in-house. Admin decision is final.`;
@@ -866,7 +871,8 @@ function showTab(id, el) {
   if (id === 'leaderboard') renderLeaderboard();
   if (id === 'livescores') renderLiveScores();
   if (id === 'stats') renderStats();
-  if (id === 'majorgeneral') { renderMgTrack(); renderHonorTable(); }
+  if (id === 'sergeant') { renderMgTrack(); }
+  if (id === 'rollofhonour') { renderHonorTable(); }
   if (id === 'share') renderSharePreview();
   if (id === 'manage') { renderPicksValidation(); populatePlayerDropdowns(); }
 }

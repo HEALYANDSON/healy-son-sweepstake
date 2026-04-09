@@ -34,16 +34,32 @@ module.exports = async function handler(req, res) {
       const athlete = comp.athlete || {};
       const linescores = comp.linescores || [];
 
-      const rounds = linescores.map(function(ls) {
-        const val = ls.value;
-        return (val === undefined || val === null || isNaN(val)) ? null : parseInt(val);
-      });
-
+      // totalToPar and todayScore come from ESPN already relative to par
       const scoreStr = comp.score || 'E';
       const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
 
       const todayStr = comp.today || 'E';
       const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
+
+      // Build per-round to-par scores by diffing cumulative totals
+      // linescores[i].value is raw strokes — but we can derive to-par per round
+      // from the cumulative total and today's score:
+      // e.g. after R2: totalToPar = R1_par + R2_par
+      // so R1_par = totalToPar - todayScore (if currently in R2)
+      // For completed rounds, ESPN linescores also contain a toPar field
+      const roundScores = linescores.map(function(ls) {
+        // Try toPar field first (most reliable)
+        if (ls.toPar !== undefined && ls.toPar !== null) {
+          return ls.toPar === 'E' ? 0 : parseInt(ls.toPar) || 0;
+        }
+        // Fall back: raw strokes - par (Augusta = 72)
+        const val = ls.value;
+        if (val === undefined || val === null || isNaN(val)) return null;
+        const strokes = parseInt(val);
+        // If it looks like it's already to-par (small number), use it directly
+        if (Math.abs(strokes) <= 15) return strokes;
+        return strokes - 72;
+      });
 
       const playerStatus = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
       const isCut = playerStatus.toLowerCase().includes('cut');
@@ -58,7 +74,7 @@ module.exports = async function handler(req, res) {
         totalToPar: totalToPar,
         todayScore: todayScore,
         thru: comp.thru || (isCut ? 'F' : '-'),
-        rounds: rounds,
+        rounds: roundScores,  // now all relative to par
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
         sortOrder: comp.sortOrder || 999
       };

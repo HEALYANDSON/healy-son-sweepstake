@@ -903,6 +903,18 @@ function fmtScore(score) {
   return String(score);
 }
 
+// Convert raw strokes to relative-to-par (Augusta par = 72)
+const COURSE_PAR = 72;
+function roundToPar(strokes) {
+  if (strokes === null || strokes === undefined) return null;
+  if (Math.abs(strokes) <= 15) return strokes; // already to-par
+  return strokes - COURSE_PAR;
+}
+function fmtRound(strokes) {
+  if (strokes === null || strokes === undefined) return '-';
+  return fmtScore(roundToPar(strokes));
+}
+
 function calcEntryScore(entry) {
   let total = 0;
   entry.players.forEach(p => {
@@ -1043,10 +1055,10 @@ function renderLiveScores() {
       <td class="${scoreClass(score)}" style="font-weight:700;">${fmtScore(score)}</td>
       <td class="${scoreClass(today)}">${fmtScore(today)}</td>
       <td class="hide-sm">${p.thru || '-'}</td>
-      <td class="hide-sm">${(rounds[0]) || '-'}</td>
-      <td class="hide-sm">${(rounds[1]) || '-'}</td>
-      <td class="hide-sm">${(rounds[2]) || '-'}</td>
-      <td class="hide-sm">${(rounds[3]) || '-'}</td>
+      <td class="hide-sm ${scoreClass(roundToPar(rounds[0]))}">${fmtRound(rounds[0])}</td>
+      <td class="hide-sm ${scoreClass(roundToPar(rounds[1]))}">${fmtRound(rounds[1])}</td>
+      <td class="hide-sm ${scoreClass(roundToPar(rounds[2]))}">${fmtRound(rounds[2])}</td>
+      <td class="hide-sm ${scoreClass(roundToPar(rounds[3]))}">${fmtRound(rounds[3])}</td>
       <td>${statusBadge}</td>
     </tr>`;
   }).join('');

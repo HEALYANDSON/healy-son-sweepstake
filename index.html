@@ -177,22 +177,17 @@
   .mg-major-name { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.05em; }
   .mg-major-status { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; margin-top:0.2rem; }
 
-  /* ROLL OF HONOUR CARDS */
-  .honor-year-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1rem 1.2rem; margin-bottom:0.75rem; transition:border-color 0.15s; }
-  .honor-year-card:last-child { margin-bottom:0; }
-  .honor-year-card.current { border-color:rgba(201,168,76,0.35); background:rgba(201,168,76,0.04); }
-  .honor-year-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem; }
-  .honor-year-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; min-width:60px; }
-  .honor-year-line { flex:1; height:1px; background:rgba(201,168,76,0.15); }
-  .honor-majors-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
-  @media(min-width:480px) { .honor-majors-grid { grid-template-columns:repeat(3,1fr); } }
-  .honor-major-item { background:rgba(255,255,255,0.04); border-radius:8px; padding:0.5rem 0.65rem; }
-  .honor-major-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.2rem; }
-  .honor-major-winner { font-size:0.8rem; font-weight:600; color:var(--cream); line-height:1.3; }
-  .honor-major-winner.dnp { color:var(--muted); font-weight:400; font-style:italic; }
-  .honor-major-winner.tbd { color:var(--gold); }
-  .honor-players-special { grid-column:1/-1; background:rgba(37,211,102,0.05); border:1px solid rgba(37,211,102,0.12); }
-  .honor-players-special .honor-major-label { color:rgba(76,175,132,0.8); }
+  /* ROLL OF HONOUR TABLE */
+  .roh-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+  .roh-table th { background:rgba(201,168,76,0.1); color:var(--gold); font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.4rem 0.3rem; text-align:center; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .roh-table td { font-size:0.68rem; padding:0.35rem 0.3rem; text-align:center; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--cream); line-height:1.3; word-break:break-word; }
+  .roh-year-col { width:36px; }
+  .roh-year { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; color:var(--gold); text-align:center; white-space:nowrap; }
+  .roh-current td { background:rgba(201,168,76,0.06); }
+  .roh-current .roh-year { color:var(--gold-light); }
+  .roh-dnp { color:var(--muted) !important; font-size:0.6rem !important; }
+  .roh-tbd { color:var(--gold) !important; font-style:italic; font-size:0.65rem !important; }
+  .roh-table tr:hover td { background:rgba(255,255,255,0.03); }
 
   /* T&Cs */
   .tnc-section { margin-bottom:2rem; }
@@ -1260,46 +1255,34 @@ function renderHonorTable() {
   const container = document.getElementById('honor-cards');
   if (!container) return;
 
-  const isTbd = v => !v || v === '?' || v === 'TBD';
-  const isDnp = v => v === 'DNP';
+  const majors = [
+    { key: 'masters',  short: 'Masters' },
+    { key: 'pga',      short: 'PGA' },
+    { key: 'us',       short: 'US Open' },
+    { key: 'open',     short: 'The Open' },
+    { key: 'players',  short: 'Players' }
+  ];
 
-  container.innerHTML = [...HONOR_DATA].reverse().map(r => {
-    const isCurrent = r.year === '2026';
-    const majors = [
-      { label: 'The Masters', val: r.masters },
-      { label: 'PGA Championship', val: r.pga },
-      { label: 'US Open', val: r.us },
-      { label: 'The Open', val: r.open }
-    ];
+  const fmt = v => (!v || v === 'DNP' || v === '?') ? (v === 'DNP' ? 'DNP' : '?') : v;
+  const cls = v => (!v || v === '?') ? 'roh-tbd' : v === 'DNP' ? 'roh-dnp' : '';
 
-    const majorItems = majors.map(m => {
-      const cls = isTbd(m.val) ? 'tbd' : isDnp(m.val) ? 'dnp' : '';
-      const display = isTbd(m.val) ? (isCurrent ? 'TBD' : '—') : m.val;
-      return `<div class="honor-major-item">
-        <div class="honor-major-label">${m.label}</div>
-        <div class="honor-major-winner ${cls}">${display}</div>
-      </div>`;
-    }).join('');
-
-    const playersCls = isTbd(r.players) ? 'tbd' : isDnp(r.players) ? 'dnp' : '';
-    const playersDisplay = isTbd(r.players) ? (isCurrent ? 'TBD' : '—') : r.players;
-    const playersItem = `<div class="honor-major-item honor-players-special">
-      <div class="honor-major-label">⛳ The Players Championship (warm-up)</div>
-      <div class="honor-major-winner ${playersCls}">${playersDisplay}</div>
-    </div>`;
-
-    return `<div class="honor-year-card ${isCurrent ? 'current' : ''}">
-      <div class="honor-year-header">
-        <div class="honor-year-num">${r.year}</div>
-        <div class="honor-year-line"></div>
-        ${isCurrent ? '<div style="font-size:0.65rem;color:var(--gold);font-weight:600;letter-spacing:0.1em;">IN PROGRESS</div>' : ''}
-      </div>
-      <div class="honor-majors-grid">
-        ${majorItems}
-        ${playersItem}
-      </div>
-    </div>`;
-  }).join('');
+  container.innerHTML = `
+    <table class="roh-table">
+      <thead>
+        <tr>
+          <th class="roh-year-col">Year</th>
+          ${majors.map(m => `<th>${m.short}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${HONOR_DATA.map(r => `
+          <tr class="${r.year === '2026' ? 'roh-current' : ''}">
+            <td class="roh-year">${r.year}</td>
+            ${majors.map(m => `<td class="${cls(r[m.key])}">${fmt(r[m.key])}</td>`).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
 }
 
 // ========= T&Cs =========

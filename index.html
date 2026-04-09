@@ -1622,7 +1622,6 @@ function renderSharePreview() {
     budget: calcBudget(p)
   })).sort((a,b) => a.score - b.score);
 
-  // Build the share card rows
   const rowsEl = document.getElementById('share-card-rows');
   if (rowsEl) {
     rowsEl.innerHTML = entries.map((e, i) => {
@@ -1631,26 +1630,37 @@ function renderSharePreview() {
       const scColor = sc < 0 ? '#4caf84' : sc > 0 ? '#e05050' : '#f5f0e8';
       const medals = ['🥇','🥈','🥉'];
       const posDisplay = pos <= 3 ? medals[pos-1] : pos + '.';
-      const playersStr = e.players.join(', ');
-      return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-        <div style="min-width:28px;font-size:${pos<=3?'1rem':'0.85rem'};text-align:center;color:#c9a84c;font-family:'Bebas Neue',sans-serif;">${posDisplay}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-weight:600;font-size:0.82rem;color:#f5f0e8;">${e.name}</div>
-          <div style="font-size:0.62rem;color:rgba(245,240,232,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${playersStr}</div>
+
+      // Player chips with individual scores
+      const playerChips = e.players.map(p => {
+        const playerScore = getAdjustedScore(p);
+        const s = state.liveScores[p];
+        const status = s ? s.status : '';
+        const scoreColor = playerScore < 0 ? '#4caf84' : playerScore > 0 ? '#e05050' : 'rgba(245,240,232,0.6)';
+        const statusTag = status ? ` <span style="font-size:0.55rem;background:rgba(228,100,100,0.2);color:#e46464;padding:0.1rem 0.25rem;border-radius:3px;">${status}</span>` : '';
+        return `<span style="display:inline-flex;align-items:center;gap:0.2rem;background:rgba(255,255,255,0.08);border-radius:4px;padding:0.15rem 0.4rem;margin:0.1rem;">
+          <span style="font-size:0.62rem;color:rgba(245,240,232,0.85);">${p}</span>
+          <span style="font-size:0.62rem;font-weight:700;color:${scoreColor};">${fmtScore(playerScore)}</span>${statusTag}
+        </span>`;
+      }).join('');
+
+      return `<div style="padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem;">
+          <div style="min-width:24px;font-size:${pos<=3?'1rem':'0.8rem'};text-align:center;color:#c9a84c;font-family:'Bebas Neue',sans-serif;">${posDisplay}</div>
+          <div style="font-weight:600;font-size:0.85rem;color:#f5f0e8;flex:1;">${e.name}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:${scColor};">${fmtScore(sc)}</div>
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:${scColor};min-width:36px;text-align:right;">${fmtScore(sc)}</div>
+        <div style="padding-left:30px;display:flex;flex-wrap:wrap;">${playerChips}</div>
       </div>`;
     }).join('');
   }
 
-  // Update footer timestamp
   const footer = document.getElementById('share-card-footer');
   if (footer) {
     const now = new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
     footer.textContent = 'healy-son-sweepstake.vercel.app · Updated ' + now;
   }
 }
-
 function copyWhatsAppText() {
   const entries = state.picks.map(p => ({
     ...p,

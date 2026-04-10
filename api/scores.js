@@ -1,117 +1,2134 @@
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEALY&SON Productions — Major Sweepstakes 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --deep: #0d2218;
+    --augusta: #1a4a2e;
+    --mid: #1f5c38;
+    --light-green: #2a7a4a;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --muted: rgba(245,240,232,0.55);
+    --red: #d44;
+    --up: #4caf84;
+    --down: #e05050;
+    --tab-bg: #122b1c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--deep); color:var(--cream); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
 
-  const TOURNAMENT_ID = '401811941';
-  const COURSE_PAR = 72;
+  /* LANDING */
+  #landing { position:fixed; inset:0; z-index:100; background:var(--deep); display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .grid-bg { position:absolute; inset:0; background-image: linear-gradient(rgba(201,168,76,0.07) 1px,transparent 1px), linear-gradient(90deg,rgba(201,168,76,0.07) 1px,transparent 1px); background-size:60px 60px; }
+  .radial-glow { position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(26,74,46,0.55) 0%, transparent 70%); }
+  .landing-inner { position:relative; z-index:2; text-align:center; padding:1.25rem 1.5rem; max-width:480px; width:100%; }
+  .presenter-line { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:0.6rem; opacity:0; animation:fadeUp 0.8s ease 0.2s forwards; }
+  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,13vw,6rem); line-height:0.88; color:var(--cream); letter-spacing:0.02em; opacity:0; animation:fadeUp 0.8s ease 0.5s forwards; }
+  .hero-title span { color:var(--gold); }
+  .hero-sub { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.1rem,4vw,1.6rem); color:var(--gold); letter-spacing:0.2em; margin-top:0.3rem; opacity:0; animation:fadeUp 0.8s ease 0.7s forwards; }
+  .gold-divider { width:60px; height:2px; background:var(--gold); margin:1rem auto; opacity:0; animation:fadeUp 0.8s ease 0.9s forwards; }
 
+  .majors-pills { display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.75rem; opacity:0; animation:fadeUp 0.8s ease 1s forwards; }
+  .major-pill { padding:0.3rem 0.8rem; border-radius:20px; font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; }
+  .major-pill.active { background:var(--gold); color:var(--deep); }
+  .major-pill.inactive { background:rgba(255,255,255,0.08); color:var(--muted); border:1px solid rgba(255,255,255,0.12); }
+
+  .deadline-card { background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.25); border-radius:10px; padding:0.75rem 1.25rem; margin-bottom:0.75rem; opacity:0; animation:fadeUp 0.8s ease 1.1s forwards; }
+  .deadline-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--gold); margin-bottom:0.5rem; }
+  .countdown { display:flex; gap:1.5rem; justify-content:center; align-items:center; }
+  .cnt-unit { text-align:center; }
+  .cnt-num { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; color:var(--cream); line-height:1; }
+  .cnt-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); }
+  .cnt-sep { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; margin-top:-4px; }
+  .deadline-closed { font-size:0.75rem; color:var(--muted); margin-top:0.5rem; }
+
+  .wa-section { background:rgba(37,211,102,0.07); border:1px solid rgba(37,211,102,0.2); border-radius:10px; padding:0.65rem 1rem; opacity:0; animation:fadeUp 0.8s ease 1.2s forwards; }
+  .wa-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#4caf84; margin-bottom:0.5rem; }
+  .wa-link { display:inline-flex; align-items:center; gap:0.5rem; background:#25D366; color:#fff; padding:0.55rem 1.2rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.85rem; transition:transform 0.15s,box-shadow 0.15s; }
+  .wa-link:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(37,211,102,0.35); }
+  .wa-info { font-size:0.72rem; color:var(--muted); margin-top:0.4rem; }
+
+  .code-section { display:flex; flex-direction:column; align-items:center; gap:0.8rem; opacity:0; animation:fadeUp 0.8s ease 1.3s forwards; }
+  .code-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); }
+  .code-row { display:flex; gap:0.5rem; align-items:center; }
+  .code-input { background:rgba(255,255,255,0.06); border:1px solid rgba(201,168,76,0.3); border-radius:8px; padding:0.6rem 1rem; color:var(--cream); font-size:1rem; font-family:'DM Sans',sans-serif; width:120px; text-align:center; letter-spacing:0.2em; outline:none; }
+  .code-input::placeholder { color:var(--muted); letter-spacing:0.05em; }
+  .code-input:focus { border-color:var(--gold); }
+  .enter-btn { background:var(--gold); color:var(--deep); border:none; padding:0.6rem 1.4rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.15s; letter-spacing:0.05em; }
+  .enter-btn:hover { background:var(--gold-light); transform:translateY(-1px); }
+  .code-err { color:#e05050; font-size:0.75rem; display:none; }
+
+  /* APP */
+  #app { display:none; flex-direction:column; min-height:100vh; }
+  .app-header { background:var(--deep); border-bottom:1px solid rgba(201,168,76,0.2); padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+  .app-logo { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--cream); letter-spacing:0.05em; }
+  .app-logo span { color:var(--gold); }
+  .app-badge { font-size:0.65rem; background:var(--gold); color:var(--deep); padding:0.2rem 0.6rem; border-radius:20px; font-weight:700; letter-spacing:0.1em; }
+
+  .tab-bar { background:var(--tab-bg); border-bottom:1px solid rgba(201,168,76,0.15); display:flex; overflow-x:auto; scrollbar-width:none; position:sticky; top:53px; z-index:49; }
+  .tab-bar::-webkit-scrollbar { display:none; }
+  .tab { padding:0.75rem 1.2rem; font-size:0.75rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:all 0.15s; }
+  .tab:hover { color:var(--cream); }
+  .tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .tab.admin-tab { color:rgba(228,100,100,0.7); }
+  .tab.admin-tab.active { color:#e46464; border-bottom-color:#e46464; }
+
+  .tab-content { display:none; padding:1.5rem; max-width:1200px; margin:0 auto; width:100%; }
+  .tab-content.active { display:block; }
+
+  /* MASTERS BANNER */
+  .masters-banner { background:linear-gradient(135deg,var(--augusta),var(--deep)); border:1px solid rgba(201,168,76,0.3); border-radius:10px; padding:0.75rem 1.5rem; margin-bottom:1.5rem; text-align:center; }
+  .masters-banner-text { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.2em; color:var(--gold); }
+  .masters-banner-sub { font-size:0.7rem; color:var(--muted); letter-spacing:0.15em; }
+
+  /* LEADERBOARD SEARCH */
+  .lb-search-wrap { position:relative; margin-bottom:1rem; }
+  .lb-search { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(201,168,76,0.25); border-radius:10px; padding:0.65rem 1rem 0.65rem 2.5rem; color:var(--cream); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.15s; }
+  .lb-search::placeholder { color:rgba(245,240,232,0.3); }
+  .lb-search:focus { border-color:var(--gold); background:rgba(255,255,255,0.08); }
+  .lb-search-icon { position:absolute; left:0.8rem; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.9rem; pointer-events:none; }
+  .lb-search-clear { position:absolute; right:0.8rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; display:none; padding:0; line-height:1; }
+  .lb-search-clear:hover { color:var(--cream); }
+  .lb-no-results { text-align:center; padding:2rem; color:var(--muted); font-size:0.85rem; }
+
+  /* LEADERBOARD — CONDENSED */
+  .lb-entry { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; margin-bottom:0.35rem; overflow:hidden; transition:border-color 0.15s, background 0.15s; cursor:pointer; }
+  .lb-entry:hover { border-color:rgba(201,168,76,0.3); background:rgba(255,255,255,0.05); }
+  .lb-entry.top-3 { border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.05); }
+  .lb-entry.highlighted { border-color:var(--gold) !important; background:rgba(201,168,76,0.1) !important; box-shadow:0 0 0 2px rgba(201,168,76,0.2); }
+  .lb-entry.expanded { border-color:rgba(201,168,76,0.35); background:rgba(255,255,255,0.05); }
+
+  /* Condensed single row */
+  .lb-row { display:grid; grid-template-columns:38px 36px 1fr auto auto; gap:0.5rem; align-items:center; padding:0.55rem 0.75rem; }
+  .lb-pos-num { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--muted); text-align:center; min-width:28px; }
+  .lb-pos-num.podium { font-size:1rem; }
+  .lb-move { font-size:0.6rem; font-weight:700; text-align:center; width:20px; }
+  .lb-move.up { color:var(--up); }
+  .lb-move.down { color:var(--down); }
+  .lb-move.same { color:rgba(255,255,255,0.2); }
+  .lb-name { font-weight:600; font-size:0.85rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
+  .lb-players-inline { font-size:0.65rem; color:var(--muted); margin-top:0.2rem; line-height:1.5; text-align:left; white-space:normal; word-break:break-word; }
+  .lb-budget-inline { font-size:0.65rem; color:var(--muted); white-space:nowrap; }
+  .lb-score-total { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; min-width:36px; text-align:right; }
+  .lb-score-total.pos { color:#e05050; }
+  .lb-score-total.neg { color:var(--up); }
+  .lb-score-total.even { color:var(--cream); }
+  .lb-chevron { color:var(--muted); font-size:0.65rem; transition:transform 0.2s; margin-left:0.25rem; }
+  .lb-entry.expanded .lb-chevron { transform:rotate(180deg); }
+
+  /* Expanded detail panel */
+  .lb-detail { display:none; padding:0.6rem 0.75rem 0.75rem; border-top:1px solid rgba(255,255,255,0.06); }
+  .lb-entry.expanded .lb-detail { display:block; }
+  .lb-picks { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.6rem; }
+  .pick-chip { display:inline-flex; align-items:center; gap:0.3rem; background:rgba(255,255,255,0.07); border-radius:20px; padding:0.2rem 0.6rem; font-size:0.72rem; }
+  .pick-chip .chip-name { color:var(--cream); font-weight:500; }
+  .pick-chip .chip-score { font-weight:700; }
+  .pick-chip .chip-price { color:var(--muted); font-size:0.65rem; }
+  .pick-chip.cut { opacity:0.55; }
+  .pick-chip.wd { opacity:0.5; }
+  .chip-score.good { color:var(--up); }
+  .chip-score.bad { color:var(--down); }
+  .chip-score.even { color:var(--cream); }
+  .budget-bar-wrap { }
+  .budget-bar-label { display:flex; justify-content:space-between; font-size:0.65rem; color:var(--muted); margin-bottom:0.3rem; }
+  .budget-bar-track { height:3px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+  .budget-bar-fill { height:100%; background:var(--gold); border-radius:2px; transition:width 0.5s ease; }
+
+  /* LIVE SCORES */
+  .ls-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+  .ls-table th { text-align:left; padding:0.5rem 0.75rem; background:rgba(201,168,76,0.1); color:var(--gold); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .ls-table td { padding:0.5rem 0.75rem; border-bottom:1px solid rgba(255,255,255,0.05); color:var(--cream); vertical-align:middle; }
+  .ls-table tr:hover td { background:rgba(255,255,255,0.03); }
+  .badge { display:inline-block; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.6rem; font-weight:700; letter-spacing:0.05em; }
+  .badge.cut { background:rgba(228,100,100,0.2); color:#e46464; }
+  .badge.wd { background:rgba(200,150,50,0.2); color:var(--gold); }
+  .badge.dq { background:rgba(180,50,50,0.3); color:#ff6060; }
+  .score-neg { color:var(--up); font-weight:700; }
+  .score-pos { color:var(--down); font-weight:700; }
+  .score-e { color:var(--cream); }
+
+  /* STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .stat-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:1.2rem; text-align:center; }
+  .stat-card-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:0.4rem; }
+  .stat-card-val { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; }
+  .stat-card-sub { font-size:0.72rem; color:var(--cream); margin-top:0.2rem; }
+  .bar-chart { margin-top:1.5rem; }
+  .bar-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; font-size:0.75rem; }
+  .bar-label { width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--cream); text-align:right; font-size:0.7rem; }
+  .bar-track { flex:1; height:18px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden; }
+  .bar-fill { height:100%; background:var(--gold); border-radius:4px; transition:width 0.6s ease; display:flex; align-items:center; padding-left:6px; font-size:0.65rem; font-weight:700; color:var(--deep); }
+
+  /* MAJOR GENERAL */
+  .mg-track { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+  .mg-major-pill { flex:1; min-width:120px; padding:0.75rem; border-radius:10px; text-align:center; border:1px solid; }
+  .mg-major-pill.active { border-color:var(--gold); background:rgba(201,168,76,0.1); }
+  .mg-major-pill.final { border-color:var(--up); background:rgba(76,175,132,0.08); }
+  .mg-major-pill.upcoming { border-color:rgba(255,255,255,0.1); background:rgba(255,255,255,0.02); opacity:0.5; }
+  .mg-major-name { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.05em; }
+  .mg-major-status { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; margin-top:0.2rem; }
+
+  /* ROLL OF HONOUR TABLE */
+  .roh-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .roh-table { border-collapse:collapse; table-layout:auto; white-space:nowrap; }
+  .roh-table th { background:rgba(201,168,76,0.1); color:var(--gold); font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.45rem 0.6rem; text-align:left; border-bottom:1px solid rgba(201,168,76,0.2); }
+  .roh-table td { font-size:0.72rem; padding:0.4rem 0.6rem; text-align:left; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--cream); white-space:nowrap; }
+  .roh-year { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--gold); }
+  .roh-current td { background:rgba(201,168,76,0.06); }
+  .roh-current .roh-year { color:var(--gold-light); }
+  .roh-dnp { color:var(--muted) !important; font-size:0.65rem !important; }
+  .roh-tbd { color:var(--gold) !important; font-style:italic; }
+  .roh-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+  /* T&Cs */
+  .tnc-section { margin-bottom:2rem; }
+  .tnc-section h3 { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--gold); margin-bottom:0.75rem; letter-spacing:0.05em; border-bottom:1px solid rgba(201,168,76,0.2); padding-bottom:0.5rem; }
+  .tnc-section p { color:var(--muted); font-size:0.85rem; line-height:1.7; margin-bottom:0.5rem; }
+  .tnc-section strong { color:var(--cream); }
+
+  /* ADMIN */
+  .admin-section { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.2rem; margin-bottom:1rem; }
+  .admin-section h3 { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold); margin-bottom:1rem; }
+  .admin-input { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:0.6rem 0.8rem; color:var(--cream); font-family:'DM Sans',sans-serif; font-size:0.85rem; width:100%; outline:none; margin-bottom:0.5rem; }
+  .admin-input:focus { border-color:var(--gold); }
+  .admin-btn { background:var(--augusta); border:1px solid var(--gold); color:var(--gold); padding:0.55rem 1.2rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600; cursor:pointer; letter-spacing:0.05em; transition:all 0.15s; }
+  .admin-btn:hover { background:var(--gold); color:var(--deep); }
+  .admin-btn.danger { border-color:#e46464; color:#e46464; }
+  .admin-btn.danger:hover { background:#e46464; color:#fff; }
+  .admin-row { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; margin-bottom:0.5rem; }
+  .admin-label { font-size:0.75rem; color:var(--muted); min-width:120px; }
+  .supabase-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.5rem; margin-top:0.75rem; }
+  .sb-card { background:rgba(62,207,142,0.07); border:1px solid rgba(62,207,142,0.2); border-radius:8px; padding:0.75rem; text-align:center; text-decoration:none; color:var(--cream); font-size:0.75rem; font-weight:600; transition:all 0.15s; }
+  .sb-card:hover { background:rgba(62,207,142,0.15); border-color:rgba(62,207,142,0.4); }
+  .sb-card-icon { font-size:1.2rem; margin-bottom:0.3rem; }
+  .upload-zone { border:2px dashed rgba(201,168,76,0.3); border-radius:10px; padding:1.5rem; text-align:center; cursor:pointer; transition:all 0.15s; color:var(--muted); font-size:0.8rem; }
+  .upload-zone:hover, .upload-zone.drag { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.04); }
+  .upload-zone input { display:none; }
+  .status-msg { font-size:0.75rem; padding:0.4rem 0.8rem; border-radius:6px; display:inline-block; margin-top:0.5rem; }
+  .status-msg.ok { background:rgba(76,175,132,0.15); color:var(--up); }
+  .status-msg.err { background:rgba(228,100,100,0.15); color:#e46464; }
+
+  /* SHARE TAB */
+  .share-preview { background:var(--augusta); border-radius:12px; padding:1.5rem; margin-bottom:1rem; max-width:500px; }
+  .share-preview .sp-title { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:1rem; }
+  .share-btn { background:var(--gold); color:var(--deep); border:none; padding:0.7rem 1.5rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-weight:700; cursor:pointer; font-size:0.85rem; transition:all 0.15s; margin-right:0.5rem; margin-bottom:0.5rem; }
+  .share-btn:hover { background:var(--gold-light); }
+
+  /* MANAGE PICKS */
+  .picks-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin-top:0.75rem; }
+  .picks-table th { background:rgba(201,168,76,0.1); color:var(--gold); padding:0.4rem 0.6rem; text-align:left; font-size:0.65rem; letter-spacing:0.1em; }
+  .picks-table td { padding:0.4rem 0.6rem; border-bottom:1px solid rgba(255,255,255,0.05); color:var(--cream); }
+  .over-budget { color:#e46464; }
+  .ok-budget { color:var(--up); }
+
+  /* PIN PROMPT */
+  #pinPrompt { position:fixed; inset:0; background:rgba(13,34,24,0.92); z-index:200; display:none; align-items:center; justify-content:center; }
+  .pin-box { background:var(--tab-bg); border:1px solid rgba(201,168,76,0.3); border-radius:14px; padding:2rem; text-align:center; max-width:300px; width:90%; }
+  .pin-box h3 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--gold); margin-bottom:1rem; }
+  .pin-box p { font-size:0.8rem; color:var(--muted); margin-bottom:1rem; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+  .live-dot { display:inline-block; width:7px; height:7px; background:var(--up); border-radius:50%; animation:pulse 1.5s ease infinite; margin-right:4px; }
+
+  /* RESPONSIVE */
+  @media(max-width:600px) {
+    .lb-row { grid-template-columns:35px 1fr auto; gap:0.4rem; }
+    .ls-table .hide-sm { display:none; }
+    .honor-table .hide-sm { display:none; }
+    .stats-grid { grid-template-columns:1fr 1fr; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:rgba(255,255,255,0.03); }
+  ::-webkit-scrollbar-thumb { background:rgba(201,168,76,0.3); border-radius:3px; }
+
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--cream); letter-spacing:0.05em; margin-bottom:0.3rem; }
+  .section-sub { font-size:0.75rem; color:var(--muted); margin-bottom:1.5rem; }
+  .refresh-info { font-size:0.7rem; color:var(--muted); display:flex; align-items:center; gap:0.3rem; }
+  select.admin-input { cursor:pointer; }
+
+  .mg-standings-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+  .mg-standings-table th { background:rgba(201,168,76,0.1); color:var(--gold); padding:0.5rem 0.75rem; text-align:left; font-size:0.65rem; letter-spacing:0.1em; }
+  .mg-standings-table td { padding:0.5rem 0.75rem; border-bottom:1px solid rgba(255,255,255,0.05); color:var(--cream); }
+  .archive-toggle { cursor:pointer; color:var(--gold); font-size:0.75rem; text-decoration:underline; }
+  .archive-content { display:none; margin-top:0.75rem; }
+  .archive-content.open { display:block; }
+</style>
+</head>
+<body>
+
+<!-- LANDING PAGE -->
+<div id="landing">
+  <div class="grid-bg"></div>
+  <div class="radial-glow"></div>
+  <div class="landing-inner">
+    <div class="presenter-line">HEALY&amp;SON Productions presents</div>
+    <div class="hero-title">MAJOR<br><span>SWEEPSTAKES</span></div>
+    <div class="hero-sub">2026</div>
+    <div class="gold-divider"></div>
+
+    <div class="majors-pills">
+      <span class="major-pill active">⛳ The Masters</span>
+      <span class="major-pill inactive">PGA Championship</span>
+      <span class="major-pill inactive">US Open</span>
+      <span class="major-pill inactive">The Open</span>
+    </div>
+
+    <div class="deadline-card">
+      <div class="deadline-label">Pick Deadline — Wed 8 Apr 2026 · 21:00 BST</div>
+      <div id="deadline-status" style="font-size:0.8rem;color:var(--gold);font-weight:600;margin-top:0.3rem;"></div>
+    </div>
+
+    <button class="enter-btn" onclick="enterApp()" style="width:100%;padding:0.9rem;font-size:1rem;letter-spacing:0.1em;border-radius:10px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+      <span class="live-dot"></span> VIEW LIVE LEADERBOARD
+    </button>
+
+    <div class="wa-section" style="margin-top:1rem;">
+      <div class="wa-label">📲 Submit Picks via WhatsApp</div>
+      <a class="wa-link" id="wa-link" href="#" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Message Seamus Healy
+      </a>
+      <div class="wa-info" style="font-size:0.68rem;">+44 7825 142966 · Name + 4 picks within £20m budget</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminModal" style="position:fixed;inset:0;background:rgba(13,34,24,0.95);z-index:200;display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--tab-bg);border:1px solid rgba(201,168,76,0.3);border-radius:16px;padding:2rem;text-align:center;max-width:320px;width:90%;position:relative;">
+    <button onclick="closeAdminModal()" style="position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;">✕</button>
+    <div id="adminModalInner">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);letter-spacing:0.05em;margin-bottom:0.25rem;">Admin Access</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem;">HEALY&amp;SON Productions</div>
+      <input class="admin-input" id="adminCodeInput" type="password" maxlength="6" placeholder="Enter code" style="text-align:center;letter-spacing:0.25em;font-size:1.1rem;margin-bottom:0.75rem;" onkeydown="if(event.key==='Enter')tryAdminCode()">
+      <button class="admin-btn" onclick="tryAdminCode()" style="width:100%;padding:0.7rem;">Unlock Admin →</button>
+      <div class="code-err" id="adminCodeErr" style="display:none;margin-top:0.6rem;">Incorrect code. Try again.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL OVERLAY -->
+<div id="adminPanel" style="position:fixed;inset:0;background:var(--deep);z-index:190;display:none;flex-direction:column;overflow:hidden;">
+  <div style="background:var(--tab-bg);border-bottom:1px solid rgba(201,168,76,0.2);padding:0.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.05em;">⚙️ Admin Panel</div>
+    <div style="display:flex;gap:0.5rem;">
+      <button onclick="lockAdmin()" style="background:rgba(228,100,100,0.1);border:1px solid rgba(228,100,100,0.3);color:#e46464;padding:0.3rem 0.75rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;">🔒 Lock</button>
+      <button onclick="closeAdminPanel()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:var(--muted);padding:0.3rem 0.75rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;">✕ Close</button>
+    </div>
+  </div>
+  <div style="display:flex;border-bottom:1px solid rgba(201,168,76,0.15);background:var(--tab-bg);flex-shrink:0;">
+    <div class="tab active" id="ap-tab-manage" onclick="showAdminTab('manage',this)" style="font-size:0.72rem;">📁 Manage Picks</div>
+    <div class="tab" id="ap-tab-share" onclick="showAdminTab('share',this)" style="font-size:0.72rem;">📤 Share</div>
+    <div class="tab" id="ap-tab-admin" onclick="showAdminTab('admin',this)" style="font-size:0.72rem;">⚙️ Settings</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:1.5rem;max-width:900px;width:100%;margin:0 auto;" id="adminPanelContent"></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header class="app-header">
+    <div class="app-logo">HEALY<span>&</span>SON <span style="color:var(--muted);font-size:0.9rem;">Productions</span></div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <div class="refresh-info"><span class="live-dot"></span> <span id="lastRefresh">Live</span></div>
+      <div class="app-badge">2026</div>
+      <button id="admin-header-btn" onclick="openAdminLogin()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:var(--muted);padding:0.3rem 0.75rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--muted)'">⚙️ Admin</button>
+    </div>
+  </header>
+  <div class="tab-bar" id="tabBar">
+    <div class="tab active" onclick="showTab('leaderboard',this)">🏆 Leaderboard</div>
+    <div class="tab" onclick="showTab('livescores',this)">📊 Live Scores</div>
+    <div class="tab" onclick="showTab('stats',this)">📈 Stats</div>
+    <div class="tab" onclick="showTab('sergeant',this)">🎖️ Sergeant of Majors</div>
+    <div class="tab" onclick="showTab('rollofhonour',this)">🏅 Roll of Honour</div>
+    <div class="tab" onclick="showTab('tnc',this)">📋 T&Cs</div>
+
+  </div>
+
+  <!-- LEADERBOARD TAB -->
+  <div class="tab-content active" id="tab-leaderboard">
+    <div class="masters-banner">
+      <div class="masters-banner-text">THE MASTERS TOURNAMENT 2026 · Augusta National · April 9–12</div>
+      <div class="masters-banner-sub">Masters Sweepstake — Live Standings</div>
+    </div>
+    <div class="section-title">Leaderboard</div>
+    <div class="section-sub" id="lb-sub">Loading entries…</div>
+    <div class="lb-search-wrap">
+      <span class="lb-search-icon">&#128269;</span>
+      <input class="lb-search" id="lb-search" type="text" placeholder="Search your name…" oninput="filterLeaderboard(this.value)" autocomplete="off">
+      <button class="lb-search-clear" id="lb-search-clear" onclick="clearLbSearch()">&#x2715;</button>
+    </div>
+    <div id="leaderboard-list"></div>
+  </div>
+
+  <!-- LIVE SCORES TAB -->
+  <div class="tab-content" id="tab-livescores">
+    <div class="section-title">Live Scores</div>
+    <div class="section-sub">Masters field · Live via ESPN · Auto-refreshes every 10 mins</div>
+    <div style="overflow-x:auto;">
+      <table class="ls-table" id="live-scores-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Score</th>
+            <th>Today</th>
+            <th>R1</th>
+            <th>R2</th>
+            <th>R3</th>
+            <th>R4</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="live-scores-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STATS TAB -->
+  <div class="tab-content" id="tab-stats">
+    <div class="section-title">Stats</div>
+    <div class="section-sub">Analysis across all entries</div>
+    <div class="stats-grid" id="stats-cards"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;flex-wrap:wrap;" id="stats-charts"></div>
+    <div style="margin-top:2rem;">
+      <div class="section-title" style="font-size:1.2rem;">Full Pick Breakdown</div>
+      <div style="overflow-x:auto;margin-top:0.75rem;">
+        <table class="ls-table" id="pick-breakdown-table">
+          <thead><tr><th>Player</th><th>Picks</th><th>Price (£m)</th><th>Score</th><th>Value</th></tr></thead>
+          <tbody id="pick-breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAJOR GENERAL TAB -->
+  <!-- SERGEANT OF MAJORS TAB -->
+  <div class="tab-content" id="tab-sergeant">
+    <div class="section-title">Sergeant of Majors</div>
+    <div class="section-sub">Season standings across all 4 Majors · Enter all 4 to be eligible</div>
+    <div class="mg-track" id="mg-track"></div>
+    <div id="mg-standings-wrap" style="display:none;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:1rem;letter-spacing:0.05em;">Overall Standings</div>
+      <table class="mg-standings-table" id="mg-standings"></table>
+    </div>
+    <div id="mg-archives"></div>
+    <div id="winners-image-section" style="margin-top:1.5rem;display:none;">
+      <img id="winners-image" src="" style="max-width:100%;border-radius:10px;" alt="Winners">
+    </div>
+  </div>
+
+  <!-- ROLL OF HONOUR TAB -->
+  <div class="tab-content" id="tab-rollofhonour">
+    <div class="section-title">Roll of Honour</div>
+    <div class="section-sub">HEALY&amp;SON Productions · Major Sweepstakes Champions</div>
+    <div class="roh-wrap" style="margin-top:1rem;"><div id="honor-cards"></div></div>
+  </div>
+
+  <!-- T&Cs TAB -->
+  <div class="tab-content" id="tab-tnc">
+    <div class="section-title">Terms & Conditions</div>
+    <div class="section-sub">2026 Major Sweepstakes — HEALY&SON Productions</div>
+    <div id="tnc-content"></div>
+  </div>
+
+  <!-- MANAGE TAB (admin) -->
+  <div class="tab-content" id="tab-manage">
+    <div class="section-title">Manage Picks</div>
+    <div class="section-sub">Add entrants and their 4 player picks</div>
+
+    <!-- ADD ENTRANT FORM -->
+    <div class="admin-section">
+      <h3>➕ Add Entrant</h3>
+      <div style="margin-bottom:0.75rem;">
+        <label style="font-size:0.72rem;color:var(--muted);display:block;margin-bottom:0.3rem;">Entrant Name</label>
+        <input class="admin-input" id="new-entrant-name" type="text" placeholder="e.g. James Healy" style="margin-bottom:0;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.75rem;" id="player-selects">
+        <div>
+          <label style="font-size:0.65rem;color:var(--muted);display:block;margin-bottom:0.25rem;">Player 1</label>
+          <select class="admin-input" id="pick-p1" style="margin-bottom:0;"></select>
+        </div>
+        <div>
+          <label style="font-size:0.65rem;color:var(--muted);display:block;margin-bottom:0.25rem;">Player 2</label>
+          <select class="admin-input" id="pick-p2" style="margin-bottom:0;"></select>
+        </div>
+        <div>
+          <label style="font-size:0.65rem;color:var(--muted);display:block;margin-bottom:0.25rem;">Player 3</label>
+          <select class="admin-input" id="pick-p3" style="margin-bottom:0;"></select>
+        </div>
+        <div>
+          <label style="font-size:0.65rem;color:var(--muted);display:block;margin-bottom:0.25rem;">Player 4</label>
+          <select class="admin-input" id="pick-p4" style="margin-bottom:0;"></select>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button class="admin-btn" onclick="addEntrant()">Add to Leaderboard</button>
+        <span id="entrant-budget-preview" style="font-size:0.78rem;color:var(--muted);"></span>
+      </div>
+      <div id="entrant-add-status" style="margin-top:0.5rem;"></div>
+    </div>
+
+    <!-- CURRENT ENTRIES -->
+    <div class="admin-section">
+      <h3>📋 Current Entries (<span id="entry-count">0</span>)</h3>
+      <div id="picks-validation"></div>
+    </div>
+  </div>
+
+  <!-- SHARE TAB (admin) -->
+  <div class="tab-content" id="tab-share">
+    <div class="section-title">Share</div>
+    <div class="section-sub">Generate a crisp high-resolution image for WhatsApp</div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;">
+      <button class="share-btn" id="save-img-btn" onclick="saveLeaderboardImage()">📸 Generate Image</button>
+      <button class="share-btn" onclick="copyWhatsAppText()">💬 Copy WhatsApp Text</button>
+      <div style="font-size:0.72rem;color:var(--muted);">How many entries?
+        <select id="share-count" style="background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.3);color:var(--cream);border-radius:6px;padding:0.3rem 0.5rem;margin-left:0.4rem;font-size:0.72rem;">
+          <option value="10">Top 10</option>
+          <option value="20" selected>Top 20</option>
+          <option value="30">Top 30</option>
+          <option value="50">Top 50</option>
+          <option value="999">All</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:0.5rem;display:none;" id="share-img-preview">
+      <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem;">Tap &amp; hold on mobile to save · Right-click on desktop to save:</div>
+      <img id="share-img-output" style="max-width:100%;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);" alt="Leaderboard">
+    </div>
+  </div>
+
+  <!-- ADMIN TAB -->
+  <div class="tab-content" id="tab-admin">
+    <div class="section-title">Admin</div>
+    <div class="section-sub">Configuration & settings</div>
+
+    <div class="admin-section">
+      <h3>🗄️ Supabase Connection</h3>
+      <div id="sb-status" class="status-msg ok">✅ Connected to HEALYANDSON's Project</div>
+      <div class="supabase-cards">
+        <a class="sb-card" href="https://supabase.com/dashboard/project/tcaijpehgoebclxusorx/editor" target="_blank"><div class="sb-card-icon">🗃️</div>Table Editor</a>
+        <a class="sb-card" href="https://supabase.com/dashboard/project/tcaijpehgoebclxusorx/sql" target="_blank"><div class="sb-card-icon">💻</div>SQL Editor</a>
+        <a class="sb-card" href="https://supabase.com/dashboard/project/tcaijpehgoebclxusorx/logs/explorer" target="_blank"><div class="sb-card-icon">📋</div>Logs</a>
+        <a class="sb-card" href="https://supabase.com/dashboard/project/tcaijpehgoebclxusorx" target="_blank"><div class="sb-card-icon">🏠</div>Overview</a>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h3>📡 Live Scoring — ESPN via Vercel</h3>
+      <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Scores pulled automatically from ESPN every 10 minutes via your Vercel serverless function at <code style="color:var(--gold);">/api/scores</code>. No API key needed.</div>
+      <div id="api-status" class="status-msg ok" style="display:block;margin-bottom:0.75rem;">✅ Masters 2026 · Tournament ID: 401811941</div>
+      <div class="admin-row">
+        <button class="admin-btn" onclick="manualRefresh()">🔄 Refresh Now</button>
+        <span id="last-refresh-admin" style="font-size:0.72rem;color:var(--muted);margin-left:0.5rem;"></span>
+      </div>
+      <div class="admin-row">
+        <span class="admin-label">Auto-refresh</span>
+        <select class="admin-input" id="refresh-interval" style="flex:1;">
+          <option value="600">Every 10 minutes</option>
+          <option value="300">Every 5 minutes</option>
+          <option value="180">Every 3 minutes</option>
+          <option value="60">Every 1 minute</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h3>⚖️ WD / DQ / DNF Penalty</h3>
+      <div class="admin-row">
+        <span class="admin-label">Cut score (par)</span>
+        <input class="admin-input" id="cut-score" type="number" placeholder="e.g. 8" style="width:100px;">
+      </div>
+      <div class="admin-row">
+        <span class="admin-label">DNF Penalty</span>
+        <input class="admin-input" id="dnf-penalty" type="number" placeholder="Auto: 2×cut" style="width:100px;">
+      </div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.5rem;">If cut ≤ 0, missed cut = +1, DNF = +5</div>
+      <button class="admin-btn" onclick="savePenalties()">Save Penalties</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>🏆 Sergeant of Majors Controls</h3>
+      <div id="mg-admin-controls"></div>
+    </div>
+
+    <div class="admin-section">
+      <h3>🖼️ Winners Image Upload</h3>
+      <div class="upload-zone" onclick="document.getElementById('winners-file').click()">
+        <input type="file" id="winners-file" accept="image/*" onchange="handleWinnersImage(event)" style="display:none;">
+        <div>Upload winners photo</div>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h3>📋 T&C Editor</h3>
+      <textarea class="admin-input" id="tnc-editor" rows="12" style="font-size:0.75rem;resize:vertical;" placeholder="Edit T&C content…"></textarea>
+      <button class="admin-btn" onclick="saveTnc()" style="margin-top:0.5rem;">Save T&Cs</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>🔐 Change Admin PIN</h3>
+      <div class="admin-row">
+        <input class="admin-input" id="new-pin" type="password" maxlength="6" placeholder="New PIN" style="width:140px;">
+        <button class="admin-btn" onclick="changePin()">Update PIN</button>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h3>🔗 Viewer Link</h3>
+      <div style="font-size:0.8rem;color:var(--cream);background:rgba(255,255,255,0.05);padding:0.75rem;border-radius:8px;margin-bottom:0.5rem;word-break:break-all;" id="viewer-link">Loading…</div>
+      <button class="admin-btn" onclick="copyViewerLink()">Copy Link</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========= SUPABASE CONFIG =========
+const SUPABASE_URL = 'https://tcaijpehgoebclxusorx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjYWlqcGVoZ29lYmNseHVzb3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDQ5MDgsImV4cCI6MjA5MDEyMDkwOH0.bi81lxXm5exAsXmqT4KVmflVMlNBY3_ss_F4zPLMpY0';
+
+const VIEWER_CODE = '1540';
+const MAJORS = ['The Masters','PGA Championship','US Open','The Open Championship'];
+const PLAYERS_CHAMPIONSHIP = 'The Players Championship';
+
+// ========= STATE =========
+let state = {
+  adminUnlocked: false,
+  adminPin: '1540',
+  picks: [],       // [{name, players:[string,string,string,string]}]
+  prices: {},      // {playerName: price}
+  liveScores: {},  // {playerName: {pos,score,today,thru,r1,r2,r3,r4,status}}
+  espnPlayers: [],  // raw ESPN player array for live scores tab
+  previousScores: {}, // for movement
+  penalties: { cutScore: 8, dnfPenalty: null },
+  majorStates: [
+    { name:'The Masters', status:'active' },
+    { name:'PGA Championship', status:'upcoming' },
+    { name:'US Open', status:'upcoming' },
+    { name:'The Open Championship', status:'upcoming' }
+  ],
+  activeMajorIndex: 0,
+  archivedMajors: {},
+  tncContent: '',
+  winnersImage: null,
+  rapidApiKey: '',
+  tournamentId: '',
+  refreshInterval: 3600,
+  lastRefreshTime: null
+};
+
+// ========= PRICE LIST (from image) =========
+const PRICE_LIST_DEFAULT = {
+  'Scheffler':11.9,'McIlroy':9.2,'Rahm':7.5,'DeChambeau':7.1,'Young':5.9,'Aberg':5.9,'Morikawa':5.8,'Fleetwood':5.6,'Koepka':5.6,'Hatton':5.4,
+  'Fitzpatrick':4.9,'Henley':4.9,'Rose':4.8,'Schauffele':4.8,'Spaun':4.8,'Gotterup':4.7,'MacIntyre':4.7,'Hovland':4.5,'JohnsonD':4.3,'Straka':4.3,
+  'Matsuyama':4.2,'Smith':3.9,'Griffin':3.9,'Lowry':3.9,'Thomas':3.9,'Reed':3.7,'Bridgeman':3.6,'Cantlay':3.6,'Noren':3.5,'KimSW':3.5,
+  'English':3.4,'Bradley':3.2,'LeeMW':3.1,'Bhatia':2.9,'Burns':2.9,'Gerard':2.9,'McNealy':2.9,'Penge':2.9,'Clark':2.7,'Day':2.7,
+  'Knapp':2.7,'Rai':2.7,'HojgaardN':2.6,'Kitayama':2.6,'Berger':2.5,'Echavarria':2.4,'Homa':2.4,'Conners':2.2,'Garcia':2.2,'Brennan':2.1,
+  'McCarty':2.1,'Scott':2.1,'Watson':2.1,'Fox':2.0,'Harman':2.0,'Novak':2.0,'Reitan':2.0,'Woodland':2.0,'HojgaardR':1.9,'KimM':1.9,
+  'Schwartzel':1.9,'Spieth':1.9,'Valimaki':1.9,'Willett':1.9,'Greyserman':1.8,'Hall':1.8,'Jarvis':1.7,'NeergaardPetersen':1.7,'Taylor':1.7,'Im':1.6,
+  'Li':1.5,'Potgieter':1.5,'McKibbin':1.3,'Campbell':1.2,'Riley':1.2,'JohnsonZ':0.5,'Cabrera':0.4,'Couples':0.4,'Fang':0.4,'Herrington':0.4,
+  'Holtz':0.2,'Howell':0.2,'Kataoka':0.2,'Keefer':0.2,'Laopakdee':0.2,'Olazabal':0.2,'Ortiz':0.2,'Pulcini':0.2,'Singh':0.2,'Stevens':0.2,'Weir':0.2
+};
+
+const REAL_PICKS = [
+  {name:"ALAN W <<<#",players:["Scheffler","LeeMW","Bhatia","Scott"]},
+  {name:"ALFIE B",players:["DeChambeau","Åberg","Fitzpatrick","Woodland"]},
+  {name:"ARAN H",players:["Åberg","Fitzpatrick","Rose","Conners"]},
+  {name:"ALICE M",players:["Rahm","Åberg","Fitzpatrick","Im"]},
+  {name:"AMY W *",players:["Young","Fleetwood","Fitzpatrick","LeeMW"]},
+  {name:"ANDRE D",players:["Fleetwood","Fitzpatrick","Rose","Hovland"]},
+  {name:"ANDY B",players:["Rahm","Henley","Matsuyama","LeeMW"]},
+  {name:"ANDY H",players:["Åberg","Koepka","Rose","Fox"]},
+  {name:"ANNE H",players:["McIlroy","Matsuyama","KimSW","LeeMW"]},
+  {name:"BRADLEY W",players:["Morikawa","Fleetwood","Spaun","Noren"]},
+  {name:"BAILEY L",players:["Åberg","Fitzpatrick","Schauffele","Reed"]},
+  {name:"BEN F",players:["Young","Fleetwood","Schauffele","Day"]},
+  {name:"BOBBY C",players:["McIlroy","Schauffele","LeeMW","Bhatia"]},
+  {name:"BILLY C",players:["Åberg","Fitzpatrick","Schauffele","Bhatia"]},
+  {name:"BILLY W",players:["DeChambeau","Fitzpatrick","Rose","LeeMW"]},
+  {name:"BRODIE C",players:["Rahm","DeChambeau","Straka","JohnsonZ"]},
+  {name:"CARL S",players:["Åberg","Fleetwood","Hatton","Conners"]},
+  {name:"CHARLIE WR",players:["DeChambeau","Hatton","Straka","LeeMW"]},
+  {name:"CHARLIEBM",players:["DeChambeau","Fitzpatrick","Rose","Penge"]},
+  {name:"CHARLENE M",players:["Young","Åberg","Hovland","Reed"]},
+  {name:"CHAY P",players:["DeChambeau","Åberg","Schauffele","García"]},
+  {name:"CHRIS DM",players:["Åberg","Fleetwood","Straka","Smith"]},
+  {name:"CHRIS S",players:["DeChambeau","Fitzpatrick","Hovland","LeeMW"]},
+  {name:"CHRISTIAN T",players:["DeChambeau","Schauffele","MacIntyre","Bhatia"]},
+  {name:"CLIVE A",players:["Åberg","Fleetwood","Fitzpatrick","Bridgeman"]},
+  {name:"CLAIRE B",players:["McIlroy","Rose","Smith","Woodland"]},
+  {name:"CONOR M",players:["Morikawa","Schauffele","Matsuyama","Smith"]},
+  {name:"DAN C",players:["Rahm","Fitzpatrick","Smith","Reed"]},
+  {name:"DANIEL V",players:["DeChambeau","Rose","MacIntyre","Knapp"]},
+  {name:"DANNY M",players:["Åberg","Fitzpatrick","MacIntyre","Hovland"]},
+  {name:"DANNY MC *",players:["Rahm","Gotterup","Straka","KimSW"]},
+  {name:"DANNY P",players:["DeChambeau","Young","Rose","Spieth"]},
+  {name:"DARREN M",players:["Young","Fleetwood","Fitzpatrick","English"]},
+  {name:"DAVE C",players:["Young","Fleetwood","Spaun","KimSW"]},
+  {name:"DAVE CT",players:["Åberg","Fitzpatrick","MacIntyre","Reed"]},
+  {name:"DAVE S",players:["Åberg","Rose","Gotterup","Thomas"]},
+  {name:"DAVE W",players:["Åberg","Fitzpatrick","Spaun","Straka"]},
+  {name:"DAVID H",players:["Fleetwood","Koepka","Fitzpatrick","Reed"]},
+  {name:"DEAN B",players:["Rahm","Fitzpatrick","Rose","Scott"]},
+  {name:"EDDIE W **",players:["Young","Fitzpatrick","Schauffele","Reed"]},
+  {name:"ELLIE W",players:["Morikawa","Fleetwood","MacIntyre","Lowry"]},
+  {name:"ELLEN P",players:["Scheffler","Rose","Greyserman","Potgieter"]},
+  {name:"EMMA W",players:["Åberg","Rose","MacIntyre","Hovland"]},
+  {name:"FREDDYM",players:["McIlroy","Fitzpatrick","Lowry","Fox"]},
+  {name:"GARRY MC",players:["Rahm","Henley","Schauffele","Conners"]},
+  {name:"GARY M",players:["Åberg","Fleetwood","Fitzpatrick","Cantlay"]},
+  {name:"GARY P",players:["McIlroy","MacIntyre","Reed","Homa"]},
+  {name:"GEORGE B",players:["Åberg","Fleetwood","Fitzpatrick","Bhatia"]},
+  {name:"GEORGE S",players:["DeChambeau","MacIntyre","Hovland","Cantlay"]},
+  {name:"GEORGE W",players:["Morikawa","Fleetwood","Schauffele","Reed"]},
+  {name:"GEORGE WS *",players:["Åberg","Morikawa","Rose","Penge"]},
+  {name:"GLENN S",players:["Åberg","Fitzpatrick","Schauffele","Matsuyama"]},
+  {name:"GLENN W **",players:["Fleetwood","Hatton","Schauffele","Matsuyama"]},
+  {name:"GRAHAM H",players:["Fitzpatrick","Gotterup","MacIntyre","Matsuyama"]},
+  {name:"GREG B",players:["DeChambeau","Fitzpatrick","Straka","Reed"]},
+  {name:"GREGG J",players:["Åberg","Fleetwood","Fitzpatrick","LeeMW"]},
+  {name:"HANNAH L *",players:["Rahm","Åberg","Schauffele","Neergaard-Petersen"]},
+  {name:"HANNAH P",players:["Fleetwood","Fitzpatrick","Hovland","Thomas"]},
+  {name:"HARRY DV",players:["Åberg","Fleetwood","Schauffele","Reed"]},
+  {name:"HARRY P",players:["DeChambeau","Gotterup","Straka","Bhatia"]},
+  {name:"HAZEL D",players:["DeChambeau","Fleetwood","Rose","Echavarria"]},
+  {name:"HENRY D",players:["Rahm","Åberg","MacIntyre","Spieth"]},
+  {name:"INGRID V",players:["Young","Morikawa","Fitzpatrick","Bradley"]},
+  {name:"JACK H",players:["Rahm","Young","Reed","Kitayama"]},
+  {name:"JACK M",players:["McIlroy","Åberg","McNealy","Harman"]},
+  {name:"JACKIE C",players:["McIlroy","Rose","Cantlay","Homa"]},
+  {name:"JAMES D",players:["Åberg","Fleetwood","Schauffele","Cantlay"]},
+  {name:"JAMES H",players:["Rahm","Schauffele","Matsuyama","LeeMW"]},
+  {name:"JAMIE D",players:["Young","Åberg","MacIntyre","Bhatia"]},
+  {name:"JAMIE W",players:["DeChambeau","Schauffele","Matsuyama","Thomas"]},
+  {name:"JAMIE S",players:["Young","Åberg","Fitzpatrick","Spaun"]},
+  {name:"JEFF K",players:["DeChambeau","Åberg","Schauffele","Conners"]},
+  {name:"JESS R",players:["Scheffler","Rose","Berger","Ortiz"]},
+  {name:"JESSICA F",players:["Fitzpatrick","Rose","MacIntyre","Penge"]},
+  {name:"JIM G",players:["Åberg","Fleetwood","Rose","Matsuyama"]},
+  {name:"JOE C ***",players:["Fleetwood","Fitzpatrick","Spaun","MacIntyre"]},
+  {name:"JOE R",players:["Åberg","Fitzpatrick","Schauffele","Thomas"]},
+  {name:"JOHN S",players:["DeChambeau","Fitzpatrick","MacIntyre","Bhatia"]},
+  {name:"JOSH G",players:["Koepka","Rose","Matsuyama","LeeMW"]},
+  {name:"KATE N",players:["McIlroy","Straka","Matsuyama","Spieth"]},
+  {name:"KELLY N",players:["Scheffler","Noren","HøjgaardN","Harman"]},
+  {name:"KENDRA H",players:["Hatton","Schauffele","Hovland","JohnsonD"]},
+  {name:"KERRY MC",players:["Åberg","Fleetwood","Rose","Gotterup"]},
+  {name:"KEVIN S *",players:["DeChambeau","Fitzpatrick","Spaun","Clark"]},
+  {name:"KIRSTY W",players:["McIlroy","Fleetwood","Lowry","McKibbin"]},
+  {name:"LARRY H **",players:["McIlroy","Hovland","Lowry","Scott"]},
+  {name:"LEE H",players:["Young","Fitzpatrick","MacIntyre","Burns"]},
+  {name:"LES W *",players:["Koepka","Rose","Thomas","Reed"]},
+  {name:"LIAM C",players:["DeChambeau","Hatton","Fitzpatrick","Woodland"]},
+  {name:"LISA W *",players:["DeChambeau","Schauffele","MacIntyre","English"]},
+  {name:"LIZ W",players:["Fleetwood","Fitzpatrick","Schauffele","MacIntyre"]},
+  {name:"LOUIS R *",players:["Fleetwood","Fitzpatrick","Gotterup","KimSW"]},
+  {name:"LOUIE W",players:["DeChambeau","Fleetwood","Schauffele","Homa"]},
+  {name:"LUCY W",players:["Fleetwood","Rose","MacIntyre","Hovland"]},
+  {name:"LUKE G",players:["DeChambeau","Fitzpatrick","MacIntyre","Day"]},
+  {name:"LUKE RN",players:["McIlroy","Rose","Lowry","Spieth"]},
+  {name:"MARK RAY",players:["Rahm","DeChambeau","KimSW","Spieth"]},
+  {name:"MARK ROS",players:["Fitzpatrick","Rose","MacIntyre","Reed"]},
+  {name:"MATTHEW N",players:["Rahm","Åberg","LeeMW","Im"]},
+  {name:"MICHAEL M",players:["Young","Fleetwood","Schauffele","Reed"]},
+  {name:"MICHAEL W",players:["Fleetwood","Fitzpatrick","Schauffele","Hovland"]},
+  {name:"MICHAEL K",players:["Rahm","Rose","MacIntyre","Bhatia"]},
+  {name:"MIKE WS",players:["Rahm","Young","Penge","Knapp"]},
+  {name:"NATHAN M **",players:["Hatton","Fitzpatrick","Schauffele","Hovland"]},
+  {name:"NATHAN B",players:["Fleetwood","Koepka","MacIntyre","Lowry"]},
+  {name:"NICK HK",players:["Koepka","Fitzpatrick","MacIntyre","Reed"]},
+  {name:"NICKY H",players:["DeChambeau","Fitzpatrick","Spaun","Day"]},
+  {name:"OLIVER W",players:["Young","Åberg","Fitzpatrick","HøjgaardN"]},
+  {name:"OLLIE R",players:["Morikawa","Fitzpatrick","Rose","Hovland"]},
+  {name:"PAT P",players:["DeChambeau","Fitzpatrick","Smith","Lowry"]},
+  {name:"PAUL G",players:["Åberg","Fitzpatrick","Schauffele","Straka"]},
+  {name:"PAUL M",players:["Young","Rose","Reed","Day"]},
+  {name:"PAUL W",players:["Young","Åberg","MacIntyre","Scott"]},
+  {name:"PETER A *",players:["Hatton","Fitzpatrick","MacIntyre","Hovland"]},
+  {name:"PETER S",players:["Fleetwood","Fitzpatrick","Rose","MacIntyre"]},
+  {name:"PETER W",players:["Fleetwood","Schauffele","Smith","LeeMW"]},
+  {name:"POPPY W *",players:["McIlroy","Åberg","Knapp","Harman"]},
+  {name:"RAY N",players:["Young","Rose","MacIntyre","Homa"]},
+  {name:"REGAN H",players:["Scheffler","Reed","Conners","Brennan"]},
+  {name:"RICHY P",players:["Young","Fleetwood","Fitzpatrick","Penge"]},
+  {name:"RICHARD L",players:["Young","Morikawa","Rose","Conners"]},
+  {name:"RICKY S",players:["DeChambeau","Spaun","Matsuyama","Reed"]},
+  {name:"ROBBIE S",players:["Fleetwood","Hatton","Spaun","HøjgaardN"]},
+  {name:"RYAN B",players:["DeChambeau","Åberg","Reed","HøjgaardN"]},
+  {name:"RYAN M",players:["Rahm","Åberg","Lowry","Conners"]},
+  {name:"SCOTCHMAN",players:["Rahm","Åberg","Reed","Knapp"]},
+  {name:"SAM E",players:["Rahm","Fitzpatrick","MacIntyre","Penge"]},
+  {name:"SAM G",players:["Hatton","Fitzpatrick","Rose","Schauffele"]},
+  {name:"SAM S",players:["DeChambeau","Åberg","Fitzpatrick","Spieth"]},
+  {name:"SAM W*",players:["McIlroy","Gotterup","Bhatia","Knapp"]},
+  {name:"SEAMUS H",players:["DeChambeau","Hatton","Rose","Rai"]},
+  {name:"SEAN D",players:["DeChambeau","Fleetwood","Rose","Homa"]},
+  {name:"SEAN W",players:["Young","Åberg","Fitzpatrick","Burns"]},
+  {name:"SIDNEY F",players:["Young","Fitzpatrick","Rose","Spieth"]},
+  {name:"SIMON G",players:["DeChambeau","Åberg","Rose","Scott"]},
+  {name:"SIMON H",players:["Åberg","Rose","Schauffele","Reed"]},
+  {name:"SIMON P",players:["Åberg","Fleetwood","Schauffele","Conners"]},
+  {name:"SOPH L*<<<#",players:["Åberg","Henley","MacIntyre","Hovland"]},
+  {name:"STE R",players:["Fleetwood","Henley","Rose","MacIntyre"]},
+  {name:"STEPHEN S Jnr",players:["Åberg","Fitzpatrick","Rose","Reed"]},
+  {name:"STEPHEN S Snr",players:["Koepka","Fitzpatrick","Rose","MacIntyre"]},
+  {name:"STEVE W",players:["Åberg","Fitzpatrick","Rose","Matsuyama"]},
+  {name:"STEVEY P *",players:["Morikawa","Fitzpatrick","Schauffele","English"]},
+  {name:"TEDDY F",players:["DeChambeau","Hatton","Hovland","Penge"]},
+  {name:"THOMAS D",players:["Fleetwood","Rose","Schauffele","Matsuyama"]},
+  {name:"TONY MC",players:["Fleetwood","Fitzpatrick","Spaun","Gotterup"]},
+  {name:"TIM L",players:["Rahm","Rose","Thomas","Reed"]},
+  {name:"TINA L",players:["Fleetwood","Fitzpatrick","Rose","Straka"]},
+  {name:"TOM G",players:["Åberg","Fitzpatrick","Rose","Bridgeman"]},
+  {name:"VINNIE W",players:["Young","Fitzpatrick","Schauffele","Straka"]}
+];
+
+// Demo live scores - simulated Masters R1 data
+const DEMO_SCORES = {
+  'Scheffler':{pos:'1',score:-7,today:-7,thru:18,r1:65,r2:null,r3:null,r4:null,status:''},
+  'McIlroy':{pos:'2',score:-6,today:-6,thru:18,r1:66,r2:null,r3:null,r4:null,status:''},
+  'DeChambeau':{pos:'3',score:-5,today:-5,thru:18,r1:67,r2:null,r3:null,r4:null,status:''},
+  'Aberg':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
+  'Rose':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
+  'Rahm':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
+  'Fleetwood':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
+  'Fitzpatrick':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
+  'Hatton':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
+  'Hovland':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
+  'Koepka':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
+  'MacIntyre':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
+  'Schauffele':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
+  'Young':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
+  'Morikawa':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
+  'Thomas':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
+  'Matsuyama':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
+  'Henley':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
+  'Reed':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'Smith':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'Cantlay':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'Lowry':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'Straka':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'KimSW':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
+  'LeeMW':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'Spaun':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'Bridgeman':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'Noren':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'English':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'Bhatia':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
+  'Penge':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
+  'Burns':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
+  'Gotterup':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
+  'JohnsonD':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
+  'Homa':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
+  'Knapp':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
+  'Day':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
+  'Bradley':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
+  'Conners':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
+  'HojgaardN':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
+  'Spieth':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
+  'Scott':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
+  'Woodland':{pos:'CUT',score:8,today:8,thru:36,r1:76,r2:76,r3:null,r4:null,status:'CUT'},
+  'Spieth':{pos:'CUT',score:9,today:5,thru:36,r1:72,r2:77,r3:null,r4:null,status:'CUT'}
+};
+
+const HONOR_DATA = [
+  {year:'2020',players:'DNP',masters:'Terry Harrell',pga:'DNP',us:'DNP',open:'DNP'},
+  {year:'2021',players:'Eddie Wells',masters:'Ollie Martin',pga:'Larry Healy',us:'Eddie Wells',open:'Peter Allamby'},
+  {year:'2022',players:'Larry Healy',masters:'Lisa Ward',pga:'Terry Harrell',us:'Nathan Marks',open:'Harry Fackrell Jnr'},
+  {year:'2023',players:'Steve Fowle',masters:'Glenn Ward',pga:'Nathan Marks',us:'Joe Cobley',open:'Louis Rumble & Kevin Smith'},
+  {year:'2024',players:'Sam Woodruff',masters:'George Watts',pga:'Sophie Latham',us:'Les Whitton',open:'Glenn Ward'},
+  {year:'2025',players:'Joe Cobley & Steve Palser',masters:'Poppy Wilson',pga:'Danny McMullen',us:'Joe Cobley',open:'Amy Warren'},
+  {year:'2026',players:'?',masters:'?',pga:'?',us:'?',open:'?'}
+];
+
+const DEFAULT_TNC = `1. MISSED CUT
+If your player misses the cut, their total score after 2 rounds will be their final score. If the cut is level par or under par, the player will instead be given a score of +1. This means the best possible score for any player who misses the cut is +1.
+
+2. PLAYER DOES NOT FINISH (DNF)
+A player is considered to have started the tournament once they tee off on the 1st hole. If a player starts but does not complete the tournament, they will be recorded as DNF (Did Not Finish). In this case, their score will be double the cut score. If the cut is level par or under par, they will receive a score of +5.
+
+3. WITHDRAWALS BEFORE TEE-OFF
+If your player withdraws after picks are finalized but before the first tee shot, you can select a replacement player (as long as they haven't started their round). If there is not enough time to make a new pick, you have two options: You will be assigned the next available player of the same value who has not yet teed off, or you will receive a refund (non-runner).
+
+4. TIE-BREAK RULES
+If there is a tie, it will be decided as follows: Best score on Day 4. If still tied, the team with the lowest total value. If still tied, the result will be a dead heat.
+
+5. BUDGET
+Each entry has a £20m budget. All 4 player selections must not exceed this total combined price.
+
+6. MAJOR GENERAL ELIGIBILITY
+To qualify for the Sergeant of Majors season standings, you must enter all 4 Majors: The Masters, PGA Championship, US Open, and The Open Championship. The Players Championship is a warm-up event and does not count toward Sergeant of Majors standings.
+
+7. ADMIN DECISION
+Tiebreakers and disputes are handled in-house. Admin decision is final.`;
+
+// ========= INIT =========
+function init() {
+  state.prices = { ...PRICE_LIST_DEFAULT };
+  state.liveScores = { ...DEMO_SCORES };
+  state.tncContent = DEFAULT_TNC;
+  loadFromSupabase();
+  initCountdown();
+  buildWaLink();
+  document.getElementById('viewer-link').textContent = window.location.href + ' (Code: ' + VIEWER_CODE + ')';
+  document.getElementById('tnc-editor').value = state.tncContent;
+  renderTnc();
+  renderHonorTable();
+  renderMgTrack();
+  renderMgAdminControls();
+}
+
+// ========= SUPABASE =========
+async function sbFetch(table, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }
+  };
+  if (body) opts.body = JSON.stringify(body);
   try {
-    const url = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId=' + TOURNAMENT_ID;
-    const response = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, opts);
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+async function loadFromSupabase() {
+  try {
+    // Load settings
+    const settings = await sbFetch('settings?select=key,value');
+    if (settings && Array.isArray(settings)) {
+      settings.forEach(row => {
+        if (row.key === 'admin_pin') state.adminPin = row.value;
+        if (row.key === 'tnc') { state.tncContent = row.value; document.getElementById('tnc-editor').value = row.value; renderTnc(); }
+        if (row.key === 'cut_score') state.penalties.cutScore = parseFloat(row.value);
+        if (row.key === 'dnf_penalty') state.penalties.dnfPenalty = parseFloat(row.value);
+        if (row.key === 'major_states') { try { state.majorStates = JSON.parse(row.value); renderMgTrack(); renderMgAdminControls(); } catch(e){} }
+        if (row.key === 'active_major_index') state.activeMajorIndex = parseInt(row.value)||0;
+        if (row.key === 'rapidapi_key') state.rapidApiKey = row.value;
+        if (row.key === 'tournament_id') state.tournamentId = row.value;
+        if (row.key === 'winners_image') { state.winnersImage = row.value; if(row.value){ document.getElementById('winners-image').src=row.value; document.getElementById('winners-image-section').style.display='block'; } }
+      });
+    }
+    // Load prices
+    const prices = await sbFetch('prices?select=player_name,price');
+    if (prices && prices.length > 0) {
+      state.prices = {};
+      prices.forEach(p => state.prices[p.player_name] = parseFloat(p.price));
+    }
+    // Load picks
+    const picks = await sbFetch('picks?select=*&major_index=eq.0');
+    if (picks && picks.length > 0) {
+      state.picks = picks.map(p => ({ name: p.name, players: [p.player1, p.player2, p.player3, p.player4] }));
+    } else {
+      // load demo picks
+      loadDemoPicks();
+    }
+    // Load archived majors
+    const archives = await sbFetch('archived_majors?select=*');
+    if (archives && archives.length > 0) {
+      archives.forEach(a => state.archivedMajors[a.major_index] = a.data);
+    }
+  } catch(e) {
+    console.log('Supabase load error, using demo data', e);
+    loadDemoPicks();
+  }
+  renderAll();
+}
+
+function loadDemoPicks() {
+  state.picks = REAL_PICKS.map(r => ({ name: r.name, players: r.players }));
+}
+
+function normalizeName(n) {
+  if (!n) return '';
+  return n.trim();
+}
+
+async function saveToSupabase(key, value) {
+  try {
+    await sbFetch('settings?key=eq.' + key, 'DELETE');
+    await sbFetch('settings', 'POST', { key, value });
+  } catch(e) {}
+}
+
+// ========= COUNTDOWN =========
+function initCountdown() {
+  const deadline = new Date('2026-04-08T21:00:00+01:00').getTime();
+  function tick() {
+    const now = Date.now();
+    const diff = deadline - now;
+    const el = document.getElementById('deadline-status');
+    if (diff <= 0) {
+      if (el) el.textContent = '⏰ Picks closed · Tournament underway';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const parts = [];
+    if (d > 0) parts.push(d + 'd');
+    parts.push(String(h).padStart(2,'0') + 'h');
+    parts.push(String(m).padStart(2,'0') + 'm');
+    parts.push(String(s).padStart(2,'0') + 's');
+    if (el) el.textContent = parts.join(' ') + ' remaining';
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+function buildWaLink() {
+  const msg = encodeURIComponent('Hi Seamus! Here are my Masters Sweepstake picks:\n\nName: \nPlayer 1: \nPlayer 2: \nPlayer 3: \nPlayer 4: \nTotal: £m');
+  document.getElementById('wa-link').href = 'https://wa.me/447825142966?text=' + msg;
+}
+
+// ========= LANDING =========
+function enterApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  renderAll();
+}
+// Keep tryViewerCode as alias for any legacy references
+function tryViewerCode() { enterApp(); }
+
+// ========= TABS =========
+function showTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  if (id === 'leaderboard') renderLeaderboard();
+  if (id === 'livescores') renderLiveScores();
+  if (id === 'stats') renderStats();
+  if (id === 'sergeant') { renderMgTrack(); }
+  if (id === 'rollofhonour') { renderHonorTable(); }
+  if (id === 'share') renderSharePreview();
+  if (id === 'manage') { renderPicksValidation(); populatePlayerDropdowns(); }
+}
+
+// ========= ADMIN MODAL & PANEL =========
+function openAdminLogin() {
+  if (state.adminUnlocked) {
+    openAdminPanel('manage');
+    return;
+  }
+  const modal = document.getElementById('adminModal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('adminCodeInput').focus(), 100);
+}
+
+function closeAdminModal() {
+  document.getElementById('adminModal').style.display = 'none';
+  document.getElementById('adminCodeInput').value = '';
+  document.getElementById('adminCodeErr').style.display = 'none';
+}
+
+function tryAdminCode() {
+  const code = document.getElementById('adminCodeInput').value.trim();
+  if (code === state.adminPin) {
+    state.adminUnlocked = true;
+    closeAdminModal();
+    openAdminPanel('manage');
+    // Update admin button to show locked state
+    const btn = document.getElementById('admin-header-btn');
+    if (btn) { btn.textContent = '⚙️ Admin •'; btn.style.borderColor = 'var(--gold)'; btn.style.color = 'var(--gold)'; }
+  } else {
+    document.getElementById('adminCodeErr').style.display = 'block';
+    document.getElementById('adminCodeInput').value = '';
+    document.getElementById('adminCodeInput').focus();
+  }
+}
+
+function openAdminPanel(tab) {
+  const panel = document.getElementById('adminPanel');
+  panel.style.display = 'flex';
+  showAdminTab(tab || 'manage', document.getElementById('ap-tab-' + (tab || 'manage')));
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminPanel').style.display = 'none';
+}
+
+function lockAdmin() {
+  state.adminUnlocked = false;
+  closeAdminPanel();
+  const btn = document.getElementById('admin-header-btn');
+  if (btn) { btn.textContent = '⚙️ Admin'; btn.style.borderColor = 'rgba(255,255,255,0.15)'; btn.style.color = 'var(--muted)'; }
+}
+
+function showAdminTab(tabId, el) {
+  // Update tab highlights
+  document.querySelectorAll('#adminPanel .tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  // Inject the right tab content into the panel
+  const container = document.getElementById('adminPanelContent');
+  const source = document.getElementById('tab-' + tabId);
+  if (source && container) {
+    container.innerHTML = source.innerHTML;
+    // Re-run any render functions needed
+    if (tabId === 'manage') { renderPicksValidation(); populatePlayerDropdowns(); }
+    if (tabId === 'share') renderSharePreview();
+  }
+}
+
+// Legacy stubs (kept for safety)
+function requireAdmin(tabId) { openAdminLogin(); }
+function closePinPrompt() { closeAdminModal(); }
+
+// ========= SCORE HELPERS =========
+function getPlayerScore(playerName) {
+  const s = state.liveScores[playerName];
+  if (!s) return null;
+  return s.score;
+}
+
+function getPlayerStatus(playerName) {
+  const s = state.liveScores[playerName];
+  if (!s) return '';
+  return s.status || '';
+}
+
+function scoreClass(score) {
+  if (score === null || score === undefined) return 'score-e';
+  if (score < 0) return 'score-neg';
+  if (score > 0) return 'score-pos';
+  return 'score-e';
+}
+
+function fmtScore(score) {
+  if (score === null || score === undefined) return 'E';
+  if (score === 0) return 'E';
+  if (score > 0) return '+' + score;
+  return String(score);
+}
+
+// Rounds are already to-par from scores.js
+function roundToPar(val) {
+  if (val === null || val === undefined) return null;
+  return val;
+}
+function fmtRound(val) {
+  if (val === null || val === undefined) return '-';
+  return fmtScore(val);
+}
+
+// Apply cut/DNF/WD rules to a single player's score
+function getAdjustedScore(playerKey) {
+  const s = state.liveScores[playerKey];
+  if (!s) return 0;
+  const rawScore = s.score || 0;
+  const status = s.status || '';
+  if (status === 'CUT') {
+    // Missed cut rule: R1+R2 total used, but minimum +1
+    return rawScore <= 0 ? 1 : rawScore;
+  }
+  if (status === 'WD' || status === 'DNF' || status === 'DQ') {
+    const cutScore = state.penalties.cutScore || 8;
+    const dnfPenalty = state.penalties.dnfPenalty !== null && state.penalties.dnfPenalty !== undefined
+      ? state.penalties.dnfPenalty
+      : (cutScore <= 0 ? 5 : cutScore * 2);
+    return dnfPenalty;
+  }
+  return rawScore;
+}
+
+// Resolve a pick name to its canonical key in state.liveScores / state.prices
+// Handles diacritics, case differences, and partial matches
+function resolveKey(pickName) {
+  if (!pickName) return pickName;
+  const norm = s => stripDiacritics((s || '').toLowerCase().trim());
+  const pn = norm(pickName);
+  // 1. Exact match
+  if (state.liveScores[pickName] !== undefined) return pickName;
+  if (state.prices[pickName] !== undefined) return pickName;
+  // 2. Normalised match against liveScores keys
+  const lsKey = Object.keys(state.liveScores).find(k => norm(k) === pn);
+  if (lsKey) return lsKey;
+  // 3. Normalised match against price keys
+  const prKey = Object.keys(state.prices).find(k => norm(k) === pn);
+  if (prKey) return prKey;
+  // 4. Prefix match (normalised)
+  if (pn.length >= 4) {
+    const prefix = pn.substring(0, 5);
+    const fuzzy = Object.keys(state.liveScores).find(k => norm(k).startsWith(prefix))
+               || Object.keys(state.prices).find(k => norm(k).startsWith(prefix));
+    if (fuzzy) return fuzzy;
+  }
+  return pickName; // fallback — return original
+}
+
+function calcEntryScore(entry) {
+  let total = 0;
+  entry.players.forEach(p => { total += getAdjustedScore(resolveKey(p)); });
+  return total;
+}
+function calcBudget(entry) {
+  let total = 0;
+  entry.players.forEach(p => {
+    total += state.prices[resolveKey(p)] || 0;
+  });
+  return parseFloat(total.toFixed(1));
+}
+
+// ========= RENDER ALL =========
+function renderAll() {
+  renderLeaderboard();
+  renderLiveScores();
+  renderStats();
+  renderTnc();
+  renderHonorTable();
+  renderMgTrack();
+  renderMgAdminControls();
+  state.lastRefreshTime = new Date();
+  // lastRefresh updated by manualRefresh()
+}
+
+// ========= LEADERBOARD =========
+let _lbEntries = [];
+
+function buildLbEntry(e, pos) {
+  const scoreDisplay = fmtScore(e.score);
+  const scoreCls = e.score < 0 ? 'neg' : e.score > 0 ? 'pos' : 'even';
+  const budgetPct = Math.min((e.budget / 20) * 100, 100);
+  const isTop3 = pos <= 3;
+  const medals = ['🥇','🥈'];
+  const posDisplay = pos <= 2
+    ? `<span class="lb-pos-num podium">${medals[pos-1]}</span>`
+    : `<span class="lb-pos-num" style="color:var(--gold);">${pos}</span>`;
+
+  const playersInline = e.players.map(p => {
+    const rk = resolveKey(p);
+    const sc = state.liveScores[rk] ? getAdjustedScore(rk) : null;
+    const scFmt = sc !== null ? fmtScore(sc) : 'E';
+    const scCol = sc === null ? 'color:var(--muted)' : sc < 0 ? 'color:var(--up)' : sc > 0 ? 'color:var(--down)' : 'color:var(--cream)';
+    const status = state.liveScores[rk] ? state.liveScores[rk].status : '';
+    const statusTag = status ? ` <span style="font-size:0.55rem;color:var(--gold);font-weight:600;">${status}</span>` : '';
+    return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;">${p}&nbsp;<span style="${scCol};font-weight:700;">${scFmt}</span>${statusTag}</span>`;
+  }).join('');
+
+  const picks = e.players.map(p => {
+    const rk = resolveKey(p);
+    const score = state.liveScores[rk];
+    const price = state.prices[rk] || state.prices[p];
+    const sc = score ? getAdjustedScore(rk) : null;
+    const status = score ? score.status : '';
+    const chipCls = status === 'CUT' ? 'cut' : (status === 'WD' || status === 'DNF' || status === 'DQ') ? 'wd' : '';
+    const scoreCls2 = sc === null ? 'even' : sc < 0 ? 'good' : sc > 0 ? 'bad' : 'even';
+    return `<span class="pick-chip ${chipCls}"><span class="chip-name">${p}</span><span class="chip-score ${scoreCls2}">${fmtScore(sc)}</span><span class="chip-price">£${price || '?'}m</span>${status ? `<span class="badge ${status.toLowerCase()}">${status}</span>` : ''}</span>`
+  }).join('');
+
+  const entryId = 'lb-' + e.name.replace(/[^a-z0-9]/gi,'_');
+  return `<div class="lb-entry ${pos <= 2 ? 'top-3' : ''}" id="${entryId}" onclick="toggleLbEntry('${entryId}')"><div class="lb-row">${posDisplay}<div class="lb-move same">—</div><div style="min-width:0;text-align:left;"><div class="lb-name">${e.name}</div><div class="lb-players-inline">${playersInline}</div></div><div class="lb-budget-inline">£${e.budget}m</div><div style="display:flex;align-items:center;"><div class="lb-score-total ${scoreCls}">${scoreDisplay}</div><span class="lb-chevron">&#9660;</span></div></div><div class="lb-detail"><div class="lb-picks">${picks}</div><div class="budget-bar-wrap"><div class="budget-bar-label"><span>Budget used</span><span>£${e.budget}m / £20m</span></div><div class="budget-bar-track"><div class="budget-bar-fill" style="width:${budgetPct}%"></div></div></div></div></div>`;
+}
+
+function toggleLbEntry(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('expanded');
+}
+
+function renderLeaderboard(filter) {
+  if (!state.picks.length) {
+    document.getElementById('lb-sub').textContent = 'No picks loaded yet.';
+    document.getElementById('leaderboard-list').innerHTML = '';
+    return;
+  }
+  if (filter === undefined) {
+    _lbEntries = state.picks.map(p => ({ ...p, score: calcEntryScore(p), budget: calcBudget(p) }));
+    _lbEntries.sort((a, b) => a.score - b.score);
+  }
+  document.getElementById('lb-sub').textContent = `${_lbEntries.length} entries · Tap an entry to expand`;
+  const q = (filter || '').toLowerCase().trim();
+  const list = document.getElementById('leaderboard-list');
+  if (q) {
+    const matched = _lbEntries.filter(e => e.name.toLowerCase().includes(q));
+    if (!matched.length) {
+      list.innerHTML = `<div class="lb-no-results">No entries found for "<strong>${q}</strong>"</div>`;
+      return;
+    }
+    list.innerHTML = matched.map(e => buildLbEntry(e, _lbEntries.indexOf(e) + 1)).join('');
+    matched.forEach(e => {
+      const id = 'lb-' + e.name.replace(/[^a-z0-9]/gi,'_');
+      const el = document.getElementById(id);
+      if (el) el.classList.add('expanded', 'highlighted');
     });
-    if (!response.ok) throw new Error('ESPN returned ' + response.status);
+  } else {
+    list.innerHTML = _lbEntries.map((e, i) => buildLbEntry(e, i + 1)).join('');
+  }
+}
 
-    const raw = await response.json();
-    const event = raw && raw.events && raw.events[0];
-    if (!event) return res.status(200).json({ players: [], status: 'no_data' });
+function filterLeaderboard(val) {
+  renderLeaderboard(val);
+  const clearBtn = document.getElementById('lb-search-clear');
+  if (clearBtn) clearBtn.style.display = val ? 'block' : 'none';
+}
 
-    const competition = event.competitions && event.competitions[0];
-    const competitors = (competition && competition.competitors) || [];
-    const statusDesc = (event.status && event.status.type && event.status.type.description) || 'In Progress';
-    const currentRound = (event.status && event.status.period) || 1;
+function clearLbSearch() {
+  const input = document.getElementById('lb-search');
+  if (input) { input.value = ''; input.focus(); }
+  document.getElementById('lb-search-clear').style.display = 'none';
+  renderLeaderboard('');
+}
 
-    function parseToPar(val) {
-      if (val === null || val === undefined) return null;
-      const s = String(val).trim();
-      if (s === '' || s === '-') return null;
-      if (s.toUpperCase() === 'E') return 0;
-      const n = parseInt(s, 10);
-      if (isNaN(n)) return null;
-      return n > 40 ? n - COURSE_PAR : n;
+// ========= LIVE SCORES =========
+function renderLiveScores() {
+  const tbody = document.getElementById('live-scores-body');
+  const source = (state.espnPlayers && state.espnPlayers.length)
+    ? state.espnPlayers
+    : Object.keys(state.liveScores).map(k => ({ ...state.liveScores[k], lastName: k }));
+
+  if (!source.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem;">Waiting for live data — Round 1 in progress</td></tr>';
+    return;
+  }
+
+  // Work out current round from data
+  const currentRound = (state.tournamentRound) || 1;
+
+  tbody.innerHTML = source.map(p => {
+    const score = p.totalToPar !== undefined ? p.totalToPar : (p.score || 0);
+    const today = p.todayScore !== undefined ? p.todayScore : (p.today !== undefined ? p.today : null);
+    const isCut = p.status === 'CUT';
+    const isWD  = p.status === 'WD' || p.status === 'DQ';
+    const thru  = p.thru || '-';
+
+    // Build round display: for in-progress rounds, use todayScore
+    // rounds[] from ESPN only has completed rounds filled; active round will be null
+    const rawRounds = p.rounds || [p.r1, p.r2, p.r3, p.r4];
+    const displayRounds = [null, null, null, null];
+    for (let i = 0; i < 4; i++) {
+      if (rawRounds[i] !== null && rawRounds[i] !== undefined) {
+        displayRounds[i] = rawRounds[i];
+      } else if (i === currentRound - 1 && !isCut && !isWD && today !== null) {
+        // Current in-progress round — show today's score
+        displayRounds[i] = today;
+      }
     }
 
-    const leaderboard = competitors.map(function(comp) {
-      const athlete = comp.athlete || {};
-      const displayName = athlete.displayName || '';
-      const nameParts = displayName.trim().split(' ');
-      const lastName = athlete.lastName || (nameParts.length > 1 ? nameParts[nameParts.length - 1] : displayName);
-      const firstName = athlete.firstName || (nameParts.length > 1 ? nameParts[0] : '');
+    // For R2 fallback: if R1 is missing but we have total and today, derive R1
+    if (currentRound === 2 && displayRounds[0] === null && !isCut && !isWD && today !== null) {
+      displayRounds[0] = score - today;
+    }
 
-      const statusType = (comp.status && comp.status.type) || {};
-      const statusName = statusType.name || '';
-      const statusDetail = statusType.shortDetail || statusType.description || '';
-      const statusLower = (statusName + ' ' + statusDetail).toLowerCase();
+    const statusBadge = p.status ? `<span class="badge ${p.status.toLowerCase()}">${p.status}</span>` : '';
+    const thruDisplay = isCut || isWD ? '-' : (thru === '18' ? 'F' : thru);
 
-      const isCut = statusName === 'STATUS_MISSED_CUT' || statusLower.includes('cut') || statusLower.includes(' mc');
-      const isWD  = statusName === 'STATUS_WITHDRAWN' || statusLower.includes('wd') || statusLower.includes('withdrew');
-      const isDQ  = statusName === 'STATUS_DISQUALIFIED' || statusLower.includes('dq');
-      const isActive = !isCut && !isWD && !isDQ;
+    return `<tr>
+      <td style="font-weight:600;">${p.name || p.fullName || p.lastName || '-'}</td>
+      <td class="${scoreClass(score)}" style="font-weight:700;">${fmtScore(score)}</td>
+      <td class="${scoreClass(today)}">${today !== null ? fmtScore(today) : (isCut || isWD ? '-' : 'E')}</td>
+      <td style="color:var(--muted);font-size:0.75rem;">${thruDisplay}</td>
+      <td class="${scoreClass(displayRounds[0])}">${displayRounds[0] !== null ? fmtScore(displayRounds[0]) : '-'}</td>
+      <td class="${scoreClass(displayRounds[1])}">${displayRounds[1] !== null ? fmtScore(displayRounds[1]) : (currentRound >= 2 && !isCut && !isWD ? fmtScore(today) : '-')}</td>
+      <td class="${scoreClass(displayRounds[2])}">${displayRounds[2] !== null ? fmtScore(displayRounds[2]) : '-'}</td>
+      <td class="${scoreClass(displayRounds[3])}">${displayRounds[3] !== null ? fmtScore(displayRounds[3]) : '-'}</td>
+      <td>${statusBadge}</td>
+    </tr>`;
+  }).join('');
+}
 
-      const totalToPar = parseToPar(comp.score);
-      const todayToPar = isActive ? parseToPar(comp.today) : null;
+// ========= STATS =========
+function renderStats() {
+  if (!state.picks.length) return;
 
-      // Thru
-      let thru = '-';
-      if (isActive) {
-        if (comp.thru !== undefined && comp.thru !== null && String(comp.thru).trim() !== '') {
-          thru = String(comp.thru) === '18' ? 'F' : String(comp.thru);
-        } else if (statusDetail) {
-          if (/^f$/i.test(statusDetail.trim())) thru = 'F';
-          else { const m = statusDetail.match(/(\d+)/); if (m) thru = m[1] === '18' ? 'F' : m[1]; }
-        }
+  // Pick counts
+  const pickCounts = {};
+  state.picks.forEach(entry => {
+    entry.players.forEach(p => {
+      pickCounts[p] = (pickCounts[p] || 0) + 1;
+    });
+  });
+
+  const sorted = Object.entries(pickCounts).sort((a,b) => b[1]-a[1]);
+  const most = sorted[0];
+  const least = sorted[sorted.length-1];
+
+  // Best value: best score relative to price
+  let bestValue = null, bestValueScore = Infinity;
+  Object.keys(pickCounts).forEach(p => {
+    const price = state.prices[p] || 1;
+    const sc = state.liveScores[p] ? state.liveScores[p].score : 0;
+    const val = sc / price;
+    if (val < bestValueScore) { bestValueScore = val; bestValue = p; }
+  });
+
+  const totalEntries = state.picks.length;
+  const totalPicked = Object.keys(pickCounts).length;
+
+  document.getElementById('stats-cards').innerHTML = `
+    <div class="stat-card"><div class="stat-card-label">Total Entries</div><div class="stat-card-val">${totalEntries}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Players Picked</div><div class="stat-card-val">${totalPicked}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Most Picked</div><div class="stat-card-val" style="font-size:1.4rem;">${most?most[0]:'—'}</div><div class="stat-card-sub">${most?most[1]+' entries':''}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Least Picked</div><div class="stat-card-val" style="font-size:1.4rem;">${least?least[0]:'—'}</div><div class="stat-card-sub">${least?least[1]+' entr${least[1]===1?"y":"ies"}':''}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Best Value Pick</div><div class="stat-card-val" style="font-size:1.4rem;">${bestValue||'—'}</div><div class="stat-card-sub">Score per £m</div></div>
+  `;
+
+  const top10 = sorted.slice(0,10);
+  const bottom10 = sorted.slice(-10).reverse();
+  const maxPicks = top10[0] ? top10[0][1] : 1;
+
+  document.getElementById('stats-charts').innerHTML = `
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);margin-bottom:1rem;letter-spacing:0.05em;">Top 10 Most Picked</div>
+      <div class="bar-chart">
+        ${top10.map(([p,c]) => `<div class="bar-row">
+          <div class="bar-label">${p}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(c/maxPicks*100).toFixed(0)}%">${c}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);margin-bottom:1rem;letter-spacing:0.05em;">Bottom 10 (Contrarian Picks)</div>
+      <div class="bar-chart">
+        ${bottom10.map(([p,c]) => `<div class="bar-row">
+          <div class="bar-label">${p}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(c/maxPicks*100).toFixed(0)}%;background:rgba(201,168,76,0.5);">${c}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+  `;
+
+  // Full breakdown table
+  document.getElementById('pick-breakdown-body').innerHTML = sorted.map(([p,c]) => {
+    const price = state.prices[p] || '?';
+    const sc = state.liveScores[p] ? state.liveScores[p].score : null;
+    const val = sc !== null && price !== '?' ? (sc / price).toFixed(2) : '—';
+    return `<tr>
+      <td style="font-weight:600;">${p}</td>
+      <td>${c}</td>
+      <td style="color:var(--gold);">£${price}m</td>
+      <td class="${scoreClass(sc)}">${fmtScore(sc)}</td>
+      <td style="color:var(--muted);">${val}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ========= MAJOR GENERAL =========
+function renderMgTrack() {
+  const track = document.getElementById('mg-track');
+  track.innerHTML = state.majorStates.map((m, i) => {
+    const cls = m.status === 'active' ? 'active' : m.status === 'final' ? 'final' : 'upcoming';
+    const label = m.status === 'active' ? '● Active' : m.status === 'final' ? '✓ Final' : 'Upcoming';
+    return `<div class="mg-major-pill ${cls}">
+      <div class="mg-major-name">${m.name}</div>
+      <div class="mg-major-status" style="color:${m.status==='final'?'var(--up)':m.status==='active'?'var(--gold)':'var(--muted)'}">${label}</div>
+    </div>`;
+  }).join('');
+
+  // Show archives
+  const archivesDiv = document.getElementById('mg-archives');
+  archivesDiv.innerHTML = '';
+  Object.keys(state.archivedMajors).forEach(idx => {
+    const major = state.majorStates[idx];
+    const name = major ? major.name : 'Major ' + idx;
+    archivesDiv.innerHTML += `<div style="margin-bottom:1rem;">
+      <span class="archive-toggle" onclick="this.nextElementSibling.classList.toggle('open')">📁 ${name} — Final Results (click to expand)</span>
+      <div class="archive-content">
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">${JSON.stringify(state.archivedMajors[idx]).substring(0,200)}…</div>
+      </div>
+    </div>`;
+  });
+
+  // Check if 2+ finals → show standings
+  const finalCount = state.majorStates.filter(m => m.status === 'final').length;
+  document.getElementById('mg-standings-wrap').style.display = finalCount >= 2 ? 'block' : 'none';
+}
+
+function renderHonorTable() {
+  const container = document.getElementById('honor-cards');
+  if (!container) return;
+
+  const majors = [
+    { key: 'players', short: 'Players' },
+    { key: 'masters', short: 'Masters' },
+    { key: 'pga',     short: 'PGA' },
+    { key: 'us',      short: 'US Open' },
+    { key: 'open',    short: 'The Open' }
+  ];
+
+  const fmt = v => (!v || v === 'DNP' || v === '?') ? (v === 'DNP' ? 'DNP' : '?') : v;
+  const cls = v => (!v || v === '?') ? 'roh-tbd' : v === 'DNP' ? 'roh-dnp' : '';
+
+  container.innerHTML = `
+    <table class="roh-table">
+      <thead>
+        <tr>
+          <th class="roh-year-col">Year</th>
+          ${majors.map(m => `<th>${m.short}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${HONOR_DATA.map(r => `
+          <tr class="${r.year === '2026' ? 'roh-current' : ''}">
+            <td class="roh-year">${r.year}</td>
+            ${majors.map(m => `<td class="${cls(r[m.key])}">${fmt(r[m.key])}</td>`).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+}
+
+// ========= T&Cs =========
+function renderTnc() {
+  const content = state.tncContent || DEFAULT_TNC;
+  const sections = content.split(/\n(?=\d+\.)/).filter(Boolean);
+  document.getElementById('tnc-content').innerHTML = sections.map(s => {
+    const lines = s.trim().split('\n');
+    const heading = lines[0];
+    const body = lines.slice(1).join('\n').trim();
+    return `<div class="tnc-section">
+      <h3>${heading}</h3>
+      ${body.split('\n').map(l => `<p>${l}</p>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ========= MANAGE PICKS =========
+// ========= MANAGE PICKS — FORM-BASED =========
+
+function populatePlayerDropdowns() {
+  const players = Object.keys(state.prices).sort();
+  const opts = '<option value="">— Select player —</option>' +
+    players.map(p => `<option value="${p}">${p} (£${state.prices[p]}m)</option>`).join('');
+  ['pick-p1','pick-p2','pick-p3','pick-p4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+  // Live budget preview on change
+  ['pick-p1','pick-p2','pick-p3','pick-p4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', updateBudgetPreview);
+  });
+}
+
+function updateBudgetPreview() {
+  const players = ['pick-p1','pick-p2','pick-p3','pick-p4']
+    .map(id => { const el = document.getElementById(id); return el ? el.value : ''; })
+    .filter(Boolean);
+  const total = players.reduce((sum, p) => sum + (state.prices[p] || 0), 0);
+  const preview = document.getElementById('entrant-budget-preview');
+  if (!preview) return;
+  if (players.length === 0) { preview.textContent = ''; return; }
+  const over = total > 20;
+  preview.style.color = over ? 'var(--down)' : 'var(--up)';
+  preview.textContent = '£' + total.toFixed(1) + 'm / £20m' + (over ? ' ⚠️ Over budget' : players.length === 4 ? ' ✅' : '');
+}
+
+async function addEntrant() {
+  const name = (document.getElementById('new-entrant-name') || {}).value;
+  if (!name || !name.trim()) { showEntrantStatus('err', 'Please enter an entrant name.'); return; }
+
+  const players = ['pick-p1','pick-p2','pick-p3','pick-p4']
+    .map(id => { const el = document.getElementById(id); return el ? el.value : ''; });
+
+  if (players.some(p => !p)) { showEntrantStatus('err', 'Please select all 4 players.'); return; }
+
+  const uniquePlayers = new Set(players);
+  if (uniquePlayers.size < 4) { showEntrantStatus('err', 'Please select 4 different players.'); return; }
+
+  const budget = players.reduce((sum, p) => sum + (state.prices[p] || 0), 0);
+  if (budget > 20) { showEntrantStatus('err', '£' + budget.toFixed(1) + 'm exceeds £20m budget.'); return; }
+
+  // Check for duplicate name
+  const nameTrimmed = name.trim();
+  if (state.picks.find(e => e.name.toLowerCase() === nameTrimmed.toLowerCase())) {
+    showEntrantStatus('err', nameTrimmed + ' already exists. Remove them first to re-add.'); return;
+  }
+
+  const entry = { name: nameTrimmed, players };
+  state.picks.push(entry);
+
+  // Save to Supabase
+  try {
+    await sbFetch('picks', 'POST', {
+      major_index: 0,
+      name: nameTrimmed,
+      player1: players[0], player2: players[1], player3: players[2], player4: players[3]
+    });
+  } catch(e) { console.warn('Supabase save failed:', e); }
+
+  // Reset form
+  const nameEl = document.getElementById('new-entrant-name');
+  if (nameEl) nameEl.value = '';
+  ['pick-p1','pick-p2','pick-p3','pick-p4'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const preview = document.getElementById('entrant-budget-preview');
+  if (preview) preview.textContent = '';
+
+  showEntrantStatus('ok', '✅ ' + nameTrimmed + ' added! £' + budget.toFixed(1) + 'm budget used.');
+  renderPicksValidation();
+  renderAll();
+}
+
+function showEntrantStatus(type, msg) {
+  const el = document.getElementById('entrant-add-status');
+  if (el) el.innerHTML = `<div class="status-msg ${type}" style="display:inline-block;">${msg}</div>`;
+  setTimeout(() => { if (el) el.innerHTML = ''; }, 4000);
+}
+
+async function removeEntrant(name) {
+  if (!confirm('Remove ' + name + ' from the leaderboard?')) return;
+  state.picks = state.picks.filter(e => e.name !== name);
+  try {
+    await sbFetch('picks?name=eq.' + encodeURIComponent(name) + '&major_index=eq.0', 'DELETE');
+  } catch(e) {}
+  renderPicksValidation();
+  renderAll();
+}
+
+function renderPicksValidation() {
+  const countEl = document.getElementById('entry-count');
+  if (countEl) countEl.textContent = state.picks.length;
+
+  const div = document.getElementById('picks-validation');
+  if (!div) return;
+
+  if (!state.picks.length) {
+    div.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:1rem;">No entries yet. Add the first entrant above.</div>';
+    return;
+  }
+
+  const sorted = [...state.picks].map(e => ({ ...e, score: calcEntryScore(e), budget: calcBudget(e) })).sort((a,b) => a.score - b.score);
+
+  div.innerHTML = `<div style="overflow-x:auto;">
+    <table class="picks-table">
+      <thead><tr><th>#</th><th>Entrant</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>Budget</th><th>Score</th><th></th></tr></thead>
+      <tbody>
+        ${sorted.map((e, i) => {
+          const over = e.budget > 20;
+          return `<tr>
+            <td style="color:var(--gold);font-weight:700;">${i+1}</td>
+            <td style="font-weight:600;">${e.name}</td>
+            <td>${e.players[0]}</td><td>${e.players[1]}</td><td>${e.players[2]}</td><td>${e.players[3]}</td>
+            <td class="${over?'over-budget':'ok-budget'}">£${e.budget}m</td>
+            <td class="${e.score<0?'ok-budget':e.score>0?'over-budget':''}">${fmtScore(e.score)}</td>
+            <td><button onclick="removeEntrant('${e.name.replace(/'/g,"\\'")}')" style="background:none;border:none;color:rgba(228,100,100,0.6);cursor:pointer;font-size:0.8rem;padding:0.1rem 0.3rem;" title="Remove">✕</button></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// Keep CSV upload functions as fallback (used internally)
+function handlePricesUpload(e) {}
+function handlePicksUpload(e) {}
+
+// ========= ADMIN CONTROLS =========
+function renderMgAdminControls() {
+  const div = document.getElementById('mg-admin-controls');
+  div.innerHTML = state.majorStates.map((m, i) => `
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+      <span style="font-size:0.8rem;min-width:180px;color:var(--cream);">${m.name}</span>
+      <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:4px;background:${m.status==='active'?'rgba(201,168,76,0.2)':m.status==='final'?'rgba(76,175,132,0.2)':'rgba(255,255,255,0.08)'};color:${m.status==='active'?'var(--gold)':m.status==='final'?'var(--up)':'var(--muted)'};">${m.status.toUpperCase()}</span>
+      <button class="admin-btn" onclick="setMajorActive(${i})" ${m.status==='active'?'disabled':''}>Set Active</button>
+      <button class="admin-btn" onclick="setMajorFinal(${i})" ${m.status==='final'?'disabled':''}>Mark Final</button>
+    </div>
+  `).join('');
+}
+
+async function setMajorActive(idx) {
+  state.majorStates.forEach((m, i) => { if (m.status !== 'final') m.status = i === idx ? 'active' : 'upcoming'; });
+  state.activeMajorIndex = idx;
+  await saveToSupabase('major_states', JSON.stringify(state.majorStates));
+  await saveToSupabase('active_major_index', String(idx));
+  renderMgTrack(); renderMgAdminControls();
+}
+
+async function setMajorFinal(idx) {
+  // Archive current leaderboard
+  const entries = state.picks.map(p => ({ ...p, score: calcEntryScore(p), budget: calcBudget(p) }));
+  entries.sort((a,b) => a.score - b.score);
+  state.archivedMajors[idx] = entries;
+  await sbFetch('archived_majors?major_index=eq.' + idx, 'DELETE');
+  await sbFetch('archived_majors', 'POST', { major_index: idx, data: entries });
+  state.majorStates[idx].status = 'final';
+  await saveToSupabase('major_states', JSON.stringify(state.majorStates));
+  renderMgTrack(); renderMgAdminControls();
+}
+
+async function manualRefresh() {
+  const btns = document.querySelectorAll('[onclick="manualRefresh()"]');
+  btns.forEach(b => { b.textContent = '⏳ Fetching...'; b.disabled = true; });
+  try {
+    const r = await fetch('/api/scores');
+    if (!r.ok) throw new Error('Server returned ' + r.status);
+    const data = await r.json();
+    if (!data.players || !data.players.length) throw new Error(data.error || 'No player data returned');
+
+    state.previousScores = JSON.parse(JSON.stringify(state.liveScores));
+    state.liveScores = {};
+    state.espnPlayers = data.players; // store full list for live scores tab
+    state.tournamentRound = data.round || 1; // track current round
+
+    data.players.forEach(p => {
+      const key = matchPlayerName(p.lastName, p.name);
+      if (key) {
+        state.liveScores[key] = {
+          pos: p.position || '-',
+          score: p.totalToPar,            // cumulative total to-par
+          today: p.todayScore,             // current round to-par (null if cut/wd)
+          thru: p.thru || '-',
+          r1: p.rounds[0] !== undefined ? p.rounds[0] : null,
+          r2: p.rounds[1] !== undefined ? p.rounds[1] : null,
+          r3: p.rounds[2] !== undefined ? p.rounds[2] : null,
+          r4: p.rounds[3] !== undefined ? p.rounds[3] : null,
+          status: p.status || '',
+          fullName: p.name
+        };
+      } else {
+        // Log unmatched players so we can add aliases
+        console.log('Unmatched player:', p.name, '|', p.lastName);
+      }
+    });
+
+    state.lastRefreshTime = new Date();
+    const timeStr = state.lastRefreshTime.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('lastRefresh').textContent = 'Live · ' + timeStr;
+    const adminEl = document.getElementById('last-refresh-admin');
+    if (adminEl) adminEl.textContent = 'Last updated: ' + timeStr;
+    const apiStatus = document.getElementById('api-status');
+    if (apiStatus) {
+      apiStatus.className = 'status-msg ok';
+      apiStatus.style.display = 'block';
+      apiStatus.textContent = '✅ Live · R' + (data.round || '?') + ' · ' + (data.tournamentStatus || '') + ' · ' + timeStr;
+    }
+    renderAll();
+  } catch(e) {
+    console.error('Refresh error:', e);
+    const apiStatus = document.getElementById('api-status');
+    if (apiStatus) {
+      apiStatus.className = 'status-msg err';
+      apiStatus.style.display = 'block';
+      apiStatus.textContent = '❌ ' + e.message + ' — retrying next refresh';
+    }
+    document.getElementById('lastRefresh').textContent = 'Retrying...';
+  } finally {
+    btns.forEach(b => { b.textContent = '🔄 Refresh Now'; b.disabled = false; });
+  }
+}
+
+// Strip accents/diacritics from a string so e.g. "Åberg" === "Aberg"
+function stripDiacritics(str) {
+  if (!str) return '';
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u00f8/g,'o').replace(/\u00d8/g,'O').replace(/\u00e6/g,'ae').replace(/\u00c6/g,'Ae').replace(/\u00df/g,'ss');
+}
+
+function matchPlayerName(lastName, fullName) {
+  // Known aliases — full name or last name → our price list keys
+  // Includes diacritic variants so both "Aberg" and "Åberg" resolve correctly
+  const aliases = {
+    // Diacritic variants first
+    'Ludvig Åberg': 'Aberg', 'Åberg': 'Aberg', 'Ludvig Aberg': 'Aberg',
+    'Søren Kjeldsen': 'Kjeldsen', 'Rasmus Hojgåard': 'HojgaardR',
+    'Sébastien Gros': 'Gros', 'Adrián Otaegui': 'Otaegui',
+    'Rafa Cabrera Bello': 'Cabrera', 'Ángel Cabrera': 'Cabrera',
+    'Bernd Wiesberger': 'Wiesberger', 'Sébastien Gros': 'Gros',
+    // Full name aliases
+    'Min Woo Lee': 'LeeMW', 'Min-Woo Lee': 'LeeMW',
+    'Si Woo Kim': 'KimSW', 'Tom Kim': 'KimM',
+    'Byeong Hun An': 'An', 'Sungjae Im': 'Im',
+    'Rasmus Hojgaard': 'HojgaardR', 'Nicolai Hojgaard': 'HojgaardN',
+    'Rasmus Neergaard-Petersen': 'NeergaardPetersen',
+    'Neergaard-Petersen': 'NeergaardPetersen',
+    'HøjgaardN': 'HojgaardN', 'Høj gaardN': 'HojgaardN',
+    'García': 'Garcia', 'Garcia': 'Garcia',
+    'Rasmus Neergaard Petersen': 'NeergaardPetersen',
+    'Bryson DeChambeau': 'DeChambeau', 'Jon Rahm': 'Rahm',
+    'Rory McIlroy': 'McIlroy', 'Robert MacIntyre': 'MacIntyre',
+    'Scottie Scheffler': 'Scheffler', 'Xander Schauffele': 'Schauffele',
+    'Matt Fitzpatrick': 'Fitzpatrick', 'Tommy Fleetwood': 'Fleetwood',
+    'Justin Rose': 'Rose', 'Danny Willett': 'Willett',
+    'Lee Westwood': 'Westwood', 'Shane Lowry': 'Lowry',
+    'Tyrrell Hatton': 'Hatton', 'Viktor Hovland': 'Hovland',
+    'Akshay Bhatia': 'Bhatia', 'Wyndham Clark': 'Clark',
+    'Corey Conners': 'Conners', 'Sepp Straka': 'Straka',
+    'Chris Gotterup': 'Gotterup', 'Hideki Matsuyama': 'Matsuyama',
+    'Collin Morikawa': 'Morikawa', 'Brooks Koepka': 'Koepka',
+    'Jordan Spieth': 'Spieth', 'Justin Thomas': 'Thomas',
+    'Patrick Reed': 'Reed', 'Cameron Smith': 'Smith',
+    'Max Homa': 'Homa', 'Adam Scott': 'Scott',
+    'Jason Day': 'Day', 'Russell Henley': 'Henley',
+    'Harris English': 'English', 'Keegan Bradley': 'Bradley',
+    'Kurt Kitayama': 'Kitayama', 'Sahith Theegala': 'Theegala',
+    'Rickie Fowler': 'Fowler', 'Nico Echavarria': 'Echavarria',
+    'Cam Davis': 'Davis', 'Denny McCarthy': 'McCarthy',
+    'Nick Taylor': 'Taylor', 'Sam Burns': 'Burns',
+    'Patrick Cantlay': 'Cantlay', 'Joaquin Niemann': 'Niemann',
+    'Aldrich Potgieter': 'Potgieter', 'Neal Shipley': 'Shipley',
+    'Jose Maria Olazabal': 'Olazabal', 'Angel Cabrera': 'Cabrera',
+    'Haotong Li': 'Li', 'Takumi Kanaya': 'Kanaya',
+    'Naoyuki Kataoka': 'Kataoka', 'Sami Valimaki': 'Valimaki',
+    'Adrien Dumont de Chassart': 'DumontDeChassart',
+    'Stewart Cink': 'Cink', 'Zach Johnson': 'JohnsonZ',
+    'Davis Riley': 'Riley', 'Will Zalatoris': 'Zalatoris',
+    'Alex Noren': 'Noren', 'Luke List': 'List',
+    'Matt Wallace': 'Wallace', 'Thomas Detry': 'Detry',
+    'Jorge Campillo': 'Campillo', 'Grant Forrest': 'Forrest',
+    'Kevin Yu': 'Yu', 'Bailey Tardy': 'Tardy',
+    'Sam Bairstow': 'Bairstow', 'Daniel Brown': 'Brown',
+    'Luke Donald': 'Donald', 'Paul Waring': 'Waring',
+    'Andrew Johnston': 'Johnston', 'Callum Shinkwin': 'Shinkwin',
+    'Thorbjorn Olesen': 'Olesen', 'Thomas Bjorn': 'Bjorn'
+  };
+
+  // Normalise a name: lowercase + strip diacritics
+  const norm = s => stripDiacritics((s || '').toLowerCase().trim());
+
+  // Build normalised alias lookup (so "Åberg" and "Aberg" both hit the same entry)
+  const normAliases = {};
+  Object.entries(aliases).forEach(([k,v]) => { normAliases[norm(k)] = v; });
+
+  const normFull = norm(fullName);
+  const normLast = norm(lastName);
+
+  // 1. Exact alias match on full name (normalised)
+  if (normFull && normAliases[normFull]) return normAliases[normFull];
+
+  // 2. Exact alias match on last name (normalised)
+  if (normLast && normAliases[normLast]) return normAliases[normLast];
+
+  // 3. Direct key match on lastName (normalised vs price list keys normalised)
+  const priceKeys = Object.keys(state.prices);
+  if (normLast) {
+    const exact = priceKeys.find(k => norm(k) === normLast);
+    if (exact) return exact;
+  }
+
+  // 4. Normalised full-name last-word match against price keys
+  if (normFull) {
+    const parts = normFull.split(' ');
+    const lastWord = parts[parts.length - 1];
+    if (lastWord.length >= 3) {
+      const fromFull = priceKeys.find(k => norm(k) === lastWord);
+      if (fromFull) return fromFull;
+    }
+  }
+
+  // 5. Prefix match (normalised) as last resort
+  if (normLast && normLast.length >= 4) {
+    const prefix = normLast.substring(0, 5);
+    const partial = priceKeys.find(k => norm(k).startsWith(prefix));
+    if (partial) return partial;
+  }
+
+  return null;
+}
+
+async function savePenalties() {
+  state.penalties.cutScore = parseFloat(document.getElementById('cut-score').value) || 8;
+  const dnf = document.getElementById('dnf-penalty').value;
+  state.penalties.dnfPenalty = dnf ? parseFloat(dnf) : null;
+  await saveToSupabase('cut_score', String(state.penalties.cutScore));
+  if (state.penalties.dnfPenalty !== null) await saveToSupabase('dnf_penalty', String(state.penalties.dnfPenalty));
+  alert('Penalties saved.');
+}
+
+async function saveTnc() {
+  state.tncContent = document.getElementById('tnc-editor').value;
+  await saveToSupabase('tnc', state.tncContent);
+  renderTnc();
+  alert('T&Cs saved.');
+}
+
+async function changePin() {
+  const newPin = (document.getElementById('new-pin') || {}).value ? document.getElementById('new-pin').value.trim() : '';
+  if (newPin.length < 4) { alert('PIN must be at least 4 digits.'); return; }
+  state.adminPin = newPin;
+  await saveToSupabase('admin_pin', newPin);
+  alert('PIN updated.');
+}
+
+function handleWinnersImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    state.winnersImage = ev.target.result;
+    document.getElementById('winners-image').src = ev.target.result;
+    document.getElementById('winners-image-section').style.display = 'block';
+    await saveToSupabase('winners_image', ev.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function copyViewerLink() {
+  const link = window.location.href + ' | Viewer code: ' + VIEWER_CODE;
+  navigator.clipboard.writeText(link).then(() => alert('Link copied!'));
+}
+
+// ========= SHARE =========
+function renderSharePreview() {
+  // No-op: share card is now canvas-drawn, no DOM preview needed
+}
+
+function copyWhatsAppText() {
+  const count = parseInt((document.getElementById('share-count') || {value:'10'}).value) || 10;
+  const entries = state.picks.map(p => ({
+    ...p,
+    score: calcEntryScore(p),
+    budget: calcBudget(p)
+  })).sort((a,b) => a.score - b.score).slice(0, count);
+
+  const now = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const text = '\ud83c\udfcc\ufe0f HEALY&SON MAJOR SWEEPSTAKES 2026\n'
+    + '\u26f3 The Masters \xb7 Augusta National\n'
+    + '\u2500'.repeat(28) + '\n'
+    + entries.map((e, i) => {
+        const sc = fmtScore(e.score);
+        const pad = ' '.repeat(Math.max(1, 22 - e.name.length));
+        return (i+1) + '. ' + e.name + pad + sc;
+      }).join('\n')
+    + '\n' + '\u2500'.repeat(28)
+    + '\nUpdated ' + now;
+
+  navigator.clipboard.writeText(text).then(() => alert('Copied! Paste into WhatsApp.'));
+}
+
+async function saveLeaderboardImage() {
+  const btn = document.getElementById('save-img-btn');
+  if (btn) { btn.textContent = '\u23f3 Generating...'; btn.disabled = true; }
+
+  try {
+    const countEl = document.getElementById('share-count');
+    const count = countEl ? parseInt(countEl.value) : 20;
+
+    const entries = state.picks.map(p => ({
+      ...p,
+      score: calcEntryScore(p),
+      budget: calcBudget(p)
+    })).sort((a,b) => a.score - b.score).slice(0, count === 999 ? undefined : count);
+
+    // ---- Canvas dimensions ----
+    const SCALE = 3;          // 3x for crisp WhatsApp rendering
+    const W = 1080;           // output width in CSS px (will be W*SCALE actual pixels)
+    const PAD = 40;
+    const ROW_H = 62;
+    const HEADER_H = 220;
+    const FOOTER_H = 60;
+    const H = HEADER_H + entries.length * ROW_H + FOOTER_H + PAD;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = W * SCALE;
+    canvas.height = H * SCALE;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(SCALE, SCALE);
+
+    // ---- Background ----
+    ctx.fillStyle = '#0d2218';
+    ctx.fillRect(0, 0, W, H);
+
+    // Gold grid lines
+    ctx.strokeStyle = 'rgba(201,168,76,0.06)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 48) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 48) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // Radial green glow
+    const grd = ctx.createRadialGradient(W/2, HEADER_H/2, 0, W/2, HEADER_H/2, W*0.55);
+    grd.addColorStop(0, 'rgba(26,74,46,0.5)');
+    grd.addColorStop(1, 'rgba(26,74,46,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, HEADER_H + 60);
+
+    // ---- Header ----
+    const cx = W / 2;
+
+    // Presenter line
+    ctx.font = 'italic 22px Georgia, serif';
+    ctx.fillStyle = '#c9a84c';
+    ctx.textAlign = 'center';
+    ctx.fillText('HEALY&SON Productions presents', cx, 52);
+
+    // Gold divider top
+    ctx.fillStyle = '#c9a84c';
+    ctx.fillRect(cx - 60, 62, 120, 2);
+
+    // Main title
+    ctx.font = 'bold 88px Arial Black, sans-serif';
+    ctx.fillStyle = '#f5f0e8';
+    ctx.textAlign = 'center';
+    ctx.fillText('MAJOR', cx, 140);
+
+    ctx.fillStyle = '#c9a84c';
+    ctx.fillText('SWEEPSTAKES 2026', cx, 195);
+
+    // Subtitle bar
+    const subY = 215;
+    ctx.fillStyle = 'rgba(201,168,76,0.12)';
+    ctx.fillRect(PAD, subY, W - PAD*2, 36);
+    ctx.strokeStyle = 'rgba(201,168,76,0.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(PAD, subY, W - PAD*2, 36);
+    ctx.font = 'bold 16px Arial, sans-serif';
+    ctx.fillStyle = '#c9a84c';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '0.15em';
+    ctx.fillText('\u26f3  THE MASTERS TOURNAMENT 2026  \xb7  AUGUSTA NATIONAL  \xb7  APRIL 9-12', cx, subY + 23);
+
+    // ---- Column headers ----
+    const tableTop = HEADER_H + 16;
+    ctx.fillStyle = 'rgba(201,168,76,0.15)';
+    ctx.fillRect(PAD, tableTop, W - PAD*2, 30);
+    ctx.font = 'bold 13px Arial, sans-serif';
+    ctx.fillStyle = 'rgba(201,168,76,0.8)';
+    ctx.textAlign = 'left';
+    ctx.fillText('POS   ENTRANT', PAD + 16, tableTop + 20);
+    ctx.textAlign = 'right';
+    ctx.fillText('SCORE', W - PAD - 12, tableTop + 20);
+
+    // ---- Rows ----
+    const rowStart = tableTop + 30;
+    const medals = ['\ud83e\udd47','\ud83e\udd48'];
+
+    entries.forEach((e, i) => {
+      const pos = i + 1;
+      const y = rowStart + i * ROW_H;
+      const sc = e.score;
+
+      // Alternating row bg
+      ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.1)';
+      ctx.fillRect(PAD, y, W - PAD*2, ROW_H);
+
+      // Top 2 gold left border
+      if (pos <= 2) {
+        ctx.fillStyle = '#c9a84c';
+        ctx.fillRect(PAD, y, 4, ROW_H);
       }
 
       // Position
-      let position = '-';
-      if (comp.position) position = comp.position.displayName || comp.position.name || String(comp.position);
-
-      // Round scores
-      const roundScores = [null, null, null, null];
-      const linescores = comp.linescores || [];
-      const completedRounds = isCut ? 2 : Math.max(0, currentRound - 1);
-
-      for (let i = 0; i < completedRounds && i < linescores.length && i < 4; i++) {
-        const v = linescores[i] && linescores[i].value;
-        const p = parseToPar(v);
-        if (p !== null) roundScores[i] = p;
+      ctx.textAlign = 'left';
+      if (pos <= 2) {
+        ctx.font = '28px Arial, sans-serif';
+        ctx.fillText(medals[pos-1], PAD + 12, y + ROW_H/2 + 10);
+      } else {
+        ctx.font = 'bold 22px Arial Black, sans-serif';
+        ctx.fillStyle = pos <= 10 ? '#c9a84c' : 'rgba(245,240,232,0.5)';
+        ctx.fillText(pos + '.', PAD + 12, y + ROW_H/2 + 8);
       }
 
-      // Always set current active round to todayToPar (even if 0 = E)
-      if (isActive && currentRound >= 1 && currentRound <= 4) {
-        roundScores[currentRound - 1] = todayToPar !== null ? todayToPar : 0;
-      }
+      // Name
+      ctx.font = 'bold 24px Arial, sans-serif';
+      ctx.fillStyle = '#f5f0e8';
+      ctx.textAlign = 'left';
+      // Truncate long names
+      let name = e.name;
+      while (ctx.measureText(name).width > W - 340 && name.length > 6) name = name.slice(0,-1);
+      if (name !== e.name) name += '…';
+      ctx.fillText(name, PAD + 72, y + 26);
 
-      // Derive R1 if missing in R2
-      if (currentRound === 2 && roundScores[0] === null && isActive && totalToPar !== null && todayToPar !== null) {
-        roundScores[0] = totalToPar - todayToPar;
-      }
+      // Players inline
+      const playerStr = e.players.map(p => {
+        const rk = resolveKey(p);
+        const sc2 = state.liveScores[rk] ? getAdjustedScore(rk) : null;
+        return p + ' ' + (sc2 !== null ? fmtScore(sc2) : 'E');
+      }).join('  \xb7  ');
+      ctx.font = '17px Arial, sans-serif';
+      ctx.fillStyle = 'rgba(245,240,232,0.5)';
+      let ps = playerStr;
+      while (ctx.measureText(ps).width > W - 320 && ps.length > 10) ps = ps.slice(0,-1);
+      if (ps !== playerStr) ps += '…';
+      ctx.fillText(ps, PAD + 72, y + 50);
 
-      return {
-        name: displayName,
-        lastName: lastName,
-        firstName: firstName,
-        position: position,
-        totalToPar: totalToPar !== null ? totalToPar : 0,
-        todayScore: isActive ? (todayToPar !== null ? todayToPar : 0) : null,
-        thru: thru,
-        rounds: roundScores,
-        status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
-        sortOrder: comp.sortOrder || 9999
-      };
+      // Score
+      const scColor = sc < 0 ? '#4caf84' : sc > 0 ? '#e05050' : '#f5f0e8';
+      ctx.font = 'bold 32px Arial Black, sans-serif';
+      ctx.fillStyle = scColor;
+      ctx.textAlign = 'right';
+      ctx.fillText(fmtScore(sc), W - PAD - 16, y + ROW_H/2 + 12);
+
+      // Row divider
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(PAD, y + ROW_H);
+      ctx.lineTo(W - PAD, y + ROW_H);
+      ctx.stroke();
     });
 
-    leaderboard.sort(function(a, b) { return a.sortOrder - b.sortOrder; });
+    // ---- Footer ----
+    const footerY = rowStart + entries.length * ROW_H + 16;
+    ctx.fillStyle = 'rgba(201,168,76,0.08)';
+    ctx.fillRect(PAD, footerY, W - PAD*2, 44);
+    ctx.strokeStyle = 'rgba(201,168,76,0.2)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(PAD, footerY, W - PAD*2, 44);
 
-    return res.status(200).json({
-      players: leaderboard,
-      tournamentStatus: statusDesc,
-      round: currentRound,
-      lastUpdated: new Date().toISOString()
-    });
+    const now = new Date().toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    ctx.font = '15px Arial, sans-serif';
+    ctx.fillStyle = 'rgba(201,168,76,0.6)';
+    ctx.textAlign = 'center';
+    ctx.fillText('healy-son-sweepstake.vercel.app  \xb7  Updated ' + now + '  \xb7  HEALY&SON Productions', cx, footerY + 28);
 
-  } catch (err) {
-    console.error('ESPN fetch error:', err);
-    return res.status(500).json({ error: err.message, players: [], status: 'error' });
+    // ---- Export ----
+    const imgData = canvas.toDataURL('image/png');
+
+    // Show preview
+    const preview = document.getElementById('share-img-preview');
+    const imgEl = document.getElementById('share-img-output');
+    if (preview && imgEl) {
+      imgEl.src = imgData;
+      preview.style.display = 'block';
+    }
+
+    // Download
+    const link = document.createElement('a');
+    link.download = 'healy-sweepstake-' + new Date().toISOString().slice(0,10) + '.png';
+    link.href = imgData;
+    link.click();
+
+  } catch(err) {
+    console.error(err);
+    alert('Image generation failed: ' + err.message);
+  } finally {
+    if (btn) { btn.textContent = '\ud83d\udcf8 Generate Image'; btn.disabled = false; }
   }
-};
+}
+
+// ========= DRAG & DROP =========
+function setupDragDrop(zoneId, handler) {
+  const zone = document.getElementById(zoneId);
+  if (!zone) return;
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) handler({ target: { files: [file] } });
+  });
+}
+
+// ========= AUTO-REFRESH =========
+let refreshTimer = null;
+function setupAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  const sel = document.getElementById('refresh-interval');
+  const interval = sel ? parseInt(sel.value) * 1000 : 600000;
+  refreshTimer = setInterval(() => manualRefresh(), interval);
+}
+
+// ========= START =========
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  setupDragDrop('prices-zone', handlePricesUpload);
+  setupDragDrop('picks-zone', handlePicksUpload);
+  document.getElementById('refresh-interval').addEventListener('change', setupAutoRefresh);
+  // Fetch live scores immediately when app loads, then auto-refresh
+  setupAutoRefresh();
+  manualRefresh();
+});
+</script>
+</body>
+</html>

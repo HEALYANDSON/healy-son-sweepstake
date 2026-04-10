@@ -111,10 +111,11 @@
   .lb-row { display:grid; grid-template-columns:38px 36px 1fr auto auto; gap:0.5rem; align-items:center; padding:0.55rem 0.75rem; }
   .lb-pos-num { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--muted); text-align:center; min-width:28px; }
   .lb-pos-num.podium { font-size:1rem; }
-  .lb-move { font-size:0.6rem; font-weight:700; text-align:center; width:20px; }
+  .lb-move { font-size:0.6rem; font-weight:700; text-align:center; width:28px; white-space:nowrap; }
   .lb-move.up { color:var(--up); }
   .lb-move.down { color:var(--down); }
   .lb-move.same { color:rgba(255,255,255,0.2); }
+  .lb-move.new { color:var(--gold); font-size:0.55rem; }
   .lb-name { font-weight:600; font-size:0.85rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
   .lb-players-inline { font-size:0.65rem; color:var(--muted); margin-top:0.2rem; line-height:1.5; text-align:left; white-space:normal; word-break:break-word; }
   .lb-budget-inline { font-size:0.65rem; color:var(--muted); white-space:nowrap; }
@@ -610,6 +611,7 @@ let state = {
   liveScores: {},  // {playerName: {pos,score,today,thru,r1,r2,r3,r4,status}}
   espnPlayers: [],  // raw ESPN player array for live scores tab
   previousScores: {}, // for movement
+  previousPositions: {}, // entry name -> previous rank
   penalties: { cutScore: 8, dnfPenalty: null },
   majorStates: [
     { name:'The Masters', status:'active' },
@@ -1226,8 +1228,22 @@ function buildLbEntry(e, pos) {
     return `<span class="pick-chip ${chipCls}"><span class="chip-name">${p}</span><span class="chip-score ${scoreCls2}">${fmtScore(sc)}</span><span class="chip-price">£${price || '?'}m</span>${status ? `<span class="badge ${status.toLowerCase()}">${status}</span>` : ''}</span>`
   }).join('');
 
+  // Movement indicator
+  const prevPos = state.previousPositions[e.name];
+  let moveHtml;
+  if (!prevPos || prevPos === pos) {
+    moveHtml = '<div class="lb-move same">—</div>';
+  } else {
+    const diff = prevPos - pos; // positive = moved up
+    if (diff > 0) {
+      moveHtml = `<div class="lb-move up">▲${diff}</div>`;
+    } else {
+      moveHtml = `<div class="lb-move down">▼${Math.abs(diff)}</div>`;
+    }
+  }
+
   const entryId = 'lb-' + e.name.replace(/[^a-z0-9]/gi,'_');
-  return `<div class="lb-entry ${pos <= 2 ? 'top-3' : ''}" id="${entryId}" onclick="toggleLbEntry('${entryId}')"><div class="lb-row">${posDisplay}<div class="lb-move same">—</div><div style="min-width:0;text-align:left;"><div class="lb-name">${e.name}</div><div class="lb-players-inline">${playersInline}</div></div><div class="lb-budget-inline">£${e.budget}m</div><div style="display:flex;align-items:center;"><div class="lb-score-total ${scoreCls}">${scoreDisplay}</div><span class="lb-chevron">&#9660;</span></div></div><div class="lb-detail"><div class="lb-picks">${picks}</div><div class="budget-bar-wrap"><div class="budget-bar-label"><span>Budget used</span><span>£${e.budget}m / £20m</span></div><div class="budget-bar-track"><div class="budget-bar-fill" style="width:${budgetPct}%"></div></div></div></div></div>`;
+  return `<div class="lb-entry ${pos <= 2 ? 'top-3' : ''}" id="${entryId}" onclick="toggleLbEntry('${entryId}')"><div class="lb-row">${posDisplay}${moveHtml}<div style="min-width:0;text-align:left;"><div class="lb-name">${e.name}</div><div class="lb-players-inline">${playersInline}</div></div><div class="lb-budget-inline">£${e.budget}m</div><div style="display:flex;align-items:center;"><div class="lb-score-total ${scoreCls}">${scoreDisplay}</div><span class="lb-chevron">&#9660;</span></div></div><div class="lb-detail"><div class="lb-picks">${picks}</div><div class="budget-bar-wrap"><div class="budget-bar-label"><span>Budget used</span><span>£${e.budget}m / £20m</span></div><div class="budget-bar-track"><div class="budget-bar-fill" style="width:${budgetPct}%"></div></div></div></div></div>`;
 }
 
 function toggleLbEntry(id) {
@@ -1242,6 +1258,10 @@ function renderLeaderboard(filter) {
     return;
   }
   if (filter === undefined) {
+    // Save previous positions before re-ranking
+    if (_lbEntries.length) {
+      _lbEntries.forEach((e, i) => { state.previousPositions[e.name] = i + 1; });
+    }
     _lbEntries = state.picks.map(p => ({ ...p, score: calcEntryScore(p), budget: calcBudget(p) }));
     _lbEntries.sort((a, b) => a.score - b.score);
   }
@@ -1640,6 +1660,10 @@ async function manualRefresh() {
     if (!data.players || !data.players.length) throw new Error(data.error || 'No player data returned');
 
     state.previousScores = JSON.parse(JSON.stringify(state.liveScores));
+    // Snapshot current leaderboard positions before scores update
+    if (_lbEntries && _lbEntries.length) {
+      _lbEntries.forEach((e, i) => { state.previousPositions[e.name] = i + 1; });
+    }
     state.liveScores = {};
     state.espnPlayers = data.players; // store full list for live scores tab
 

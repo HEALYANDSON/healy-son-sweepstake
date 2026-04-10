@@ -1318,7 +1318,6 @@ function renderLiveScores() {
 
   tbody.innerHTML = source.map(p => {
     const score = p.totalToPar !== undefined ? p.totalToPar : (p.score || 0);
-    const today = p.todayScore !== undefined ? p.todayScore : (p.today !== undefined ? p.today : null);
     const playerKey = matchPlayerName(p.lastName, p.name);
     const price = playerKey ? (state.prices[playerKey] || '') : '';
     const today = p.todayScore !== undefined ? p.todayScore : null;

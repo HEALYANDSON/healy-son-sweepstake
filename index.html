@@ -115,8 +115,8 @@
   .lb-move.up { color:var(--up); }
   .lb-move.down { color:var(--down); }
   .lb-move.same { color:rgba(255,255,255,0.2); }
-  .lb-name { font-weight:600; font-size:0.85rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .lb-players-inline { font-size:0.65rem; color:var(--muted); margin-top:0.2rem; line-height:1.5; }
+  .lb-name { font-weight:600; font-size:0.85rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
+  .lb-players-inline { font-size:0.65rem; color:var(--muted); margin-top:0.2rem; line-height:1.5; text-align:left; white-space:normal; word-break:break-word; }
   .lb-budget-inline { font-size:0.65rem; color:var(--muted); white-space:nowrap; }
   .lb-score-total { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; min-width:36px; text-align:right; }
   .lb-score-total.pos { color:#e05050; }
@@ -1205,8 +1205,8 @@ function buildLbEntry(e, pos) {
   const scoreCls = e.score < 0 ? 'neg' : e.score > 0 ? 'pos' : 'even';
   const budgetPct = Math.min((e.budget / 20) * 100, 100);
   const isTop3 = pos <= 3;
-  const medals = ['🥇','🥈','🥉'];
-  const posDisplay = pos <= 3
+  const medals = ['🥇','🥈'];
+  const posDisplay = pos <= 2
     ? `<span class="lb-pos-num podium">${medals[pos-1]}</span>`
     : `<span class="lb-pos-num" style="color:var(--gold);">${pos}</span>`;
 
@@ -1232,7 +1232,7 @@ function buildLbEntry(e, pos) {
   }).join('');
 
   const entryId = 'lb-' + e.name.replace(/[^a-z0-9]/gi,'_');
-  return `<div class="lb-entry ${isTop3 ? 'top-3' : ''}" id="${entryId}" onclick="toggleLbEntry('${entryId}')"><div class="lb-row">${posDisplay}<div class="lb-move same">—</div><div style="min-width:0;"><div class="lb-name">${e.name}</div><div class="lb-players-inline">${playersInline}</div></div><div class="lb-budget-inline">£${e.budget}m</div><div style="display:flex;align-items:center;"><div class="lb-score-total ${scoreCls}">${scoreDisplay}</div><span class="lb-chevron">&#9660;</span></div></div><div class="lb-detail"><div class="lb-picks">${picks}</div><div class="budget-bar-wrap"><div class="budget-bar-label"><span>Budget used</span><span>£${e.budget}m / £20m</span></div><div class="budget-bar-track"><div class="budget-bar-fill" style="width:${budgetPct}%"></div></div></div></div></div>`;
+  return `<div class="lb-entry ${pos <= 2 ? 'top-3' : ''}" id="${entryId}" onclick="toggleLbEntry('${entryId}')"><div class="lb-row">${posDisplay}<div class="lb-move same">—</div><div style="min-width:0;text-align:left;"><div class="lb-name">${e.name}</div><div class="lb-players-inline">${playersInline}</div></div><div class="lb-budget-inline">£${e.budget}m</div><div style="display:flex;align-items:center;"><div class="lb-score-total ${scoreCls}">${scoreDisplay}</div><span class="lb-chevron">&#9660;</span></div></div><div class="lb-detail"><div class="lb-picks">${picks}</div><div class="budget-bar-wrap"><div class="budget-bar-label"><span>Budget used</span><span>£${e.budget}m / £20m</span></div><div class="budget-bar-track"><div class="budget-bar-fill" style="width:${budgetPct}%"></div></div></div></div></div>`;
 }
 
 function toggleLbEntry(id) {
@@ -1854,8 +1854,8 @@ function renderSharePreview() {
       const pos = i + 1;
       const sc = e.score;
       const scColor = sc < 0 ? '#4caf84' : sc > 0 ? '#e05050' : '#f5f0e8';
-      const medals = ['🥇','🥈','🥉'];
-      const posDisplay = pos <= 3 ? medals[pos-1] : pos + '.';
+      const medals = ['🥇','🥈'];
+      const posDisplay = pos <= 2 ? medals[pos-1] : pos + '.';
 
       // Player chips with individual scores
       const playerChips = e.players.map(p => {

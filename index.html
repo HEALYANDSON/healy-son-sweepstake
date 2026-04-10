@@ -385,6 +385,12 @@
             <th>Player</th>
             <th>Price</th>
             <th>Score</th>
+            <th>Today</th>
+            <th>Thru</th>
+            <th>R1</th>
+            <th>R2</th>
+            <th>R3</th>
+            <th>R4</th>
           </tr>
         </thead>
         <tbody id="live-scores-body"></tbody>
@@ -1315,10 +1321,23 @@ function renderLiveScores() {
     const today = p.todayScore !== undefined ? p.todayScore : (p.today !== undefined ? p.today : null);
     const playerKey = matchPlayerName(p.lastName, p.name);
     const price = playerKey ? (state.prices[playerKey] || '') : '';
+    const today = p.todayScore !== undefined ? p.todayScore : null;
+    const thru  = p.thru || '-';
+    const r1 = p.r1 !== undefined ? p.r1 : (p.rounds ? p.rounds[0] : null);
+    const r2 = p.r2 !== undefined ? p.r2 : (p.rounds ? p.rounds[1] : null);
+    const r3 = p.r3 !== undefined ? p.r3 : (p.rounds ? p.rounds[2] : null);
+    const r4 = p.r4 !== undefined ? p.r4 : (p.rounds ? p.rounds[3] : null);
+    const fmtR = v => v !== null && v !== undefined ? fmtScore(v) : '-';
     return `<tr>
       <td style="font-weight:600;">${p.name || p.fullName || p.lastName || '-'}</td>
       <td style="color:var(--gold);font-size:0.75rem;">${price ? '£' + price + 'm' : '-'}</td>
       <td class="${scoreClass(score)}" style="font-weight:700;">${fmtScore(score)}</td>
+      <td class="${scoreClass(today)}">${today !== null ? fmtScore(today) : '-'}</td>
+      <td style="color:var(--muted);font-size:0.75rem;">${thru}</td>
+      <td class="${scoreClass(r1)}">${fmtR(r1)}</td>
+      <td class="${scoreClass(r2)}">${fmtR(r2)}</td>
+      <td class="${scoreClass(r3)}">${fmtR(r3)}</td>
+      <td class="${scoreClass(r4)}">${fmtR(r4)}</td>
     </tr>`;
   }).join('');
 }

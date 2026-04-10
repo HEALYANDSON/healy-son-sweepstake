@@ -3,6 +3,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
   const TOURNAMENT_ID = '401811941'; // Masters 2026
+  const COURSE_PAR = 72;
 
   try {
     const url = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId=' + TOURNAMENT_ID;
@@ -17,77 +18,125 @@ module.exports = async function handler(req, res) {
     if (!response.ok) throw new Error('ESPN returned ' + response.status);
 
     const data = await response.json();
-    const events = data && data.events && data.events[0];
-    if (!events) return res.status(200).json({ players: [], status: 'no_data' });
+    const event = data && data.events && data.events[0];
+    if (!event) return res.status(200).json({ players: [], status: 'no_data' });
 
-    const competition = events.competitions && events.competitions[0];
+    const competition = event.competitions && event.competitions[0];
     const competitors = (competition && competition.competitors) || [];
-    const status = (events.status && events.status.type && events.status.type.description) || 'In Progress';
-    const currentRound = (events.status && events.status.period) || 1;
+    const statusDesc = (event.status && event.status.type && event.status.type.description) || 'In Progress';
+    const currentRound = (event.status && event.status.period) || 1;
 
     const leaderboard = competitors.map(function(comp) {
       const athlete = comp.athlete || {};
 
-      // totalToPar
-      const scoreStr = comp.score || 'E';
-      const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
+      // Name parsing
+      const displayName = athlete.displayName || '';
+      const nameParts = displayName.trim().split(' ');
+      const lastName = athlete.lastName || (nameParts.length > 1 ? nameParts[nameParts.length - 1] : displayName);
 
-      // todayScore
-      const todayStr = comp.today || 'E';
-      const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
+      // ---- SCORE parsing ----
+      // ESPN returns comp.score as the TOTAL cumulative to-par string e.g. "-14", "+3", "E"
+      // comp.today is the CURRENT ROUND to-par string e.g. "-5", "+2", "E"
+      const parseToPar = function(str) {
+        if (str === null || str === undefined) return null;
+        const s = String(str).trim();
+        if (s === 'E' || s === '' || s === '-') return 0;
+        const n = parseInt(s);
+        return isNaN(n) ? 0 : n;
+      };
 
-      // Position — try multiple ESPN field locations
-      const posDisplay =
-        (comp.status && comp.status.position && comp.status.position.displayName) ||
-        (comp.status && comp.status.position && comp.status.position.name) ||
-        (comp.sortOrder ? 'T' + comp.sortOrder : '-');
+      const totalToPar = parseToPar(comp.score);
+      const todayToPar = parseToPar(comp.today);
 
-      // Thru — try multiple field names ESPN uses
-      const thruRaw = comp.thru !== undefined ? comp.thru : (comp.holesPlayed !== undefined ? comp.holesPlayed : null);
-      const thru = thruRaw !== null && thruRaw !== undefined && thruRaw !== '' ? String(thruRaw) : '-';
+      // ---- STATUS ----
+      const statusDetail = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
+      const statusLower = statusDetail.toLowerCase();
+      const isCut = statusLower.includes('cut') || statusLower.includes('mc') ||
+                    (comp.status && comp.status.type && comp.status.type.name === 'STATUS_MISSED_CUT');
+      const isWD  = statusLower.includes('wd') || statusLower.includes('withdrew') || statusLower.includes('withdrawal');
+      const isDQ  = statusLower.includes('dq') || statusLower.includes('disqualified');
+      const isActive = !isCut && !isWD && !isDQ;
 
-      // Build per-round scores
+      // ---- THRU ----
+      // comp.status.type.shortDetail often contains "F" (finished) or e.g. "Thru 9"
+      // comp.thru is sometimes present directly
+      let thru = '-';
+      if (comp.thru !== undefined && comp.thru !== null) {
+        thru = String(comp.thru);
+      } else if (statusDetail) {
+        if (statusDetail === 'F' || statusDetail.toLowerCase() === 'f') {
+          thru = 'F';
+        } else {
+          const m = statusDetail.match(/thru\s+(\d+)/i) || statusDetail.match(/(\d+)/);
+          if (m) thru = m[1];
+        }
+      }
+      if (isCut || isWD || isDQ) thru = '-';
+
+      // ---- POSITION ----
+      const position = comp.position
+        ? (comp.position.displayName || comp.position.name || String(comp.position))
+        : (comp.sortOrder ? 'T' + comp.sortOrder : '-');
+
+      // ---- ROUND SCORES ----
+      // linescores[] contains one entry per round played.
+      // Each entry has a value which may be raw strokes (e.g. 68) or to-par (e.g. -4).
+      // We normalise to to-par.
       const roundScores = [null, null, null, null];
+      const linescores = comp.linescores || [];
+
+      // Helper: convert a linescore value to to-par
+      const lineToToPar = function(val) {
+        const n = parseInt(val);
+        if (isNaN(n)) return null;
+        // If it looks like raw strokes (> 50), subtract course par
+        return n > 50 ? n - COURSE_PAR : n;
+      };
 
       if (currentRound === 1) {
+        // Only R1 in progress — today = total
         roundScores[0] = totalToPar;
       } else {
-        const linescores = comp.linescores || [];
-        for (let i = 0; i < currentRound - 1 && i < linescores.length; i++) {
-          const strokes = parseInt(linescores[i].value);
-          if (!isNaN(strokes) && strokes > 50) {
-            roundScores[i] = strokes - 72;
-          } else if (!isNaN(strokes)) {
-            roundScores[i] = strokes;
+        // R2+ — fill completed rounds from linescores
+        // For an active R2 player: linescores[0] = R1 (completed), linescores[1] may be partial R2
+        const completedCount = isCut ? linescores.length : currentRound - 1;
+
+        for (let i = 0; i < linescores.length && i < 4; i++) {
+          const val = linescores[i] && (linescores[i].value !== undefined ? linescores[i].value : null);
+          if (val !== null) {
+            if (i < completedCount) {
+              // Fully completed round
+              roundScores[i] = lineToToPar(val);
+            } else if (i === currentRound - 1 && isActive) {
+              // Current round in progress — use todayToPar for accuracy
+              roundScores[i] = todayToPar;
+            }
           }
         }
-        roundScores[currentRound - 1] = todayScore;
+
+        // Ensure current active round is always set to todayToPar
+        if (isActive && currentRound >= 2) {
+          roundScores[currentRound - 1] = todayToPar;
+        }
+
+        // Sanity check: if we only got R1 from linescores but we're in R2,
+        // make sure R1 is set. Derive R1 = total - today if linescores didn't give it.
+        if (currentRound === 2 && roundScores[0] === null && isActive) {
+          roundScores[0] = totalToPar - todayToPar;
+        }
       }
 
-      const playerStatus = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
-      const isCut = playerStatus.toLowerCase().includes('cut');
-      const isWD = playerStatus.toLowerCase().includes('wd') || playerStatus.toLowerCase().includes('withdrew');
-      const isDQ = playerStatus.toLowerCase().includes('dq');
-
-      // Also dump raw comp fields we might need for debugging
       return {
-        name: athlete.displayName || '',
-        lastName: athlete.lastName || '',
-        firstName: athlete.firstName || '',
-        position: posDisplay,
+        name: displayName,
+        lastName: lastName,
+        firstName: athlete.firstName || (nameParts.length > 1 ? nameParts[0] : ''),
+        position: position,
         totalToPar: totalToPar,
-        todayScore: currentRound === 1 ? totalToPar : todayScore,
+        todayScore: isCut ? null : (isDQ || isWD ? null : todayToPar),
         thru: thru,
         rounds: roundScores,
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
-        sortOrder: comp.sortOrder || 999,
-        // Debug: expose raw ESPN fields so we can see what's available
-        _raw: {
-          thru: comp.thru,
-          holesPlayed: comp.holesPlayed,
-          status: comp.status,
-          sortOrder: comp.sortOrder
-        }
+        sortOrder: comp.sortOrder || 9999
       };
     });
 
@@ -95,7 +144,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       players: leaderboard,
-      tournamentStatus: status,
+      tournamentStatus: statusDesc,
       round: currentRound,
       lastUpdated: new Date().toISOString()
     });

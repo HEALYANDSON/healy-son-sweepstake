@@ -612,6 +612,7 @@ let state = {
   espnPlayers: [],  // raw ESPN player array for live scores tab
   previousScores: {}, // for movement
   previousPositions: {}, // entry name -> previous rank
+  hasRefreshed: false,   // true only after at least one live refresh has happened
   penalties: { cutScore: 8, dnfPenalty: null },
   majorStates: [
     { name:'The Masters', status:'active' },
@@ -1228,10 +1229,12 @@ function buildLbEntry(e, pos) {
     return `<span class="pick-chip ${chipCls}"><span class="chip-name">${p}</span><span class="chip-score ${scoreCls2}">${fmtScore(sc)}</span><span class="chip-price">£${price || '?'}m</span>${status ? `<span class="badge ${status.toLowerCase()}">${status}</span>` : ''}</span>`
   }).join('');
 
-  // Movement indicator
-  const prevPos = state.previousPositions[e.name];
+  // Movement indicator — only shown after at least 2 refreshes
   let moveHtml;
-  if (!prevPos || prevPos === pos) {
+  const prevPos = state.previousPositions[e.name];
+  if (!state.hasRefreshed || !prevPos || Object.keys(state.previousPositions).length === 0) {
+    moveHtml = '<div class="lb-move same">—</div>';
+  } else if (prevPos === pos) {
     moveHtml = '<div class="lb-move same">—</div>';
   } else {
     const diff = prevPos - pos; // positive = moved up
@@ -1361,7 +1364,7 @@ function renderStats() {
     <div class="stat-card"><div class="stat-card-label">Total Entries</div><div class="stat-card-val">${totalEntries}</div></div>
     <div class="stat-card"><div class="stat-card-label">Players Picked</div><div class="stat-card-val">${totalPicked}</div></div>
     <div class="stat-card"><div class="stat-card-label">Most Picked</div><div class="stat-card-val" style="font-size:1.4rem;">${most?most[0]:'—'}</div><div class="stat-card-sub">${most?most[1]+' entries':''}</div></div>
-    <div class="stat-card"><div class="stat-card-label">Least Picked</div><div class="stat-card-val" style="font-size:1.4rem;">${least?least[0]:'—'}</div><div class="stat-card-sub">${least?least[1]+' entr${least[1]===1?"y":"ies"}':''}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Least Picked</div><div class="stat-card-val" style="font-size:1.4rem;">${least?least[0]:'—'}</div><div class="stat-card-sub">${least?(least[1]===1?'1 entry':least[1]+' entries'):''}</div></div>
     <div class="stat-card"><div class="stat-card-label">Best Value Pick</div><div class="stat-card-val" style="font-size:1.4rem;">${bestValue||'—'}</div><div class="stat-card-sub">Score per £m</div></div>
   `;
 
@@ -1660,8 +1663,8 @@ async function manualRefresh() {
     if (!data.players || !data.players.length) throw new Error(data.error || 'No player data returned');
 
     state.previousScores = JSON.parse(JSON.stringify(state.liveScores));
-    // Snapshot current leaderboard positions before scores update
-    if (_lbEntries && _lbEntries.length) {
+    // Snapshot current positions ONLY if we already have a valid leaderboard
+    if (state.hasRefreshed && _lbEntries && _lbEntries.length) {
       _lbEntries.forEach((e, i) => { state.previousPositions[e.name] = i + 1; });
     }
     state.liveScores = {};
@@ -1699,6 +1702,7 @@ async function manualRefresh() {
       apiStatus.style.display = 'block';
       apiStatus.textContent = '✅ Live · R' + (data.round || '?') + ' · ' + (data.tournamentStatus || '') + ' · ' + timeStr;
     }
+    state.hasRefreshed = true;
     renderAll();
   } catch(e) {
     console.error('Refresh error:', e);

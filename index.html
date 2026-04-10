@@ -385,9 +385,6 @@
             <th>Player</th>
             <th>Price</th>
             <th>Score</th>
-            <th>Today</th>
-            <th>Thru</th>
-            <th>Status</th>
           </tr>
         </thead>
         <tbody id="live-scores-body"></tbody>
@@ -1316,18 +1313,12 @@ function renderLiveScores() {
   tbody.innerHTML = source.map(p => {
     const score = p.totalToPar !== undefined ? p.totalToPar : (p.score || 0);
     const today = p.todayScore !== undefined ? p.todayScore : (p.today !== undefined ? p.today : null);
-    const thru = p.thru || '-';
     const playerKey = matchPlayerName(p.lastName, p.name);
     const price = playerKey ? (state.prices[playerKey] || '') : '';
-    const statusBadge = p.status ? `<span class="badge ${p.status.toLowerCase()}">${p.status}</span>` : '';
-    const isCutWD = p.status === 'CUT' || p.status === 'WD' || p.status === 'DQ';
     return `<tr>
       <td style="font-weight:600;">${p.name || p.fullName || p.lastName || '-'}</td>
       <td style="color:var(--gold);font-size:0.75rem;">${price ? '£' + price + 'm' : '-'}</td>
       <td class="${scoreClass(score)}" style="font-weight:700;">${fmtScore(score)}</td>
-      <td class="${scoreClass(today)}">${today !== null ? fmtScore(today) : '-'}</td>
-      <td style="color:var(--muted);font-size:0.75rem;">${isCutWD ? '-' : thru}</td>
-      <td>${statusBadge}</td>
     </tr>`;
   }).join('');
 }

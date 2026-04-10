@@ -1649,16 +1649,19 @@ async function manualRefresh() {
       if (key) {
         state.liveScores[key] = {
           pos: p.position || '-',
-          score: p.totalToPar,
-          today: p.todayScore,
+          score: p.totalToPar,            // cumulative total to-par
+          today: p.todayScore,             // current round to-par (null if cut/wd)
           thru: p.thru || '-',
-          r1: p.rounds[0] || null,
-          r2: p.rounds[1] || null,
-          r3: p.rounds[2] || null,
-          r4: p.rounds[3] || null,
+          r1: p.rounds[0] !== undefined ? p.rounds[0] : null,
+          r2: p.rounds[1] !== undefined ? p.rounds[1] : null,
+          r3: p.rounds[2] !== undefined ? p.rounds[2] : null,
+          r4: p.rounds[3] !== undefined ? p.rounds[3] : null,
           status: p.status || '',
           fullName: p.name
         };
+      } else {
+        // Log unmatched players so we can add aliases
+        console.log('Unmatched player:', p.name, '|', p.lastName);
       }
     });
 

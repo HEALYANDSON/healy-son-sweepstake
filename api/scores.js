@@ -29,86 +29,49 @@ module.exports = async function handler(req, res) {
     const leaderboard = competitors.map(function(comp) {
       const athlete = comp.athlete || {};
 
+      // Extract last name from displayName as fallback (ESPN often leaves lastName blank)
       const displayName = athlete.displayName || '';
       const nameParts = displayName.trim().split(' ');
       const lastName = athlete.lastName || (nameParts.length > 1 ? nameParts[nameParts.length - 1] : displayName);
       const firstName = athlete.firstName || (nameParts.length > 1 ? nameParts[0] : '');
 
-      // SCORE — cumulative to-par, ESPN sends as "-14", "E", "+3"
+      // totalToPar — cumulative, already relative to par
       const scoreStr = comp.score || 'E';
       const totalToPar = scoreStr === 'E' ? 0 : (parseInt(scoreStr) || 0);
 
-      // TODAY — current round to-par
+      // todayScore — current round relative to par
       const todayStr = comp.today || 'E';
       const todayScore = todayStr === 'E' ? 0 : (parseInt(todayStr) || 0);
 
-      // STATUS
+      // Player status
       const playerStatus = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
       const statusLower = playerStatus.toLowerCase();
       const isCut = statusLower.includes('cut') || statusLower.includes('mc');
-      const isWD  = statusLower.includes('wd') || statusLower.includes('withdrew') || statusLower.includes('withdrawal');
-      const isDQ  = statusLower.includes('dq') || statusLower.includes('disqualified');
+      const isWD = statusLower.includes('wd') || statusLower.includes('withdrew') || statusLower.includes('withdrawal');
+      const isDQ = statusLower.includes('dq') || statusLower.includes('disqualified');
       const isActive = !isCut && !isWD && !isDQ;
 
-      // THRU — hole number in progress, "F" if finished, or tee time
-      // ESPN puts this in comp.status.type.shortDetail or comp.linescores
-      let thru = '-';
-      const shortDetail = (comp.status && comp.status.type && comp.status.type.shortDetail) || '';
-      if (isActive) {
-        if (shortDetail === 'F' || shortDetail === 'F*') {
-          thru = 'F';
-        } else {
-          // shortDetail often contains "Thru 7" or just "7" or a tee time like "8:48 AM"
-          const holeMatch = shortDetail.match(/(\d{1,2})$/);
-          if (holeMatch) {
-            thru = holeMatch[1] === '18' ? 'F' : holeMatch[1];
-          } else if (shortDetail.match(/\d{1,2}:\d{2}/)) {
-            // It's a tee time — convert from ET to BST (ET + 5 hours)
-            const timeMatch = shortDetail.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-            if (timeMatch) {
-              let h = parseInt(timeMatch[1]);
-              const m = timeMatch[2];
-              const ampm = timeMatch[3].toUpperCase();
-              if (ampm === 'PM' && h !== 12) h += 12;
-              if (ampm === 'AM' && h === 12) h = 0;
-              h += 5; // ET to BST
-              if (h >= 24) h -= 24;
-              thru = h + ':' + m + ' BST';
-            } else {
-              thru = shortDetail; // fallback: show as-is
-            }
-          } else if (shortDetail) {
-            thru = shortDetail;
-          }
-        }
-      }
-
-      // ROUND SCORES — linescores[] from ESPN contains raw strokes per completed round
-      // e.g. [{value:"70"}, {value:"68"}] = R1 70 strokes, R2 68 strokes
-      // Convert: to-par = strokes - 72
+      // Build per-round scores — all relative to par
       const roundScores = [null, null, null, null];
       const linescores = comp.linescores || [];
 
       if (currentRound === 1) {
-        // R1 in progress — no completed linescores yet, today IS R1
-        roundScores[0] = todayScore;
+        // R1 in progress: score = today = totalToPar
+        roundScores[0] = totalToPar;
       } else {
-        // R2+: linescores has one entry per completed round
-        // For a cut player after R2: linescores has 2 entries (R1, R2)
-        // For active R2 player: linescores has 1 entry (R1 complete), R2 = today
+        // Completed rounds: derive from linescores (raw strokes → subtract par)
+        // linescores array contains one entry per completed round
         const completedRounds = isCut ? linescores.length : currentRound - 1;
-
         for (let i = 0; i < completedRounds && i < linescores.length; i++) {
-          const val = linescores[i] && linescores[i].value;
+          const val = linescores[i].value;
           const strokes = parseInt(val);
           if (!isNaN(strokes)) {
-            // Raw strokes (e.g. 70) → convert to to-par. To-par values are always small (-10 to +10 range)
-            roundScores[i] = strokes > 30 ? strokes - COURSE_PAR : strokes;
+            // If value > 50 it's raw strokes, convert to par
+            roundScores[i] = strokes > 50 ? strokes - COURSE_PAR : strokes;
           }
         }
-
-        // Active player: current round = todayScore
-        if (isActive) {
+        // Current round for active players
+        if (isActive && currentRound <= 4) {
           roundScores[currentRound - 1] = todayScore;
         }
       }
@@ -118,12 +81,8 @@ module.exports = async function handler(req, res) {
         lastName: lastName,
         firstName: firstName,
         totalToPar: totalToPar,
-        todayScore: isCut ? null : todayScore,
-        thru: thru,
-        r1: roundScores[0],
-        r2: roundScores[1],
-        r3: roundScores[2],
-        r4: roundScores[3],
+        // For cut players today resets to 0 — use totalToPar as today for display clarity
+        todayScore: currentRound === 1 ? totalToPar : (isCut ? null : todayScore),
         rounds: roundScores,
         status: isCut ? 'CUT' : isWD ? 'WD' : isDQ ? 'DQ' : '',
         sortOrder: comp.sortOrder || 999

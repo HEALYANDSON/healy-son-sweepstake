@@ -1209,10 +1209,19 @@ function buildLbEntry(e, pos) {
     const rk = resolveKey(p);
     const sc = state.liveScores[rk] ? getAdjustedScore(rk) : null;
     const scFmt = sc !== null ? fmtScore(sc) : 'E';
-    const scCol = sc === null ? 'color:var(--muted)' : sc < 0 ? 'color:var(--up)' : sc > 0 ? 'color:var(--down)' : 'color:var(--cream)';
     const status = state.liveScores[rk] ? state.liveScores[rk].status : '';
-    const statusTag = status ? ` <span style="font-size:0.55rem;color:var(--gold);font-weight:600;">${status}</span>` : '';
-    return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;">${p}&nbsp;<span style="${scCol};font-weight:700;">${scFmt}</span>${statusTag}</span>`;
+    const isCut = status === 'CUT';
+    const isWD  = status === 'WD' || status === 'DQ';
+    // Cut players: greyed out with scissors prefix and score
+    // WD/DQ: similar but with different icon
+    if (isCut) {
+      return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;opacity:0.5;">&#9986;&nbsp;<span style="text-decoration:line-through;color:var(--muted);">${p}</span>&nbsp;<span style="color:var(--muted);font-weight:700;">${scFmt}</span></span>`;
+    } else if (isWD) {
+      return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;opacity:0.45;"><span style="color:var(--muted);">✕&nbsp;${p}</span>&nbsp;<span style="color:var(--muted);font-weight:700;">${scFmt}</span></span>`;
+    } else {
+      const scCol = sc === null ? 'color:var(--muted)' : sc < 0 ? 'color:var(--up)' : sc > 0 ? 'color:var(--down)' : 'color:var(--cream)';
+      return `<span style="display:inline-block;margin-right:0.6rem;white-space:nowrap;">${p}&nbsp;<span style="${scCol};font-weight:700;">${scFmt}</span></span>`;
+    }
   }).join('');
 
   const picks = e.players.map(p => {

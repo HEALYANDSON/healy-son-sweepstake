@@ -610,6 +610,15 @@ let state = {
   previousScores: {}, // for movement
   previousPositions: {}, // entry name -> previous rank
   hasRefreshed: false,   // true only after at least one live refresh has happened
+  cutPlayers: new Set([
+    // Masters 2026 confirmed cut players
+    'Hall','Fox','Willett','Watson','Spaun','HojgaardN','Hojgaard','DeChambeau',
+    'JohnsonZ','Bhatia','MacIntyre','NeergaardPetersen','Neergaard-Petersen',
+    'Novak','McKibbin','Smith','Jarvis','Berger','Herrington','KimM','Kim',
+    'Fang','Couples','Howell','Olazabal','Weir','Singh','Laopakdee','Ortiz',
+    'Valimaki','LeeMW','Keefer','Greyserman','Echavarria','Kataoka','Potgieter',
+    'Pulcini','Holtz','Cabrera','Riley'
+  ]),
   penalties: { cutScore: 8, dnfPenalty: null },
   majorStates: [
     { name:'The Masters', status:'active' },
@@ -1122,12 +1131,28 @@ function fmtRound(val) {
 }
 
 // Apply cut/DNF/WD rules to a single player's score
+function isPlayerCut(playerKey) {
+  // Check ESPN status first
+  const s = state.liveScores[playerKey];
+  if (s && s.status === 'CUT') return true;
+  // Check hardcoded cut list — normalise key for comparison
+  if (state.cutPlayers && state.cutPlayers.has(playerKey)) return true;
+  // Also check stripped/normalised version
+  const norm = stripDiacritics(playerKey).toLowerCase();
+  if (state.cutPlayers) {
+    for (const cp of state.cutPlayers) {
+      if (stripDiacritics(cp).toLowerCase() === norm) return true;
+    }
+  }
+  return false;
+}
+
 function getAdjustedScore(playerKey) {
   const s = state.liveScores[playerKey];
   if (!s) return 0;
   const rawScore = s.score || 0;
   const status = s.status || '';
-  if (status === 'CUT') {
+  if (status === 'CUT' || isPlayerCut(playerKey)) {
     // Missed cut rule: R1+R2 total used, but minimum +1
     return rawScore <= 0 ? 1 : rawScore;
   }
@@ -1210,7 +1235,7 @@ function buildLbEntry(e, pos) {
     const sc = state.liveScores[rk] ? getAdjustedScore(rk) : null;
     const scFmt = sc !== null ? fmtScore(sc) : 'E';
     const status = state.liveScores[rk] ? state.liveScores[rk].status : '';
-    const isCut = status === 'CUT';
+    const isCut = isPlayerCut(rk);
     const isWD  = status === 'WD' || status === 'DQ';
     // Cut players: greyed out with scissors prefix and score
     // WD/DQ: similar but with different icon
@@ -1230,7 +1255,7 @@ function buildLbEntry(e, pos) {
     const price = state.prices[rk] || state.prices[p];
     const sc = score ? getAdjustedScore(rk) : null;
     const status = score ? score.status : '';
-    const chipCls = status === 'CUT' ? 'cut' : (status === 'WD' || status === 'DNF' || status === 'DQ') ? 'wd' : '';
+    const chipCls = isPlayerCut(rk) ? 'cut' : (status === 'WD' || status === 'DNF' || status === 'DQ') ? 'wd' : '';
     const scoreCls2 = sc === null ? 'even' : sc < 0 ? 'good' : sc > 0 ? 'bad' : 'even';
     return `<span class="pick-chip ${chipCls}"><span class="chip-name">${p}</span><span class="chip-score ${scoreCls2}">${fmtScore(sc)}</span><span class="chip-price">£${price || '?'}m</span>${status ? `<span class="badge ${status.toLowerCase()}">${status}</span>` : ''}</span>`
   }).join('');

@@ -1340,20 +1340,41 @@ function renderLiveScores() {
     : Object.keys(state.liveScores).map(k => ({ ...state.liveScores[k], lastName: k }));
 
   if (!source.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem;">Waiting for live data — Round 1 in progress</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">Waiting for live data…</td></tr>';
     return;
   }
 
-  tbody.innerHTML = source.map(p => {
+  // Split into active and cut players
+  const active = [];
+  const cut = [];
+  source.forEach(p => {
+    const playerKey = matchPlayerName(p.lastName, p.name);
+    const isCut = (p.status === 'CUT') || (playerKey && isPlayerCut(playerKey));
+    if (isCut) cut.push(p);
+    else active.push(p);
+  });
+
+  const buildRow = (p, faded) => {
     const score = p.totalToPar !== undefined ? p.totalToPar : (p.score || 0);
     const playerKey = matchPlayerName(p.lastName, p.name);
     const price = playerKey ? (state.prices[playerKey] || '') : '';
-    return `<tr>
-      <td style="font-weight:600;">${p.name || p.fullName || p.lastName || '-'}</td>
+    const opacity = faded ? 'opacity:0.45;' : '';
+    return `<tr style="${opacity}">
+      <td style="font-weight:600;">${p.name || p.lastName || '-'}</td>
       <td style="color:var(--gold);font-size:0.75rem;">${price ? '£' + price + 'm' : '-'}</td>
       <td class="${scoreClass(score)}" style="font-weight:700;">${fmtScore(score)}</td>
     </tr>`;
-  }).join('');
+  };
+
+  const cutDivider = `<tr>
+    <td colspan="3" style="padding:0.6rem 0.75rem 0.4rem;border-top:2px solid rgba(228,100,100,0.4);border-bottom:1px solid rgba(228,100,100,0.2);background:rgba(228,100,100,0.05);">
+      <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;color:#e05050;text-transform:uppercase;">✂ Failed to make the cut</span>
+    </td>
+  </tr>`;
+
+  const activeRows = active.map(p => buildRow(p, false)).join('');
+  const cutRows = cut.length ? (cutDivider + cut.map(p => buildRow(p, true)).join('')) : '';
+  tbody.innerHTML = activeRows + cutRows;
 }
 
 // ========= STATS =========

@@ -617,7 +617,8 @@ let state = {
     'Novak','McKibbin','Smith','Jarvis','Berger','Herrington','KimM','Kim',
     'Fang','Couples','Howell','Olazabal','Weir','Singh','Laopakdee','Ortiz',
     'Valimaki','LeeMW','Keefer','Greyserman','Echavarria','Kataoka','Potgieter',
-    'Pulcini','Holtz','Cabrera','Riley'
+    'Pulcini','Holtz','Cabrera','Riley',
+    'KimM','Michael Kim','MichaelKim'
   ]),
   penalties: { cutScore: 8, dnfPenalty: null },
   majorStates: [
@@ -1132,16 +1133,17 @@ function fmtRound(val) {
 
 // Apply cut/DNF/WD rules to a single player's score
 function isPlayerCut(playerKey) {
+  if (!playerKey) return false;
   // Check ESPN status first
   const s = state.liveScores[playerKey];
   if (s && s.status === 'CUT') return true;
   // Check hardcoded cut list — normalise key for comparison
   if (state.cutPlayers && state.cutPlayers.has(playerKey)) return true;
-  // Also check stripped/normalised version
-  const norm = stripDiacritics(playerKey).toLowerCase();
+  // Also check stripped/normalised version (handles diacritics)
+  const norm = stripDiacritics(playerKey).toLowerCase().replace(/\s+/g,'');
   if (state.cutPlayers) {
     for (const cp of state.cutPlayers) {
-      if (stripDiacritics(cp).toLowerCase() === norm) return true;
+      if (stripDiacritics(cp).toLowerCase().replace(/\s+/g,'') === norm) return true;
     }
   }
   return false;
@@ -1349,7 +1351,11 @@ function renderLiveScores() {
   const cut = [];
   source.forEach(p => {
     const playerKey = matchPlayerName(p.lastName, p.name);
-    const isCut = (p.status === 'CUT') || (playerKey && isPlayerCut(playerKey));
+    // Check via resolved key, full name, and last name
+    const isCut = (p.status === 'CUT')
+      || (playerKey && isPlayerCut(playerKey))
+      || (p.lastName && isPlayerCut(p.lastName))
+      || isPlayerCut(p.name || '');
     if (isCut) cut.push(p);
     else active.push(p);
   });
@@ -1781,6 +1787,7 @@ function matchPlayerName(lastName, fullName) {
     'Bernd Wiesberger': 'Wiesberger', 'Sébastien Gros': 'Gros',
     // Full name aliases
     'Min Woo Lee': 'LeeMW', 'Min-Woo Lee': 'LeeMW',
+    'Michael Kim': 'KimM', 'Kim Michael': 'KimM',
     'Si Woo Kim': 'KimSW', 'Tom Kim': 'KimM',
     'Byeong Hun An': 'An', 'Sungjae Im': 'Im',
     'Rasmus Hojgaard': 'HojgaardR', 'Nicolai Hojgaard': 'HojgaardN',

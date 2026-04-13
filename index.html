@@ -9,19 +9,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
-    --deep: #0d2218;
-    --augusta: #1a4a2e;
-    --mid: #1f5c38;
-    --light-green: #2a7a4a;
+    --deep: #0d1a2e;
+    --augusta: #0f2d4a;
+    --mid: #133a5e;
+    --light-green: #1a5080;
     --gold: #c9a84c;
     --gold-light: #e8c97a;
-    --cream: #f5f0e8;
+    --cream: #f0f4f8;
     --white: #ffffff;
-    --muted: rgba(245,240,232,0.55);
+    --muted: rgba(220,232,245,0.55);
     --red: #d44;
     --up: #4caf84;
     --down: #e05050;
-    --tab-bg: #122b1c;
+    --tab-bg: #0a1e33;
+    --pga-navy: #0d1a2e;
+    --pga-blue: #1a4a7a;
+    --pga-accent: #3a8fd4;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--deep); color:var(--cream); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
@@ -281,29 +284,22 @@
     <div class="gold-divider"></div>
 
     <div class="majors-pills">
-      <span class="major-pill active">⛳ The Masters</span>
-      <span class="major-pill inactive">PGA Championship</span>
+      <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ The Masters</span>
+      <span class="major-pill active">🏆 PGA Championship</span>
       <span class="major-pill inactive">US Open</span>
       <span class="major-pill inactive">The Open</span>
     </div>
 
     <div class="deadline-card">
-      <div class="deadline-label">Pick Deadline — Wed 8 Apr 2026 · 21:00 BST</div>
-      <div id="deadline-status" style="font-size:0.8rem;color:var(--gold);font-weight:600;margin-top:0.3rem;"></div>
+      <div class="deadline-label">⛳ PGA Championship 2026</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">QUAIL HOLLOW CLUB · CHARLOTTE, NC</div>
+      <div style="font-size:0.75rem;color:var(--muted);">15–18 May 2026</div>
+      <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(201,168,76,0.2);font-size:0.78rem;color:var(--gold);font-weight:600;">Player prices &amp; pick deadline to be announced closer to the date</div>
     </div>
 
     <button class="enter-btn" onclick="enterApp()" style="width:100%;padding:0.9rem;font-size:1rem;letter-spacing:0.1em;border-radius:10px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
-      <span class="live-dot"></span> VIEW LIVE LEADERBOARD
+      📊 VIEW MASTERS FINAL LEADERBOARD
     </button>
-
-    <div class="wa-section" style="margin-top:1rem;">
-      <div class="wa-label">📲 Submit Picks via WhatsApp</div>
-      <a class="wa-link" id="wa-link" href="#" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Message Seamus Healy
-      </a>
-      <div class="wa-info" style="font-size:0.68rem;">+44 7825 142966 · Name + 4 picks within £20m budget</div>
-    </div>
   </div>
 </div>
 
@@ -360,9 +356,9 @@
 
   <!-- LEADERBOARD TAB -->
   <div class="tab-content active" id="tab-leaderboard">
-    <div class="masters-banner">
-      <div class="masters-banner-text">THE MASTERS TOURNAMENT 2026 · Augusta National · April 9–12</div>
-      <div class="masters-banner-sub">Masters Sweepstake — Live Standings</div>
+    <div class="masters-banner" style="background:linear-gradient(135deg,var(--pga-blue),var(--pga-navy));border-color:rgba(58,143,212,0.4);">
+      <div class="masters-banner-text" style="color:#3a8fd4;">✓ THE MASTERS 2026 — FINAL · Augusta National · April 9–12</div>
+      <div class="masters-banner-sub">Masters Final Leaderboard · PGA Championship coming May 15–18</div>
     </div>
     <div class="section-title">Leaderboard</div>
     <div class="section-sub" id="lb-sub">Loading entries…</div>
@@ -377,7 +373,7 @@
   <!-- LIVE SCORES TAB -->
   <div class="tab-content" id="tab-livescores">
     <div class="section-title">Live Scores</div>
-    <div class="section-sub">Masters field · Live via ESPN · Auto-refreshes every 10 mins</div>
+    <div class="section-sub">Masters field · Final scores · PGA Championship scoring coming May 2026</div>
     <div style="overflow-x:auto;">
       <table class="ls-table" id="live-scores-table">
         <thead>
@@ -1471,17 +1467,72 @@ function renderMgTrack() {
     </div>`;
   }).join('');
 
-  // Show archives
+  // Show major panels — one per major
   const archivesDiv = document.getElementById('mg-archives');
   archivesDiv.innerHTML = '';
-  Object.keys(state.archivedMajors).forEach(idx => {
-    const major = state.majorStates[idx];
-    const name = major ? major.name : 'Major ' + idx;
-    archivesDiv.innerHTML += `<div style="margin-bottom:1rem;">
-      <span class="archive-toggle" onclick="this.nextElementSibling.classList.toggle('open')">📁 ${name} — Final Results (click to expand)</span>
-      <div class="archive-content">
-        <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">${JSON.stringify(state.archivedMajors[idx]).substring(0,200)}…</div>
+
+  const majorColours = [
+    { banner:'linear-gradient(135deg,#1a4a2e,#0d2218)', accent:'#c9a84c', border:'rgba(201,168,76,0.3)', label:'The Masters', venue:'Augusta National · April 9–12' },
+    { banner:'linear-gradient(135deg,#0f2d4a,#0d1a2e)', accent:'#3a8fd4', border:'rgba(58,143,212,0.3)', label:'PGA Championship', venue:'Quail Hollow Club · May 15–18' },
+    { banner:'linear-gradient(135deg,#1a1a3a,#0d0d2e)', accent:'#a0a0ff', border:'rgba(160,160,255,0.3)', label:'US Open', venue:'Shinnecock Hills · June' },
+    { banner:'linear-gradient(135deg,#2a1a0d,#1a0d00)', accent:'#d4884c', border:'rgba(212,136,76,0.3)', label:'The Open Championship', venue:'Royal Portrush · July' }
+  ];
+
+  state.majorStates.forEach((m, i) => {
+    const mc = majorColours[i] || majorColours[0];
+    const archived = state.archivedMajors[i];
+    const isFinal = m.status === 'final';
+    const isActive = m.status === 'active';
+
+    let bodyHtml = '';
+
+    if (isFinal && archived && archived.length) {
+      // Render full leaderboard
+      const medals = ['🥇','🥈'];
+      const rows = archived.slice(0, 20).map((e, ri) => {
+        const pos = ri + 1;
+        const posDisplay = pos <= 2 ? medals[pos-1] : `<span style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${mc.accent};">${pos}</span>`;
+        const sc = e.score !== undefined ? e.score : 0;
+        const scCol = sc < 0 ? '#4caf84' : sc > 0 ? '#e05050' : '#f0f4f8';
+        return `<div style="display:grid;grid-template-columns:32px 1fr auto;gap:0.5rem;align-items:center;padding:0.4rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.05);${pos<=2?'background:rgba(255,255,255,0.04);':''}">
+          <div style="text-align:center;">${posDisplay}</div>
+          <div style="font-size:0.82rem;font-weight:600;color:#f0f4f8;">${e.name}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${scCol};">${sc===0?'E':sc>0?'+'+sc:sc}</div>
+        </div>`;
+      }).join('');
+      const showMoreCount = archived.length - 20;
+      bodyHtml = `
+        <div style="padding:0.5rem 0;">
+          ${rows}
+          ${showMoreCount > 0 ? `<div style="text-align:center;padding:0.5rem;font-size:0.7rem;color:rgba(255,255,255,0.35);">+${showMoreCount} more entries</div>` : ''}
+        </div>`;
+    } else if (isActive) {
+      bodyHtml = `<div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:0.8rem;color:${mc.accent};font-weight:600;margin-bottom:0.3rem;">● LIVE NOW</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);">Leaderboard updating live</div>
+      </div>`;
+    } else {
+      bodyHtml = `<div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:0.3rem;">COMING SOON</div>
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.25);">Player prices & picks to be announced closer to the date</div>
+      </div>`;
+    }
+
+    const statusBadge = isFinal
+      ? `<span style="font-size:0.6rem;background:rgba(76,175,132,0.2);color:#4caf84;padding:0.2rem 0.5rem;border-radius:10px;font-weight:700;">✓ FINAL</span>`
+      : isActive
+        ? `<span style="font-size:0.6rem;background:rgba(201,168,76,0.2);color:${mc.accent};padding:0.2rem 0.5rem;border-radius:10px;font-weight:700;">● LIVE</span>`
+        : `<span style="font-size:0.6rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.3);padding:0.2rem 0.5rem;border-radius:10px;font-weight:700;">UPCOMING</span>`;
+
+    archivesDiv.innerHTML += `<div style="background:rgba(255,255,255,0.03);border:1px solid ${mc.border};border-radius:12px;margin-bottom:1.25rem;overflow:hidden;">
+      <div style="background:${mc.banner};padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${mc.accent};letter-spacing:0.05em;">${mc.label}</div>
+          <div style="font-size:0.65rem;color:rgba(255,255,255,0.45);margin-top:0.1rem;">${mc.venue}</div>
+        </div>
+        ${statusBadge}
       </div>
+      ${bodyHtml}
     </div>`;
   });
 

@@ -292,7 +292,7 @@
 
     <div class="deadline-card">
       <div class="deadline-label">⛳ PGA Championship 2026</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">QUAIL HOLLOW CLUB · CHARLOTTE, NC</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">ARONIMINK GOLF CLUB · PENNSYLVANIA</div>
       <div style="font-size:0.75rem;color:var(--muted);">15–18 May 2026</div>
       <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(201,168,76,0.2);font-size:0.78rem;color:var(--gold);font-weight:600;">Player prices &amp; pick deadline to be announced closer to the date</div>
     </div>
@@ -357,35 +357,34 @@
   <!-- LEADERBOARD TAB -->
   <div class="tab-content active" id="tab-leaderboard">
     <div class="masters-banner" style="background:linear-gradient(135deg,var(--pga-blue),var(--pga-navy));border-color:rgba(58,143,212,0.4);">
-      <div class="masters-banner-text" style="color:#3a8fd4;">✓ THE MASTERS 2026 — FINAL · Augusta National · April 9–12</div>
-      <div class="masters-banner-sub">Masters Final Leaderboard · PGA Championship coming May 15–18</div>
+      <div class="masters-banner-text" style="color:#3a8fd4;">🏆 PGA CHAMPIONSHIP 2026 · Aronimink Golf Club · Pennsylvania</div>
+      <div class="masters-banner-sub">Masters final results available in Sergeant of Majors tab</div>
     </div>
-    <div class="section-title">Leaderboard</div>
-    <div class="section-sub" id="lb-sub">Loading entries…</div>
-    <div class="lb-search-wrap">
-      <span class="lb-search-icon">&#128269;</span>
-      <input class="lb-search" id="lb-search" type="text" placeholder="Search your name…" oninput="filterLeaderboard(this.value)" autocomplete="off">
-      <button class="lb-search-clear" id="lb-search-clear" onclick="clearLbSearch()">&#x2715;</button>
+    <div style="text-align:center;padding:3rem 1.5rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🏌️</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">PGA CHAMPIONSHIP</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#3a8fd4;letter-spacing:0.15em;margin:0.5rem 0 1.5rem;">COMING SOON</div>
+      <div style="background:rgba(58,143,212,0.07);border:1px solid rgba(58,143,212,0.2);border-radius:12px;padding:1.5rem;max-width:420px;margin:0 auto;">
+        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.15em;color:#3a8fd4;margin-bottom:0.5rem;">Aronimink Golf Club · Newtown Square, PA</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--cream);margin-bottom:1rem;">15–18 May 2026</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.7;">Player prices and the pick deadline will be shared closer to the date via WhatsApp.<br><br>The <strong style="color:var(--gold);">Sergeant of Majors</strong> tab has the full Masters 2026 final leaderboard.</div>
+      </div>
     </div>
-    <div id="leaderboard-list"></div>
+    <div id="leaderboard-list" style="display:none;"></div>
+    <div id="lb-sub" style="display:none;"></div>
   </div>
 
   <!-- LIVE SCORES TAB -->
   <div class="tab-content" id="tab-livescores">
-    <div class="section-title">Live Scores</div>
-    <div class="section-sub">Masters field · Final scores · PGA Championship scoring coming May 2026</div>
-    <div style="overflow-x:auto;">
-      <table class="ls-table" id="live-scores-table">
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Price</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody id="live-scores-body"></tbody>
-      </table>
+    <div style="text-align:center;padding:3rem 1.5rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">📡</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">LIVE SCORES</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#3a8fd4;letter-spacing:0.15em;margin:0.5rem 0 1.5rem;">COMING SOON</div>
+      <div style="background:rgba(58,143,212,0.07);border:1px solid rgba(58,143,212,0.2);border-radius:12px;padding:1.5rem;max-width:420px;margin:0 auto;font-size:0.8rem;color:var(--muted);line-height:1.7;">
+        Live PGA Championship scores will appear here once the tournament begins on 15 May 2026.
+      </div>
     </div>
+    <table style="display:none;" id="live-scores-table"><tbody id="live-scores-body"></tbody></table>
   </div>
 
   <!-- STATS TAB -->
@@ -1473,9 +1472,9 @@ function renderMgTrack() {
 
   const majorColours = [
     { banner:'linear-gradient(135deg,#1a4a2e,#0d2218)', accent:'#c9a84c', border:'rgba(201,168,76,0.3)', label:'The Masters', venue:'Augusta National · April 9–12' },
-    { banner:'linear-gradient(135deg,#0f2d4a,#0d1a2e)', accent:'#3a8fd4', border:'rgba(58,143,212,0.3)', label:'PGA Championship', venue:'Quail Hollow Club · May 15–18' },
-    { banner:'linear-gradient(135deg,#1a1a3a,#0d0d2e)', accent:'#a0a0ff', border:'rgba(160,160,255,0.3)', label:'US Open', venue:'Shinnecock Hills · June' },
-    { banner:'linear-gradient(135deg,#2a1a0d,#1a0d00)', accent:'#d4884c', border:'rgba(212,136,76,0.3)', label:'The Open Championship', venue:'Royal Portrush · July' }
+    { banner:'linear-gradient(135deg,#0f2d4a,#0d1a2e)', accent:'#3a8fd4', border:'rgba(58,143,212,0.3)', label:'PGA Championship', venue:'Aronimink Golf Club · Newtown Square, PA' },
+    { banner:'linear-gradient(135deg,#1a1a3a,#0d0d2e)', accent:'#a0a0ff', border:'rgba(160,160,255,0.3)', label:'US Open', venue:'Shinnecock Hills G.C. · Southampton, NY' },
+    { banner:'linear-gradient(135deg,#2a1a0d,#1a0d00)', accent:'#d4884c', border:'rgba(212,136,76,0.3)', label:'The Open Championship', venue:'Royal Birkdale · Southport, England' }
   ];
 
   state.majorStates.forEach((m, i) => {
@@ -1489,7 +1488,7 @@ function renderMgTrack() {
     if (isFinal && archived && archived.length) {
       // Render full leaderboard
       const medals = ['🥇','🥈'];
-      const rows = archived.slice(0, 20).map((e, ri) => {
+      const rows = archived.map((e, ri) => {
         const pos = ri + 1;
         const posDisplay = pos <= 2 ? medals[pos-1] : `<span style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${mc.accent};">${pos}</span>`;
         const sc = e.score !== undefined ? e.score : 0;
@@ -1500,11 +1499,11 @@ function renderMgTrack() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${scCol};">${sc===0?'E':sc>0?'+'+sc:sc}</div>
         </div>`;
       }).join('');
-      const showMoreCount = archived.length - 20;
+
       bodyHtml = `
         <div style="padding:0.5rem 0;">
           ${rows}
-          ${showMoreCount > 0 ? `<div style="text-align:center;padding:0.5rem;font-size:0.7rem;color:rgba(255,255,255,0.35);">+${showMoreCount} more entries</div>` : ''}
+
         </div>`;
     } else if (isActive) {
       bodyHtml = `<div style="padding:1.5rem;text-align:center;">

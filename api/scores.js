@@ -2,7 +2,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const TOURNAMENT_ID = '401811941'; // Masters 2026
+  const TOURNAMENT_ID = '401811947'; // PGA Championship 2026
   const COURSE_PAR = 72;
 
   try {

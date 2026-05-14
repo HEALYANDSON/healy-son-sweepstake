@@ -521,7 +521,7 @@
     <div class="admin-section">
       <h3>📡 Live Scoring — ESPN via Vercel</h3>
       <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Scores pulled automatically from ESPN every 10 minutes via your Vercel serverless function at <code style="color:var(--gold);">/api/scores</code>. No API key needed.</div>
-      <div id="api-status" class="status-msg ok" style="display:block;margin-bottom:0.75rem;">✅ Masters 2026 · Tournament ID: 401811941</div>
+      <div id="api-status" class="status-msg ok" style="display:block;margin-bottom:0.75rem;">✅ PGA Championship 2026 · Tournament ID: 401811947</div>
       <div class="admin-row">
         <button class="admin-btn" onclick="manualRefresh()">🔄 Refresh Now</button>
         <span id="last-refresh-admin" style="font-size:0.72rem;color:var(--muted);margin-left:0.5rem;"></span>
@@ -1068,7 +1068,7 @@ function initCountdown() {
 
 function buildWaLink() {
   const msg = encodeURIComponent('Hi Seamus! Here are my Masters Sweepstake picks:\n\nName: \nPlayer 1: \nPlayer 2: \nPlayer 3: \nPlayer 4: \nTotal: £m');
-  document.getElementById('wa-link').href = 'https://wa.me/447825142966?text=' + msg;
+  const el = document.getElementById('wa-link'); if (el) el.href = 'https://wa.me/447825142966?text=' + msg;
 }
 
 // ========= LANDING =========
@@ -1834,8 +1834,11 @@ async function manualRefresh() {
   btns.forEach(b => { b.textContent = '⏳ Fetching...'; b.disabled = true; });
   try {
     const r = await fetch('/api/scores');
+    console.log('API status:', r.status);
     if (!r.ok) throw new Error('Server returned ' + r.status);
     const data = await r.json();
+    console.log('API data:', JSON.stringify(data).substring(0, 300));
+    console.log('Players count:', data.players ? data.players.length : 'none');
     if (!data.players || !data.players.length) throw new Error(data.error || 'No player data returned');
 
     state.previousScores = JSON.parse(JSON.stringify(state.liveScores));

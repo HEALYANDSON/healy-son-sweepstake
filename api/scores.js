@@ -3,10 +3,10 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
   const TOURNAMENT_ID = '401811947'; // PGA Championship 2026
-  const COURSE_PAR = 72;
+  const COURSE_PAR = 70; // Aronimink Golf Club
 
   try {
-    const url = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId=' + TOURNAMENT_ID;
+    const url = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId=' + TOURNAMENT_ID + '&enable=roster,stats,scores';
 
     const response = await fetch(url, {
       headers: {

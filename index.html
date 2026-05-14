@@ -357,34 +357,35 @@
   <!-- LEADERBOARD TAB -->
   <div class="tab-content active" id="tab-leaderboard">
     <div class="masters-banner" style="background:linear-gradient(135deg,var(--pga-blue),var(--pga-navy));border-color:rgba(58,143,212,0.4);">
-      <div class="masters-banner-text" style="color:#3a8fd4;">🏆 PGA CHAMPIONSHIP 2026 · Aronimink Golf Club · Pennsylvania</div>
-      <div class="masters-banner-sub">Masters final results available in Sergeant of Majors tab</div>
+      <div class="masters-banner-text" style="color:#3a8fd4;"><span class="live-dot"></span> PGA CHAMPIONSHIP 2026 · Aronimink Golf Club · 14–17 May</div>
+      <div class="masters-banner-sub">Live Sweepstake Leaderboard · Masters final results in Sergeant of Majors tab</div>
     </div>
-    <div style="text-align:center;padding:3rem 1.5rem 2rem;">
-      <div style="font-size:3rem;margin-bottom:1rem;">🏌️</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">PGA CHAMPIONSHIP</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#3a8fd4;letter-spacing:0.15em;margin:0.5rem 0 1.5rem;">COMING SOON</div>
-      <div style="background:rgba(58,143,212,0.07);border:1px solid rgba(58,143,212,0.2);border-radius:12px;padding:1.5rem;max-width:420px;margin:0 auto;">
-        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.15em;color:#3a8fd4;margin-bottom:0.5rem;">Aronimink Golf Club · Newtown Square, PA</div>
-        <div style="font-size:1.1rem;font-weight:700;color:var(--cream);margin-bottom:1rem;">14–17 May 2026</div>
-        <div style="font-size:0.8rem;color:var(--muted);line-height:1.7;">Player prices and the pick deadline will be shared closer to the date via WhatsApp.<br><br>The <strong style="color:var(--gold);">Sergeant of Majors</strong> tab has the full Masters 2026 final leaderboard.</div>
-      </div>
+    <div class="section-title">Leaderboard</div>
+    <div class="section-sub" id="lb-sub">Loading entries…</div>
+    <div class="lb-search-wrap">
+      <span class="lb-search-icon">&#128269;</span>
+      <input class="lb-search" id="lb-search" type="text" placeholder="Search your name…" oninput="filterLeaderboard(this.value)" autocomplete="off">
+      <button class="lb-search-clear" id="lb-search-clear" onclick="clearLbSearch()">&#x2715;</button>
     </div>
-    <div id="leaderboard-list" style="display:none;"></div>
-    <div id="lb-sub" style="display:none;"></div>
+    <div id="leaderboard-list"></div>
   </div>
 
   <!-- LIVE SCORES TAB -->
   <div class="tab-content" id="tab-livescores">
-    <div style="text-align:center;padding:3rem 1.5rem 2rem;">
-      <div style="font-size:3rem;margin-bottom:1rem;">📡</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">LIVE SCORES</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#3a8fd4;letter-spacing:0.15em;margin:0.5rem 0 1.5rem;">COMING SOON</div>
-      <div style="background:rgba(58,143,212,0.07);border:1px solid rgba(58,143,212,0.2);border-radius:12px;padding:1.5rem;max-width:420px;margin:0 auto;font-size:0.8rem;color:var(--muted);line-height:1.7;">
-        Live PGA Championship scores will appear here once the tournament begins on 14 May 2026.
-      </div>
+    <div class="section-title">Live Scores</div>
+    <div class="section-sub">PGA Championship field · Live via ESPN · Auto-refreshes every 10 mins</div>
+    <div style="overflow-x:auto;">
+      <table class="ls-table" id="live-scores-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Price</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="live-scores-body"></tbody>
+      </table>
     </div>
-    <table style="display:none;" id="live-scores-table"><tbody id="live-scores-body"></tbody></table>
   </div>
 
   <!-- STATS TAB -->

@@ -919,52 +919,7 @@ const REAL_PICKS = [
 ];
 
 // Demo live scores - simulated Masters R1 data
-const DEMO_SCORES = {
-  'Scheffler':{pos:'1',score:-7,today:-7,thru:18,r1:65,r2:null,r3:null,r4:null,status:''},
-  'McIlroy':{pos:'2',score:-6,today:-6,thru:18,r1:66,r2:null,r3:null,r4:null,status:''},
-  'DeChambeau':{pos:'3',score:-5,today:-5,thru:18,r1:67,r2:null,r3:null,r4:null,status:''},
-  'Aberg':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
-  'Rose':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
-  'Rahm':{pos:'T4',score:-4,today:-4,thru:18,r1:68,r2:null,r3:null,r4:null,status:''},
-  'Fleetwood':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
-  'Fitzpatrick':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
-  'Hatton':{pos:'T7',score:-3,today:-3,thru:18,r1:69,r2:null,r3:null,r4:null,status:''},
-  'Hovland':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
-  'Koepka':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
-  'MacIntyre':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
-  'Schauffele':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
-  'Young':{pos:'T10',score:-2,today:-2,thru:18,r1:70,r2:null,r3:null,r4:null,status:''},
-  'Morikawa':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
-  'Thomas':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
-  'Matsuyama':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
-  'Henley':{pos:'T15',score:-1,today:-1,thru:18,r1:71,r2:null,r3:null,r4:null,status:''},
-  'Reed':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'Smith':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'Cantlay':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'Lowry':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'Straka':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'KimSW':{pos:'T20',score:0,today:0,thru:18,r1:72,r2:null,r3:null,r4:null,status:''},
-  'LeeMW':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'Spaun':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'Bridgeman':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'Noren':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'English':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'Bhatia':{pos:'T26',score:1,today:1,thru:18,r1:73,r2:null,r3:null,r4:null,status:''},
-  'Penge':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
-  'Burns':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
-  'Gotterup':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
-  'JohnsonD':{pos:'T32',score:2,today:2,thru:18,r1:74,r2:null,r3:null,r4:null,status:''},
-  'Homa':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
-  'Knapp':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
-  'Day':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
-  'Bradley':{pos:'T36',score:3,today:3,thru:18,r1:75,r2:null,r3:null,r4:null,status:''},
-  'Conners':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
-  'HojgaardN':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
-  'Spieth':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
-  'Scott':{pos:'T40',score:4,today:4,thru:18,r1:76,r2:null,r3:null,r4:null,status:''},
-  'Woodland':{pos:'CUT',score:8,today:8,thru:36,r1:76,r2:76,r3:null,r4:null,status:'CUT'},
-  'Spieth':{pos:'CUT',score:9,today:5,thru:36,r1:72,r2:77,r3:null,r4:null,status:'CUT'}
-};
+const DEMO_SCORES = {};
 
 const HONOR_DATA = [
   {year:'2020',players:'DNP',masters:'Terry Harrell',pga:'DNP',us:'DNP',open:'DNP'},
@@ -1000,7 +955,7 @@ Tiebreakers and disputes are handled in-house. Admin decision is final.`;
 // ========= INIT =========
 function init() {
   state.prices = { ...PRICE_LIST_DEFAULT };
-  state.liveScores = { ...DEMO_SCORES };
+  state.liveScores = {}; // scores load from ESPN on first refresh
   state.tncContent = DEFAULT_TNC;
   loadFromSupabase();
   initCountdown();

@@ -991,12 +991,15 @@ function renderMgStandings() {
   const mastersArchive = state.archivedMajors[0];
   if (!mastersArchive || !mastersArchive.length) return;
 
+  // Strip decorators like *, **, ***, <<<#, <<< from names for matching
+  const normEntrantName = n => n.replace(/[*#<>]+/g,'').trim();
+
   const mastersScores = {};
-  mastersArchive.forEach(e => { mastersScores[e.name] = e.score; });
+  mastersArchive.forEach(e => { mastersScores[normEntrantName(e.name)] = e.score; });
 
   const combined = [];
   state.picks.forEach(p => {
-    const ms = mastersScores[p.name];
+    const ms = mastersScores[normEntrantName(p.name)];
     if (ms !== undefined) {
       const ps = calcEntryScore(p);
       combined.push({ name: p.name, mastersScore: ms, pgaScore: ps, total: ms + ps });

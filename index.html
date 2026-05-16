@@ -1071,7 +1071,9 @@ function renderMgStandings() {
   mastersArchive.forEach(e => { mastersScores[normEntrantName(e.name)] = e.score; });
 
   const combined = [];
+  const excludeFromSergeant = ['KERRY MC'];
   state.picks.forEach(p => {
+    if (excludeFromSergeant.some(ex => normEntrantName(p.name).trim().toUpperCase() === ex.trim().toUpperCase())) return;
     const ms = mastersScores[normEntrantName(p.name)];
     if (ms !== undefined) {
       const ps = calcEntryScore(p);

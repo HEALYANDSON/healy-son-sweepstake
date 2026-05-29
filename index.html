@@ -710,6 +710,140 @@ const REAL_PICKS = [
 
 const DEMO_SCORES = {};
 
+// PGA Championship 2026 — Final hardcoded scores
+const PGA_FINAL_SCORES = [
+  {name:"GEORGE B *",players:["Rahm","Rose","Aberg","Spieth"],score:-15},
+  {name:"RICKY S",players:["FitzpatrickM","Rose","Aberg","Reed"],score:-13},
+  {name:"JAMIE W",players:["Rahm","Aberg","Schauffele","Lowry"],score:-13},
+  {name:"BOBBY C",players:["FitzpatrickM","Schauffele","Thomas","Spieth"],score:-12},
+  {name:"HARRY DV",players:["Young","Aberg","Schauffele","Kitayama"],score:-12},
+  {name:"BAILEY L",players:["Young","Aberg","Gotterup","Reed"],score:-11},
+  {name:"JACK M",players:["McIlroy","Aberg","Cantlay","Spieth"],score:-9},
+  {name:"BEN F",players:["Aberg","Schauffele","Hatton","Thomas"],score:-8},
+  {name:"SIMON H",players:["McIlroy","Schauffele","Cantlay","Spieth"],score:-8},
+  {name:"ANDY B",players:["Young","FitzpatrickM","Aberg","Spieth"],score:-8},
+  {name:"VINNIE W",players:["Young","FitzpatrickM","Schauffele","Spieth"],score:-7},
+  {name:"ANDY H",players:["FitzpatrickM","Koepka","Aberg","Reed"],score:-7},
+  {name:"EDDIE W **",players:["Fleetwood","Rose","Aberg","Schauffele"],score:-7},
+  {name:"NATHAN B",players:["Rose","Henley","Aberg","Schauffele"],score:-7},
+  {name:"JO W",players:["FitzpatrickM","Aberg","Schauffele","MacIntyre"],score:-6},
+  {name:"PAUL G",players:["Young","Rose","Aberg","HojgaardN"],score:-6},
+  {name:"BILLY C",players:["McIlroy","Aberg","Cantlay","Conners"],score:-5},
+  {name:"KELLY N",players:["FitzpatrickM","Aberg","Schauffele","Hatton"],score:-5},
+  {name:"BILLY W",players:["DeChambeau","Aberg","Schauffele","Reed"],score:-5},
+  {name:"JAMES H",players:["Fleetwood","Aberg","Schauffele","Matsuyama"],score:-4},
+  {name:"SOPH L*<<<#",players:["Koepka","Morikawa","Aberg","Schauffele"],score:-3},
+  {name:"CHRIS DM",players:["Young","FitzpatrickM","Schauffele","Harman"],score:-2},
+  {name:"THOMAS D",players:["Fleetwood","Rose","Schauffele","Matsuyama"],score:-2},
+  {name:"EMMA W",players:["McIlroy","Hatton","Reed","Spieth"],score:-2},
+  {name:"JOHN S",players:["Fleetwood","Morikawa","Aberg","Schauffele"],score:-1},
+  {name:"CHRIS S",players:["Young","FitzpatrickM","Woo Kim","Burns"],score:-1},
+  {name:"TIM L",players:["Young","Fleetwood","Aberg","Woo Lee"],score:-1},
+  {name:"DAVE W",players:["McIlroy","Reed","Bradley","Knapp"],score:-1},
+  {name:"MICHAEL M",players:["Young","FitzpatrickM","Aberg","Woodland"],score:-1},
+  {name:"CONOR M",players:["Rahm","Young","Woo Lee","Day"],score:-1},
+  {name:"POPPY W *",players:["FitzpatrickM","Morikawa","Rose","Lowry"],score:0},
+  {name:"CHAY P",players:["DeChambeau","Aberg","Schauffele","Lowry"],score:0},
+  {name:"CLIVE A",players:["Young","Fleetwood","Aberg","Burns"],score:0},
+  {name:"SAM W*",players:["Young","FitzpatrickM","Rose","Higgo"],score:0},
+  {name:"HARRY P",players:["Young","Aberg","Gotterup","FitzpatrickA"],score:0},
+  {name:"LARRY H **",players:["FitzpatrickM","Aberg","Hovland","Lowry"],score:1},
+  {name:"DARREN M",players:["Rahm","Young","Cantlay","Day"],score:1},
+  {name:"SIDNEY F",players:["Rahm","Schauffele","Hatton","Bhatia"],score:1},
+  {name:"SAM E",players:["Young","Fleetwood","Thomas","Woo Kim"],score:1},
+  {name:"KERRY MC",players:["Fleetwood","Rose","Gotterup","Lowry"],score:1},
+  {name:"LEE H",players:["FitzpatrickM","Fleetwood","Rose","Cantlay"],score:1},
+  {name:"JOSH G",players:["Young","Koepka","Gotterup","Wallace"],score:2},
+  {name:"LOUIE W",players:["Morikawa","Rose","Schauffele","Hovland"],score:2},
+  {name:"CHARLIE WR",players:["McIlroy","Rose","Day","Conners"],score:2},
+  {name:"GLENN W **",players:["Morikawa","Rose","Schauffele","Hatton"],score:2},
+  {name:"GREGG J",players:["Young","Morikawa","Aberg","Fowler"],score:2},
+  {name:"LUKE RN",players:["Young","Fleetwood","Aberg","Reitan"],score:2},
+  {name:"DANIEL V",players:["FitzpatrickM","Fleetwood","Rose","Lowry"],score:2},
+  {name:"GEORGE WS *",players:["Young","Fleetwood","Aberg","HojgaardN"],score:2},
+  {name:"DILLON B",players:["Young","Aberg","Spaun","Cantlay"],score:2},
+  {name:"PETER A *",players:["FitzpatrickM","Fleetwood","Aberg","Fowler"],score:2},
+  {name:"SAM G",players:["Scheffler","Thomas","Fowler","Woodland"],score:3},
+  {name:"REGAN H",players:["Young","Aberg","Hatton","Lowry"],score:3},
+  {name:"LISA W *",players:["Young","FitzpatrickM","Rose","Neergaard-Petersen"],score:3},
+  {name:"CHRISTIAN T",players:["McIlroy","Gotterup","Day","Fowler"],score:3},
+  {name:"LUCY W",players:["McIlroy","Fleetwood","Lowry","Li"],score:4},
+  {name:"HANNAH P",players:["FitzpatrickM","Fleetwood","Rose","Fowler"],score:4},
+  {name:"CARL S",players:["Koepka","Aberg","Hatton","Matsuyama"],score:4},
+  {name:"ADAM T",players:["FitzpatrickM","Fleetwood","Hovland","Thomas"],score:4},
+  {name:"DENISE P",players:["McIlroy","Hovland","Matsuyama","Wallace"],score:4},
+  {name:"MARK RAY",players:["Young","Gotterup","Hatton","Lowry"],score:5},
+  {name:"DAVID H",players:["FitzpatrickM","Aberg","Spaun","Hatton"],score:5},
+  {name:"ALFIE B",players:["DeChambeau","Rose","Aberg","Day"],score:5},
+  {name:"STEPHEN S Jnr",players:["FitzpatrickM","Aberg","Hatton","Straka"],score:5},
+  {name:"KEVIN S *",players:["McIlroy","Hatton","Cantlay","Reitan"],score:5},
+  {name:"OLIVER W",players:["Young","Fleetwood","Rose","Fowler"],score:6},
+  {name:"SIMON G",players:["FitzpatrickM","Fleetwood","Hatton","Reed"],score:6},
+  {name:"GARY M",players:["Young","Fleetwood","Aberg","Day"],score:6},
+  {name:"NATHAN M **",players:["FitzpatrickM","Schauffele","Hovland","Hatton"],score:6},
+  {name:"GRAHAM H",players:["FitzpatrickM","Fleetwood","Rose","Bradley"],score:6},
+  {name:"TINA L",players:["FitzpatrickM","Fleetwood","Rose","Day"],score:6},
+  {name:"NICKY H",players:["Young","Morikawa","Aberg","FitzpatrickA"],score:6},
+  {name:"MICHAEL K",players:["McIlroy","Hatton","Lowry","Conners"],score:7},
+  {name:"ANDRE D",players:["Fleetwood","Morikawa","Rose","Lowry"],score:7},
+  {name:"JACKIE C *",players:["McIlroy","Fleetwood","Fowler","Reitan"],score:7},
+  {name:"MIKE WS",players:["Young","Fleetwood","Schauffele","Day"],score:7},
+  {name:"RYAN M",players:["Fleetwood","Aberg","MacIntyre","Lowry"],score:7},
+  {name:"LES W *",players:["DeChambeau","Henley","Aberg","Matsuyama"],score:7},
+  {name:"BRODIE C",players:["Young","Fleetwood","Rose","Day"],score:8},
+  {name:"DEAN B",players:["Young","FitzpatrickM","Lowry","FitzpatrickA"],score:8},
+  {name:"LOUIS R *",players:["Schauffele","Spaun","MacIntyre","Cantlay"],score:8},
+  {name:"GARY P",players:["Young","FitzpatrickM","Straka","Harman"],score:8},
+  {name:"JAMIE D",players:["Young","FitzpatrickM","Fleetwood","Im"],score:8},
+  {name:"GARRY MC",players:["Rahm","DeChambeau","Spaun","Bezuidenhout"],score:8},
+  {name:"DAVE C",players:["Young","Aberg","Spaun","Bridgeman"],score:9},
+  {name:"SEAMUS H",players:["Scheffler","Schauffele","Brennan","Harman"],score:9},
+  {name:"JEFF K",players:["DeChambeau","Fleetwood","Schauffele","Cantlay"],score:9},
+  {name:"LUKE G",players:["Young","Aberg","Spaun","FitzpatrickA"],score:9},
+  {name:"OLLIE R",players:["McIlroy","Koepka","Spieth","Brennan"],score:9},
+  {name:"KIRSTY W",players:["McIlroy","Fleetwood","Lowry","McGreevy"],score:9},
+  {name:"LIZ W",players:["Fleetwood","Aberg","FitzpatrickA","Reitan"],score:10},
+  {name:"STEVE W",players:["Scheffler","Young","Ayora","Cink"],score:10},
+  {name:"TOM G",players:["Koepka","Fleetwood","Schauffele","Hatton"],score:10},
+  {name:"KENDRA H",players:["Scheffler","Reed","Homa","Conners"],score:10},
+  {name:"GEORGE W",players:["McIlroy","Fleetwood","Lowry","Grillo"],score:11},
+  {name:"ELLEN P",players:["McIlroy","Straka","Bhatia","Fowler"],score:11},
+  {name:"JACK H",players:["Young","Gotterup","Hovland","Scott"],score:11},
+  {name:"ALAN W <<<#",players:["Scheffler","Bhatia","HojgaardN","Woodland"],score:11},
+  {name:"ROBBIE S",players:["McIlroy","FitzpatrickM","Penge","Im"],score:11},
+  {name:"STEPHEN S Snr",players:["Morikawa","Henley","Gotterup","Hatton"],score:11},
+  {name:"MICHAEL W",players:["FitzpatrickM","Fleetwood","Hovland","Lowry"],score:11},
+  {name:"LEE F",players:["Young","DeChambeau","Reed","FitzpatrickA"],score:12},
+  {name:"RICHY P",players:["Fleetwood","Henley","Schauffele","Spaun"],score:12},
+  {name:"KATE N",players:["DeChambeau","Fleetwood","Thomas","Bhatia"],score:12},
+  {name:"JOE C ***",players:["Young","FitzpatrickM","Hatton","FitzpatrickA"],score:12},
+  {name:"ANNE H",players:["Young","Hovland","Woo Kim","Bhatia"],score:12},
+  {name:"STEVEY P *",players:["Young","Fleetwood","Straka","Cantlay"],score:12},
+  {name:"PAUL M",players:["Young","Fleetwood","Spaun","Reitan"],score:13},
+  {name:"RYAN B",players:["Young","Fleetwood","Spaun","HojgaardN"],score:13},
+  {name:"HAZEL D",players:["Fleetwood","Rose","Henley","Hatton"],score:13},
+  {name:"PETER W",players:["Scheffler","DeChambeau","Horschel","Hiller"],score:13},
+  {name:"SIMON P",players:["Rahm","Fleetwood","Morikawa","McCarty"],score:13},
+  {name:"STE R",players:["Young","Fleetwood","Rose","Homa"],score:14},
+  {name:"PAUL W",players:["Scheffler","Woo Kim","Fowler","McCarty"],score:14},
+  {name:"HENRY D",players:["Young","Fleetwood","Morikawa","Day"],score:14},
+  {name:"CHARLIEBM",players:["McIlroy","Hatton","Bhatia","FitzpatrickA"],score:15},
+  {name:"CHARLENE M",players:["Scheffler","Day","Homa","Spieth"],score:15},
+  {name:"SAM S",players:["Young","Koepka","Fleetwood","FitzpatrickA"],score:16},
+  {name:"AMY W *",players:["McIlroy","Spaun","Day","FitzpatrickA"],score:16},
+  {name:"DAVE S",players:["Scheffler","Hatton","Homa","Fox"],score:17},
+  {name:"HANNAH L *",players:["Rahm","Fleetwood","Straka","Homa"],score:17},
+  {name:"PAT P",players:["Young","DeChambeau","Henley","Im"],score:17},
+  {name:"JAMES D",players:["Young","Fleetwood","Hatton","Day"],score:17},
+  {name:"TEDDY F",players:["McIlroy","Morikawa","Day","Penge"],score:17},
+  {name:"RAY N",players:["Scheffler","Lowry","Homa","Woodland"],score:18},
+  {name:"ALEC T",players:["DeChambeau","FitzpatrickM","Henley","Scott"],score:18},
+  {name:"LIAM C",players:["DeChambeau","Fleetwood","Hatton","Lowry"],score:20},
+  {name:"MARK ROS",players:["McIlroy","Hatton","Bridgeman","McCarty"],score:21},
+  {name:"SEAN D",players:["DeChambeau","Fleetwood","Rose","Homa"],score:21},
+  {name:"JESSICA F",players:["Young","Fleetwood","MacIntyre","Homa"],score:22}
+];
+
 const HONOR_DATA = [
   {year:'2020',players:'DNP',masters:'Terry Harrell',pga:'DNP',us:'DNP',open:'DNP'},
   {year:'2021',players:'Eddie Wells',masters:'Ollie Martin',pga:'Larry Healy',us:'Eddie Wells',open:'Peter Allamby'},
@@ -789,7 +923,19 @@ async function loadFromSupabase() {
   renderAll();
 }
 
-function loadDemoPicks() { state.picks = REAL_PICKS.map(r => ({ name: r.name, players: r.players })); }
+function loadDemoPicks() {
+  state.picks = REAL_PICKS.map(r => ({ name: r.name, players: r.players }));
+}
+
+function loadFinalPGAScores() {
+  const normN = n => n.replace(/[*#<>]+/g,'').trim().toUpperCase();
+  PGA_FINAL_SCORES.forEach(entry => {
+    const normName = normN(entry.name);
+    const pick = state.picks.find(p => normN(p.name) === normName);
+    if (pick) pick._finalScore = entry.score;
+  });
+  state.pgaFinalLoaded = true;
+}
 function normalizeName(n) { if (!n) return ''; return n.trim(); }
 async function saveToSupabase(key, value) { try { await sbFetch('settings?key=eq.' + key, 'DELETE'); await sbFetch('settings', 'POST', { key, value }); } catch(e) {} }
 
@@ -889,10 +1035,18 @@ function resolveKey(pickName) {
   return pickName;
 }
 
-function calcEntryScore(entry) { let total = 0; entry.players.forEach(p => { total += getAdjustedScore(resolveKey(p)); }); return total; }
+function calcEntryScore(entry) {
+  if (entry._finalScore !== undefined) return entry._finalScore;
+  let total = 0;
+  entry.players.forEach(p => { total += getAdjustedScore(resolveKey(p)); });
+  return total;
+}
 function calcBudget(entry) { let total = 0; entry.players.forEach(p => { total += state.prices[resolveKey(p)] || 0; }); return parseFloat(total.toFixed(1)); }
 
-function renderAll() { renderLeaderboard(); renderLiveScores(); renderStats(); renderTnc(); renderHonorTable(); renderMgTrack(); renderMgAdminControls(); state.lastRefreshTime = new Date(); }
+function renderAll() {
+  if (!state.pgaFinalLoaded) loadFinalPGAScores();
+  renderLeaderboard(); renderLiveScores(); renderStats(); renderTnc(); renderHonorTable(); renderMgTrack(); renderMgAdminControls(); state.lastRefreshTime = new Date();
+}
 
 let _lbEntries = [];
 
@@ -1073,7 +1227,8 @@ function renderMgStandings() {
   const combined = [];
   const excludeFromSergeant = ['KERRY MC'];
   state.picks.forEach(p => {
-    if (excludeFromSergeant.some(ex => normEntrantName(p.name).trim().toUpperCase() === ex.trim().toUpperCase())) return;
+    const normN = normEntrantName(p.name).trim().toUpperCase();
+    if (excludeFromSergeant.some(ex => normN === ex.trim().toUpperCase() || normN.startsWith(ex.trim().toUpperCase()))) return;
     const ms = mastersScores[normEntrantName(p.name)];
     if (ms !== undefined) {
       const ps = calcEntryScore(p);

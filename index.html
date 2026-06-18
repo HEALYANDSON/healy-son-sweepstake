@@ -672,6 +672,140 @@ const REAL_PICKS = [
 
 const DEMO_SCORES = {};
 
+// PGA Championship 2026 — Final archived scores (for Sergeant of Majors combined standings)
+const PGA_ARCHIVE_SCORES = [
+  {name:"GEORGE B *",score:-15},
+  {name:"RICKY S",score:-13},
+  {name:"JAMIE W",score:-13},
+  {name:"BOBBY C",score:-12},
+  {name:"HARRY DV",score:-12},
+  {name:"BAILEY L",score:-11},
+  {name:"JACK M",score:-9},
+  {name:"BEN F",score:-8},
+  {name:"SIMON H",score:-8},
+  {name:"ANDY B",score:-8},
+  {name:"VINNIE W",score:-7},
+  {name:"ANDY H",score:-7},
+  {name:"EDDIE W **",score:-7},
+  {name:"NATHAN B",score:-7},
+  {name:"JO W",score:-6},
+  {name:"PAUL G",score:-6},
+  {name:"BILLY C",score:-5},
+  {name:"KELLY N",score:-5},
+  {name:"BILLY W",score:-5},
+  {name:"JAMES H",score:-4},
+  {name:"SOPH L*<<<#",score:-3},
+  {name:"CHRIS DM",score:-2},
+  {name:"THOMAS D",score:-2},
+  {name:"EMMA W",score:-2},
+  {name:"JOHN S",score:-1},
+  {name:"CHRIS S",score:-1},
+  {name:"TIM L",score:-1},
+  {name:"DAVE W",score:-1},
+  {name:"MICHAEL M",score:-1},
+  {name:"CONOR M",score:-1},
+  {name:"POPPY W *",score:0},
+  {name:"CHAY P",score:0},
+  {name:"CLIVE A",score:0},
+  {name:"SAM W*",score:0},
+  {name:"HARRY P",score:0},
+  {name:"LARRY H **",score:1},
+  {name:"DARREN M",score:1},
+  {name:"SIDNEY F",score:1},
+  {name:"SAM E",score:1},
+  {name:"KERRY MC",score:1},
+  {name:"LEE H",score:1},
+  {name:"JOSH G",score:2},
+  {name:"LOUIE W",score:2},
+  {name:"CHARLIE WR",score:2},
+  {name:"GLENN W **",score:2},
+  {name:"GREGG J",score:2},
+  {name:"LUKE RN",score:2},
+  {name:"DANIEL V",score:2},
+  {name:"GEORGE WS *",score:2},
+  {name:"DILLON B",score:2},
+  {name:"PETER A *",score:2},
+  {name:"SAM G",score:3},
+  {name:"REGAN H",score:3},
+  {name:"LISA W *",score:3},
+  {name:"CHRISTIAN T",score:3},
+  {name:"LUCY W",score:4},
+  {name:"HANNAH P",score:4},
+  {name:"CARL S",score:4},
+  {name:"ADAM T",score:4},
+  {name:"DENISE P",score:4},
+  {name:"MARK RAY",score:5},
+  {name:"DAVID H",score:5},
+  {name:"ALFIE B",score:5},
+  {name:"STEPHEN S Jnr",score:5},
+  {name:"KEVIN S *",score:5},
+  {name:"OLIVER W",score:6},
+  {name:"SIMON G",score:6},
+  {name:"GARY M",score:6},
+  {name:"NATHAN M **",score:6},
+  {name:"GRAHAM H",score:6},
+  {name:"TINA L",score:6},
+  {name:"NICKY H",score:6},
+  {name:"MICHAEL K",score:7},
+  {name:"ANDRE D",score:7},
+  {name:"JACKIE C *",score:7},
+  {name:"MIKE WS",score:7},
+  {name:"RYAN M",score:7},
+  {name:"LES W *",score:7},
+  {name:"BRODIE C",score:8},
+  {name:"DEAN B",score:8},
+  {name:"LOUIS R *",score:8},
+  {name:"GARY P",score:8},
+  {name:"JAMIE D",score:8},
+  {name:"GARRY MC",score:8},
+  {name:"DAVE C",score:9},
+  {name:"SEAMUS H",score:9},
+  {name:"JEFF K",score:9},
+  {name:"LUKE G",score:9},
+  {name:"OLLIE R",score:9},
+  {name:"KIRSTY W",score:9},
+  {name:"LIZ W",score:10},
+  {name:"STEVE W",score:10},
+  {name:"TOM G",score:10},
+  {name:"KENDRA H",score:10},
+  {name:"GEORGE W",score:11},
+  {name:"ELLEN P",score:11},
+  {name:"JACK H",score:11},
+  {name:"ALAN W <<<#",score:11},
+  {name:"ROBBIE S",score:11},
+  {name:"STEPHEN S Snr",score:11},
+  {name:"MICHAEL W",score:11},
+  {name:"LEE F",score:12},
+  {name:"RICHY P",score:12},
+  {name:"KATE N",score:12},
+  {name:"JOE C ***",score:12},
+  {name:"ANNE H",score:12},
+  {name:"STEVEY P *",score:12},
+  {name:"PAUL M",score:13},
+  {name:"RYAN B",score:13},
+  {name:"HAZEL D",score:13},
+  {name:"PETER W",score:13},
+  {name:"SIMON P",score:13},
+  {name:"STE R",score:14},
+  {name:"PAUL W",score:14},
+  {name:"HENRY D",score:14},
+  {name:"CHARLIEBM",score:15},
+  {name:"CHARLENE M",score:15},
+  {name:"SAM S",score:16},
+  {name:"AMY W *",score:16},
+  {name:"DAVE S",score:17},
+  {name:"HANNAH L *",score:17},
+  {name:"PAT P",score:17},
+  {name:"JAMES D",score:17},
+  {name:"TEDDY F",score:17},
+  {name:"RAY N",score:18},
+  {name:"ALEC T",score:18},
+  {name:"LIAM C",score:20},
+  {name:"MARK ROS",score:21},
+  {name:"SEAN D",score:21},
+  {name:"JESSICA F",score:22}
+];
+
 // US Open 2026 — Live scores from ESPN
 
 const HONOR_DATA = [
@@ -1032,56 +1166,80 @@ function renderMgTrack() {
     archivesDiv.innerHTML += `<div style="background:rgba(255,255,255,0.03);border:1px solid ${mc.border};border-radius:12px;margin-bottom:1.25rem;overflow:hidden;"><div style="background:${mc.banner};padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${mc.accent};letter-spacing:0.05em;">${mc.label}</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.45);margin-top:0.1rem;">${mc.venue}</div></div>${statusBadge}</div>${bodyHtml}</div>`;
   });
 
-  // ===== COMBINED STANDINGS — Masters final + PGA live =====
-  const mastersState = state.majorStates[0];
-  const pgaState = state.majorStates[1];
-  const showStandings = mastersState && mastersState.status === 'final' &&
-                        pgaState && (pgaState.status === 'active' || pgaState.status === 'final');
-  const standingsWrap = document.getElementById('mg-standings-wrap');
-  standingsWrap.style.display = showStandings ? 'block' : 'none';
-  if (showStandings) renderMgStandings();
+  // ===== COMBINED STANDINGS — Masters + PGA final + US Open live =====
+  // renderMgStandings handles its own visibility based on available data
+  renderMgStandings();
 }
 
 function renderMgStandings() {
-  const mastersArchive = state.archivedMajors[0];
-  if (!mastersArchive || !mastersArchive.length) return;
-
   // Strip decorators like *, **, ***, <<<#, <<< from names for matching
   const normEntrantName = n => n.replace(/[*#<>]+/g,'').trim();
-
-  const mastersScores = {};
-  mastersArchive.forEach(e => { mastersScores[normEntrantName(e.name)] = e.score; });
-
-  const combined = [];
   const excludeFromSergeant = ['KERRY MC'];
-  state.picks.forEach(p => {
-    const normN = normEntrantName(p.name).trim().toUpperCase();
-    if (excludeFromSergeant.some(ex => normN === ex.trim().toUpperCase() || normN.startsWith(ex.trim().toUpperCase()))) return;
-    const ms = mastersScores[normEntrantName(p.name)];
-    if (ms !== undefined) {
-      const ps = calcEntryScore(p);
-      combined.push({ name: p.name, mastersScore: ms, pgaScore: ps, total: ms + ps });
-    }
+
+  // Masters final scores (archived)
+  const mastersArchive = state.archivedMajors[0];
+  const mastersScores = {};
+  if (mastersArchive && mastersArchive.length) {
+    mastersArchive.forEach(e => { mastersScores[normEntrantName(e.name)] = e.score; });
+  }
+
+  // PGA final scores (hardcoded archive — the tournament has finished)
+  const pgaScores = {};
+  if (typeof PGA_ARCHIVE_SCORES !== 'undefined') {
+    PGA_ARCHIVE_SCORES.forEach(e => { pgaScores[normEntrantName(e.name)] = e.score; });
+  }
+
+  // Only show standings if we have at least Masters + PGA
+  if (!Object.keys(mastersScores).length || !Object.keys(pgaScores).length) {
+    document.getElementById('mg-standings-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('mg-standings-wrap').style.display = 'block';
+
+  // US Open is the current live major (index 2)
+  const usOpenLive = state.majorStates[2] && state.majorStates[2].status === 'active';
+  const usOpenFinal = state.majorStates[2] && state.majorStates[2].status === 'final';
+  const usOpenShown = usOpenLive || usOpenFinal;
+
+  // Build current US Open live scores per entrant (by name)
+  const usOpenScores = {};
+  state.picks.forEach(p => { usOpenScores[normEntrantName(p.name)] = calcEntryScore(p); });
+
+  // Combine — entrant must be in BOTH Masters and PGA to qualify
+  const combined = [];
+  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores)]);
+  allNames.forEach(nm => {
+    if (excludeFromSergeant.some(ex => nm.toUpperCase() === ex.toUpperCase() || nm.toUpperCase().startsWith(ex.toUpperCase()))) return;
+    const ms = mastersScores[nm];
+    const ps = pgaScores[nm];
+    // Must have played both Masters and PGA
+    if (ms === undefined || ps === undefined) return;
+    const us = usOpenShown && usOpenScores[nm] !== undefined ? usOpenScores[nm] : null;
+    const total = ms + ps + (us !== null ? us : 0);
+    combined.push({ name: nm, mastersScore: ms, pgaScore: ps, usScore: us, total: total });
   });
   combined.sort((a, b) => a.total - b.total);
 
-  const isLive = state.majorStates[1] && state.majorStates[1].status === 'active';
   const medals = ['🥇','🥈'];
-  const fmtS = s => s === 0 ? 'E' : s > 0 ? '+' + s : String(s);
+  const fmtS = s => s === null || s === undefined ? '–' : s === 0 ? 'E' : s > 0 ? '+' + s : String(s);
+
+  // Column layout depends on whether US Open is showing
+  const cols = usOpenShown ? '44px 1fr 52px 52px 52px 56px' : '44px 1fr 60px 60px 60px';
 
   document.getElementById('mg-standings-wrap').innerHTML = `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Combined Season Standings</div>
-      ${isLive ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
+      ${usOpenLive ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
     </div>
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters final + PGA ${isLive ? 'live' : 'final'} · ${combined.length} eligible entrants</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA final${usOpenShown ? ' + US Open ' + (usOpenLive ? 'live' : 'final') : ''} · ${combined.length} eligible entrants</div>
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:2rem;">
-      <div style="display:grid;grid-template-columns:44px 1fr 60px 60px 60px;gap:0.5rem;padding:0.5rem 0.75rem;background:rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.2);">
-        <div style="font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">Pos</div>
-        <div style="font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">Entrant</div>
-        <div style="font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;text-align:right;">Masters</div>
-        <div style="font-size:0.6rem;color:#3a8fd4;text-transform:uppercase;letter-spacing:0.1em;text-align:right;">PGA</div>
-        <div style="font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;text-align:right;">Total</div>
+      <div style="display:grid;grid-template-columns:${cols};gap:0.4rem;padding:0.5rem 0.75rem;background:rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.2);">
+        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Pos</div>
+        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Entrant</div>
+        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;text-align:right;">MAS</div>
+        <div style="font-size:0.58rem;color:#3a8fd4;text-transform:uppercase;letter-spacing:0.08em;text-align:right;">PGA</div>
+        ${usOpenShown ? '<div style="font-size:0.58rem;color:#a0a0ff;text-transform:uppercase;letter-spacing:0.08em;text-align:right;">USO</div>' : ''}
+        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;text-align:right;">Total</div>
       </div>
       ${combined.map((e, i) => {
         const pos = i + 1;
@@ -1089,7 +1247,8 @@ function renderMgStandings() {
         const tc = e.total < 0 ? 'color:var(--up)' : e.total > 0 ? 'color:var(--down)' : 'color:var(--cream)';
         const pc = e.pgaScore < 0 ? 'color:var(--up)' : e.pgaScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
         const mc = e.mastersScore < 0 ? 'color:var(--up)' : e.mastersScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        return `<div style="display:grid;grid-template-columns:44px 1fr 60px 60px 60px;gap:0.5rem;align-items:center;padding:0.45rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.82rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.8rem;font-weight:600;${mc};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.8rem;font-weight:600;${pc};text-align:right;">${fmtS(e.pgaScore)}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
+        const uc = e.usScore === null ? 'color:var(--muted)' : e.usScore < 0 ? 'color:var(--up)' : e.usScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
+        return `<div style="display:grid;grid-template-columns:${cols};gap:0.4rem;align-items:center;padding:0.45rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.8rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.78rem;font-weight:600;${mc};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.78rem;font-weight:600;${pc};text-align:right;">${fmtS(e.pgaScore)}</div>${usOpenShown ? `<div style="font-size:0.78rem;font-weight:600;${uc};text-align:right;">${fmtS(e.usScore)}</div>` : ''}<div style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
       }).join('')}
     </div>`;
 }
@@ -1271,10 +1430,8 @@ async function manualRefresh() {
     if (apiStatus) { apiStatus.className='status-msg ok'; apiStatus.style.display='block'; apiStatus.textContent='✅ Live · R'+(data.round||'?')+' · '+(data.tournamentStatus||'')+' · '+timeStr; }
     state.hasRefreshed = true;
     renderAll();
-    // Update combined standings on each live refresh
-    const mF = state.majorStates[0] && state.majorStates[0].status === 'final';
-    const pA = state.majorStates[1] && (state.majorStates[1].status === 'active' || state.majorStates[1].status === 'final');
-    if (mF && pA) renderMgStandings();
+    // Update combined standings live (handles own visibility)
+    renderMgStandings();
   } catch(e) {
     console.error('Refresh error:', e);
     const apiStatus = document.getElementById('api-status');

@@ -208,13 +208,14 @@
     <div class="gold-divider"></div>
     <div class="majors-pills">
       <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ The Masters</span>
-      <span class="major-pill active">🏆 US Open</span>
-      <span class="major-pill inactive">The Open</span>
+      <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ PGA</span>
+      <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ US Open</span>
+      <span class="major-pill active">🏆 The Open</span>
     </div>
     <div class="deadline-card">
-      <div class="deadline-label">⛳ US Open 2026 · LIVE NOW</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">SHINNECOCK HILLS G.C. · SOUTHAMPTON, NY</div>
-      <div style="font-size:0.75rem;color:var(--muted);">19–22 June 2026</div>
+      <div class="deadline-label">⛳ The Open 2026 · LIVE NOW</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">ROYAL BIRKDALE · SOUTHPORT, ENGLAND</div>
+      <div style="font-size:0.75rem;color:var(--muted);">16–19 July 2026</div>
       <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(58,143,212,0.3);font-size:0.78rem;color:#3a8fd4;font-weight:600;"><span class="live-dot"></span> Picks are closed · Tournament underway</div>
     </div>
     <button class="enter-btn" onclick="enterApp()" style="width:100%;padding:0.9rem;font-size:1rem;letter-spacing:0.1em;border-radius:10px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;background:#1a4a7a;color:#fff;">
@@ -274,8 +275,8 @@
   <!-- LEADERBOARD TAB -->
   <div class="tab-content active" id="tab-leaderboard">
     <div class="masters-banner" style="background:linear-gradient(135deg,var(--pga-blue),var(--pga-navy));border-color:rgba(58,143,212,0.4);">
-      <div class="masters-banner-text" style="color:#3a8fd4;"><span class="live-dot"></span> US OPEN 2026 · Shinnecock Hills G.C. · 19–22 June</div>
-      <div class="masters-banner-sub">Live Sweepstake Leaderboard · Masters &amp; PGA final results in Sergeant of Majors tab</div>
+      <div class="masters-banner-text" style="color:#3a8fd4;"><span class="live-dot"></span> THE OPEN 2026 · Royal Birkdale · 16–19 July</div>
+      <div class="masters-banner-sub">Live Sweepstake Leaderboard · Previous Majors in Sergeant of Majors tab</div>
     </div>
     <div class="section-title">Leaderboard</div>
     <div class="section-sub" id="lb-sub">Loading entries…</div>
@@ -290,7 +291,7 @@
   <!-- LIVE SCORES TAB -->
   <div class="tab-content" id="tab-livescores">
     <div class="section-title">Live Scores</div>
-    <div class="section-sub">US Open field · Live via ESPN · Auto-refreshes every 10 mins</div>
+    <div class="section-sub">The Open field · Live via ESPN · Auto-refreshes every 10 mins</div>
     <div style="overflow-x:auto;">
       <table class="ls-table" id="live-scores-table">
         <thead><tr><th>Player</th><th>Price</th><th>Score</th></tr></thead>
@@ -410,7 +411,7 @@
     <div class="admin-section">
       <h3>📡 Live Scoring — ESPN via Vercel</h3>
       <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Scores pulled automatically from ESPN every 10 minutes via your Vercel serverless function at <code style="color:var(--gold);">/api/scores</code>. No API key needed.</div>
-      <div id="api-status" class="status-msg ok" style="display:block;margin-bottom:0.75rem;">✅ US Open 2026 · Tournament ID: 401811952</div>
+      <div id="api-status" class="status-msg ok" style="display:block;margin-bottom:0.75rem;">✅ The Open 2026 · Tournament ID: 401811957</div>
       <div class="admin-row">
         <button class="admin-btn" onclick="manualRefresh()">🔄 Refresh Now</button>
         <span id="last-refresh-admin" style="font-size:0.72rem;color:var(--muted);margin-left:0.5rem;"></span>
@@ -480,7 +481,7 @@ let state = {
   previousPositions: {},
   hasRefreshed: false,
   cutPlayers: new Set([
-    // US Open 2026 — cut players added after R2
+    // The Open 2026 — cut players added after R2
   ]),
   penalties: { cutScore: 6, dnfPenalty: null },
   majorStates: [
@@ -498,179 +499,180 @@ let state = {
 };
 
 const PRICE_LIST_DEFAULT = {
-  "Scheffler": 11.5,
-  "McIlroy": 9.8,
+  "Scheffler": 11.1,
+  "McIlroy": 9.3,
   "Young": 7.2,
-  "Rahm": 7.1,
-  "FitzpatrickM": 6.2,
-  "DeChambeau": 6.2,
-  "Henley": 5.8,
-  "Rose": 5.3,
-  "Fleetwood": 5.2,
+  "FitzpatrickM": 6.9,
+  "Rahm": 6.5,
+  "Henley": 5.6,
+  "Gotterup": 5.4,
+  "Morikawa": 5.4,
+  "Clark": 5.2,
+  "DeChambeau": 5.2,
+  "Fleetwood": 5.1,
+  "Rose": 5.1,
   "Koepka": 5.1,
-  "Aberg": 5.1,
-  "Morikawa": 4.9,
-  "Spaun": 4.9,
-  "Gotterup": 4.7,
-  "Hatton": 4.7,
-  "Schauffele": 4.7,
+  "Aberg": 4.9,
+  "Spaun": 4.8,
+  "Hovland": 4.7,
+  "Schauffele": 4.6,
+  "Hatton": 4.5,
+  "MacIntyre": 4.4,
+  "Burns": 4.3,
   "Rai": 4.3,
-  "Thomas": 4.3,
-  "Hovland": 4.2,
-  "MacIntyre": 4.1,
-  "Woo Kim": 4.1,
-  "Straka": 4.0,
-  "English": 3.6,
-  "Lowry": 3.5,
-  "Reed": 3.5,
+  "Thomas": 4.2,
+  "KimSW": 3.8,
+  "Straka": 3.7,
+  "KimT": 3.5,
+  "Lee": 3.5,
   "Reitan": 3.5,
-  "Matsuyama": 3.5,
+  "SmithC": 3.5,
+  "Bhatia": 3.4,
   "Bridgeman": 3.4,
-  "Bhatia": 3.2,
-  "Burns": 3.1,
+  "Reed": 3.3,
+  "Matsuyama": 3.3,
+  "English": 3.3,
+  "Lowry": 3.2,
+  "Kitayama": 3.0,
   "Cantlay": 2.9,
-  "Poston": 2.8,
-  "Clark": 2.8,
+  "Day": 2.9,
+  "HojgaardN": 2.9,
+  "McNealy": 2.8,
   "Fowler": 2.6,
-  "Smalley": 2.6,
-  "Day": 2.3,
-  "Woodland": 2.3,
-  "Spieth": 2.2,
-  "Scott": 2.2,
-  "McCarty": 2.1,
-  "Conners": 2.0,
-  "Fox": 1.9,
+  "Smalley": 2.5,
+  "Penge": 2.2,
+  "Niemann": 2.2,
+  "KimM": 2.1,
+  "FitzpatrickA": 2.1,
+  "Conners": 2.1,
+  "Spieth": 2.1,
+  "Fox": 2.0,
+  "Nakajima": 2.0,
+  "Hisatsune": 1.9,
   "Harman": 1.9,
-  "Smith": 1.7,
-  "Im": 1.6,
-  "FitzpatrickA": 1.6,
+  "Chacarra": 1.9,
   "Keefer": 1.6,
-  "Niemann": 1.5,
-  "Kirk": 1.3,
-  "Yellamaraju": 1.2,
-  "Norgaard": 0.5,
-  "Koivun (A)": 0.2
+  "Homa": 1.6,
+  "Parry": 1.4,
+  "Li": 1.3,
+  "Perez": 1.2,
+  "Southgate": 0.5,
+  "Cink": 0.4,
+  "Ham": 0.3
 };
 
 const REAL_PICKS = [
-  {name:"ALAN W <<<#",players:["Young","FitzpatrickM","Gotterup","Yellamaraju"],_budget:19.3},
-  {name:"ALFIE B",players:["McIlroy","Koepka","Cantlay","Conners"],_budget:19.8},
-  {name:"AMY W *",players:["Young","Hatton","Rai","Lowry"],_budget:19.7},
-  {name:"ANDY B",players:["McIlroy","Henley","Day","Conners"],_budget:19.9},
-  {name:"ANDY H",players:["Rose","Fleetwood","Koepka","Hovland"],_budget:19.8},
-  {name:"ANNE H",players:["Koepka","Rai","Burns","Im"],_budget:14.1},
-  {name:"BAILEY L",players:["Fleetwood","Aberg","Gotterup","Schauffele"],_budget:19.7},
-  {name:"BEN F",players:["Fleetwood","Aberg","Morikawa","Schauffele"],_budget:19.9},
-  {name:"BILLY C",players:["Young","Rose","Aberg","Im"],_budget:19.2},
-  {name:"BILLY W",players:["Rahm","Aberg","Thomas","Reed"],_budget:20.0},
-  {name:"BRODIE C",players:["Rahm","Fleetwood","Koepka","Fowler"],_budget:20.0},
-  {name:"CARL S",players:["Fleetwood","Aberg","Morikawa","Hovland"],_budget:19.4},
-  {name:"CHARLIE WR",players:["FitzpatrickM","Fleetwood","Koepka","Lowry"],_budget:20.0},
-  {name:"CHARLIEBM",players:["Young","Koepka","Thomas","Poston"],_budget:19.4},
-  {name:"CHARLENE M",players:["Young","Morikawa","Thomas","Lowry"],_budget:19.9},
-  {name:"CHAY P",players:["DeChambeau","Aberg","Schauffele","Bhatia"],_budget:19.2},
-  {name:"CHRIS DM",players:["McIlroy","Schauffele","Hatton","Koivun (A)"],_budget:19.4},
-  {name:"CHRISTIAN T",players:["FitzpatrickM","Gotterup","MacIntyre","Woodland"],_budget:17.3},
-  {name:"CLIVE A",players:["FitzpatrickM","Fleetwood","Hatton","Bridgeman"],_budget:19.5},
-  {name:"CONOR M",players:["FitzpatrickM","Aberg","Rai","Woo Kim"],_budget:19.7},
-  {name:"DANIEL V",players:["Young","Henley","Schauffele","Spieth"],_budget:19.9},
-  {name:"DARREN M",players:["Young","Rahm","Cantlay","Day"],_budget:19.5},
-  {name:"DANNY M",players:["Scheffler","Rai","McCarty","Smith"],_budget:19.6},
-  {name:"DAVE C",players:["FitzpatrickM","MacIntyre","Lowry","Cantlay"],_budget:16.7},
-  {name:"DAVE S",players:["Rahm","Rose","Aberg","Conners"],_budget:19.5},
-  {name:"DAVE W",players:["FitzpatrickM","Fleetwood","Gotterup","Reitan"],_budget:19.6},
-  {name:"DAVID H",players:["Young","Schauffele","Rai","Reed"],_budget:19.7},
-  {name:"DEAN B",players:["Rose","Fleetwood","Lowry","FitzpatrickA"],_budget:15.6},
-  {name:"DAN C",players:["FitzpatrickM","Fleetwood","Reed","Lowry"],_budget:18.4},
-  {name:"DENISE P",players:["Young","Rahm","Burns","Fowler"],_budget:20.0},
-  {name:"EDDIE W **",players:["Rose","Fleetwood","Schauffele","Thomas"],_budget:19.5},
-  {name:"ELLEN P",players:["McIlroy","Straka","Lowry","Fowler"],_budget:19.9},
-  {name:"EMMA W",players:["Young","Aberg","Spaun","Clark"],_budget:20.0},
-  {name:"GARRY MC",players:["Rahm","Aberg","Spaun","Clark"],_budget:19.9},
-  {name:"GARY M",players:["Young","FitzpatrickM","Thomas","Day"],_budget:20.0},
-  {name:"GEORGE B *",players:["Rahm","Gotterup","Reed","Lowry"],_budget:18.8},
-  {name:"GEORGE W",players:["McIlroy","Morikawa","Gotterup","Norgaard"],_budget:19.9},
-  {name:"GEORGE WS *",players:["Young","Hatton","Lowry","Burns"],_budget:18.5},
-  {name:"GLENN W **",players:["Young","Fleetwood","Schauffele","Smalley"],_budget:19.7},
-  {name:"GREGG J",players:["Henley","Fleetwood","Woo Kim","Clark"],_budget:17.9},
-  {name:"HANNAH L *",players:["Rahm","Fleetwood","Schauffele","Day"],_budget:19.3},
-  {name:"HARRY DV",players:["Henley","Fleetwood","Schauffele","Burns"],_budget:18.8},
-  {name:"HARRY P",players:["FitzpatrickM","Gotterup","MacIntyre","Smith"],_budget:16.7},
-  {name:"HARRY PR",players:["Rose","Fleetwood","Schauffele","Hovland"],_budget:19.4},
-  {name:"HAZEL D",players:["Rahm","FitzpatrickM","Schauffele","Fox"],_budget:19.9},
-  {name:"HENRY D",players:["Aberg","Spaun","Morikawa","Schauffele"],_budget:19.6},
-  {name:"INGRID V",players:["Scheffler","Morikawa","Conners","Kirk"],_budget:19.7},
-  {name:"JACK H",players:["McIlroy","Hatton","Bridgeman","Smith"],_budget:19.6},
-  {name:"JACK M",players:["FitzpatrickM","Rose","Fleetwood","Burns"],_budget:19.8},
-  {name:"JACKIE C *",players:["McIlroy","Rose","Cantlay","Conners"],_budget:20.0},
-  {name:"JAMES D",players:["Young","Aberg","Morikawa","Clark"],_budget:20.0},
-  {name:"JAMES H",players:["Fleetwood","Aberg","Schauffele","Reed"],_budget:18.5},
-  {name:"JAMIE S",players:["Young","Rose","Aberg","Scott"],_budget:19.8},
-  {name:"JAMIE W",players:["Rahm","Fleetwood","Aberg","Fowler"],_budget:20.0},
-  {name:"JEFF K",players:["Scheffler","Burns","Clark","Spieth"],_budget:19.6},
-  {name:"JESSICA F",players:["Henley","Fleetwood","Lowry","Conners"],_budget:16.5},
-  {name:"JOE C ***",players:["McIlroy","Rose","Bhatia","FitzpatrickA"],_budget:19.9},
-  {name:"JOHN S",players:["FitzpatrickM","Rose","Fleetwood","Bhatia"],_budget:19.9},
-  {name:"JOSH G",players:["Scheffler","MacIntyre","Day","Yellamaraju"],_budget:19.1},
-  {name:"KELLY N",players:["Young","Spaun","Thomas","English"],_budget:20.0},
-  {name:"KENDRA H",players:["Scheffler","Matsuyama","Reed","Niemann"],_budget:20.0},
-  {name:"KERRY MC",players:["Rose","Fleetwood","Gotterup","Lowry"],_budget:18.7},
-  {name:"KEVIN S *",players:["Fleetwood","Spaun","Morikawa","Gotterup"],_budget:19.7},
-  {name:"KIRSTY W",players:["Rose","Koepka","Morikawa","Schauffele"],_budget:20.0},
-  {name:"LARRY H **",players:["McIlroy","Matsuyama","Lowry","Conners"],_budget:18.8},
-  {name:"LEE H",players:["Scheffler","Lowry","Burns","Fox"],_budget:20.0},
-  {name:"LEE F",players:["Rahm","FitzpatrickM","Reed","Burns"],_budget:19.9},
-  {name:"LES W *",players:["Rahm","Spaun","Reitan","Bridgeman"],_budget:18.9},
-  {name:"LIAM C",players:["FitzpatrickM","Koepka","Hatton","Lowry"],_budget:19.5},
-  {name:"LISA W *",players:["McIlroy","Aberg","Matsuyama","Keefer"],_budget:20.0},
-  {name:"LIZ W",players:["FitzpatrickM","Fleetwood","Rai","FitzpatrickA"],_budget:17.3},
-  {name:"LOUIS R *",players:["FitzpatrickM","Rose","Thomas","MacIntyre"],_budget:19.9},
-  {name:"LUCY W",players:["Scheffler","Thomas","Smalley","Im"],_budget:20.0},
-  {name:"LUKE G",players:["FitzpatrickM","Rose","Aberg","Burns"],_budget:19.7},
-  {name:"LUKE RN",players:["Rahm","Rose","Fleetwood","Spieth"],_budget:19.8},
-  {name:"MARK RAY",players:["Young","Henley","Schauffele","Smith"],_budget:19.4},
-  {name:"MARK ROS",players:["Fleetwood","Koepka","Hatton","Thomas"],_budget:19.3},
-  {name:"MICHAEL M",players:["FitzpatrickM","Fleetwood","Schauffele","Reed"],_budget:19.6},
-  {name:"MICHAEL W",players:["FitzpatrickM","Fleetwood","Aberg","Lowry"],_budget:20.0},
-  {name:"MICHAEL K",players:["Rahm","Rose","Hovland","Burns"],_budget:19.7},
-  {name:"MIKE WS",players:["FitzpatrickM","Fleetwood","Koepka","Day"],_budget:18.8},
-  {name:"NATHAN M **",players:["FitzpatrickM","Schauffele","Hatton","Hovland"],_budget:19.8},
-  {name:"NATHAN B",players:["Gotterup","Schauffele","Burns","Clark"],_budget:15.3},
-  {name:"PAT P",players:["McIlroy","Rose","Poston","Conners"],_budget:19.9},
-  {name:"PAUL G",players:["FitzpatrickM","Fleetwood","Aberg","Burns"],_budget:19.6},
-  {name:"PAUL M",players:["FitzpatrickM","Schauffele","Hatton","Thomas"],_budget:19.9},
-  {name:"PAUL W",players:["Young","Gotterup","Hatton","Burns"],_budget:19.7},
-  {name:"PETER A *",players:["Fleetwood","Schauffele","Hatton","Hovland"],_budget:18.8},
-  {name:"PETER W",players:["Scheffler","Burns","Cantlay","Fox"],_budget:19.4},
-  {name:"POPPY W *",players:["Koepka","Spaun","Morikawa","Gotterup"],_budget:19.6},
-  {name:"RAY N",players:["Scheffler","Rai","Day","Harman"],_budget:20.0},
-  {name:"ROB C",players:["Rose","Fleetwood","Aberg","Thomas"],_budget:19.9},
-  {name:"REGAN H",players:["Rahm","Rose","Reitan","Reed"],_budget:19.4},
-  {name:"RICHY P",players:["Fleetwood","Aberg","Thomas","Matsuyama"],_budget:18.1},
-  {name:"RICKY S",players:["Rose","Fleetwood","Spaun","Hovland"],_budget:19.6},
-  {name:"RYAN B",players:["FitzpatrickM","Fleetwood","Gotterup","Reed"],_budget:19.6},
-  {name:"SAM E",players:["FitzpatrickM","Henley","Hovland","Lowry"],_budget:19.7},
-  {name:"SAM G",players:["Henley","Morikawa","Schauffele","Thomas"],_budget:19.7},
-  {name:"SAM S",players:["Rahm","Fleetwood","Koepka","Spieth"],_budget:19.6},
-  {name:"SAM W*",players:["FitzpatrickM","Aberg","Rai","Hovland"],_budget:19.8},
-  {name:"SEAMUS H",players:["Fleetwood","Koepka","Schauffele","Thomas"],_budget:19.3},
-  {name:"SEAN D",players:["Young","DeChambeau","English","Spieth"],_budget:19.2},
-  {name:"SEAN W",players:["Rose","Fleetwood","Hatton","MacIntyre"],_budget:19.3},
-  {name:"SIDNEY F",players:["Fleetwood","Morikawa","Schauffele","Hatton"],_budget:19.5},
-  {name:"SIMON G",players:["FitzpatrickM","Rose","Hatton","Matsuyama"],_budget:19.7},
-  {name:"SIMON H",players:["Fleetwood","Aberg","Morikawa","Hatton"],_budget:19.9},
-  {name:"SIMON P",players:["Aberg","Morikawa","Schauffele","Hovland"],_budget:18.9},
-  {name:"SOPH L*<<<#",players:["Fleetwood","Aberg","Morikawa","Thomas"],_budget:19.5},
-  {name:"STE R",players:["Young","Henley","Reed","Lowry"],_budget:20.0},
-  {name:"STEPHEN S Jnr",players:["Rahm","Rose","Hovland","Bhatia"],_budget:19.8},
-  {name:"STEPHEN S Snr",players:["Henley","Koepka","Schauffele","Thomas"],_budget:19.9},
-  {name:"STEVE W",players:["Aberg","Koepka","Spaun","Morikawa"],_budget:20.0},
-  {name:"STEVEY P *",players:["FitzpatrickM","Fleetwood","Spaun","Burns"],_budget:19.4},
-  {name:"TEDDY F",players:["Scheffler","Reed","Cantlay","Conners"],_budget:19.9},
-  {name:"THOMAS D",players:["Rose","Fleetwood","Schauffele","Matsuyama"],_budget:18.7},
-  {name:"TIM L",players:["FitzpatrickM","Aberg","Schauffele","Burns"],_budget:19.1},
-  {name:"TINA L",players:["McIlroy","Rose","Smalley","Day"],_budget:20.0},
-  {name:"VINNIE W",players:["Rose","Koepka","Schauffele","Rai"],_budget:19.4}
+  {name:"ALAN W <<<#",players:["FitzpatrickM","Clark","Burns","Reed"],_budget:19.7},
+  {name:"ALFIE B",players:["Fleetwood","Rose","Aberg","Hatton"],_budget:19.6},
+  {name:"ANDRE D",players:["FitzpatrickM","Rose","MacIntyre","KimT"],_budget:19.9},
+  {name:"AMY W *",players:["Young","Fleetwood","Hatton","Lowry"],_budget:20.0},
+  {name:"ANDY B",players:["McIlroy","FitzpatrickM","Hisatsune","Harman"],_budget:20.0},
+  {name:"ANDY H",players:["McIlroy","Rose","Lowry","Penge"],_budget:19.8},
+  {name:"ANNE H",players:["Rahm","KimSW","Lee","Matsuyama"],_budget:17.1},
+  {name:"BAILEY L",players:["Young","Rose","KimSW","Reitan"],_budget:19.6},
+  {name:"BEN F",players:["Fleetwood","Rose","Hatton","MacIntyre"],_budget:19.1},
+  {name:"BILLY C",players:["Young","Aberg","Hatton","Lowry"],_budget:19.8},
+  {name:"BRODIE C",players:["FitzpatrickM","Henley","Gotterup","KimM"],_budget:20.0},
+  {name:"CARL S",players:["McIlroy","Morikawa","Lowry","Fox"],_budget:19.9},
+  {name:"CHARLIE WR",players:["Gotterup","Schauffele","Hatton","Thomas"],_budget:18.7},
+  {name:"CHARLENE M",players:["McIlroy","Schauffele","KimT","FitzpatrickA"],_budget:19.5},
+  {name:"CHAY P",players:["DeChambeau","Rose","Aberg","Schauffele"],_budget:19.8},
+  {name:"CHRIS DM",players:["FitzpatrickM","Fleetwood","Hatton","Lee"],_budget:20.0},
+  {name:"CHRISTIAN T",players:["McIlroy","Hovland","Reed","FitzpatrickA"],_budget:19.4},
+  {name:"CHRIS S",players:["Gotterup","Morikawa","Hovland","Hatton"],_budget:20.0},
+  {name:"CLIVE A",players:["McIlroy","KimT","Lee","Keefer"],_budget:17.9},
+  {name:"CONOR M",players:["Scheffler","Schauffele","Niemann","Conners"],_budget:20.0},
+  {name:"DANIEL V",players:["McIlroy","Rose","Lowry","FitzpatrickA"],_budget:19.7},
+  {name:"DAVE C",players:["FitzpatrickM","Fleetwood","Hovland","Matsuyama"],_budget:20.0},
+  {name:"DAVE S",players:["Clark","Schauffele","MacIntyre","Burns"],_budget:18.5},
+  {name:"DAVE W",players:["McIlroy","Fleetwood","Lowry","FitzpatrickA"],_budget:19.7},
+  {name:"DAVID H",players:["McIlroy","Schauffele","Hatton","Parry"],_budget:19.8},
+  {name:"DEAN B",players:["FitzpatrickM","Fleetwood","Hatton","Bhatia"],_budget:19.9},
+  {name:"DENISE P",players:["McIlroy","Fleetwood","Reed","Chacarra"],_budget:19.6},
+  {name:"EDDIE W **",players:["Morikawa","Fleetwood","Aberg","Schauffele"],_budget:20.0},
+  {name:"ELLEN P",players:["McIlroy","Hovland","SmithC","Conners"],_budget:19.6},
+  {name:"EMMA W",players:["Young","Clark","Hatton","Cantlay"],_budget:19.8},
+  {name:"GARRY MC",players:["Clark","Aberg","Spaun","Hovland"],_budget:19.6},
+  {name:"GARY M",players:["FitzpatrickM","Fleetwood","MacIntyre","Lowry"],_budget:19.6},
+  {name:"CHARLIE BM",players:["Rahm","Aberg","Hatton","Lowry"],_budget:19.1},
+  {name:"GEORGE B *",players:["Fleetwood","Rose","Rai","Burns"],_budget:18.8},
+  {name:"GEORGE W",players:["McIlroy","Young","Lowry","Ham"],_budget:20.0},
+  {name:"GEORGE WS *",players:["McIlroy","Fleetwood","SmithC","FitzpatrickA"],_budget:20.0},
+  {name:"GLENN W **",players:["Fleetwood","Rose","Schauffele","Lowry"],_budget:18.0},
+  {name:"GREGG J",players:["FitzpatrickM","Morikawa","Fleetwood","Niemann"],_budget:19.6},
+  {name:"GRAHAM H",players:["Rahm","Hovland","MacIntyre","KimSW"],_budget:19.4},
+  {name:"HANNAH L *",players:["Rahm","Fleetwood","Aberg","Homa"],_budget:18.1},
+  {name:"HARRY DV",players:["FitzpatrickM","Fleetwood","Schauffele","Day"],_budget:19.5},
+  {name:"HARRY P",players:["Scheffler","Young","Perez","Southgate"],_budget:20.0},
+  {name:"HAZEL D",players:["Young","Rose","MacIntyre","Reed"],_budget:20.0},
+  {name:"INGRID V",players:["Scheffler","Schauffele","Spieth","FitzpatrickA"],_budget:19.9},
+  {name:"JACK H",players:["Gotterup","Clark","Hovland","MacIntyre"],_budget:19.7},
+  {name:"JACK M",players:["McIlroy","Fleetwood","Lowry","Harman"],_budget:19.5},
+  {name:"JACKIE C *",players:["McIlroy","Hovland","Cantlay","Fowler"],_budget:19.5},
+  {name:"JAMES D",players:["FitzpatrickM","Gotterup","KimT","Lee"],_budget:19.3},
+  {name:"JAMIE D",players:["FitzpatrickM","Fleetwood","MacIntyre","Spieth"],_budget:18.5},
+  {name:"JAMES H",players:["Fleetwood","Aberg","Day","Cantlay"],_budget:15.8},
+  {name:"JAMIE S",players:["Young","Fleetwood","Hatton","Lowry"],_budget:20.0},
+  {name:"JAMIE W",players:["DeChambeau","Fleetwood","Rose","Schauffele"],_budget:20.0},
+  {name:"JEFF K",players:["FitzpatrickM","Fleetwood","Hatton","KimT"],_budget:20.0},
+  {name:"JESSICA F",players:["McIlroy","Matsuyama","Reed","HojgaardN"],_budget:18.8},
+  {name:"JOE C ***",players:["Clark","Fleetwood","Rose","MacIntyre"],_budget:19.8},
+  {name:"JOE R",players:["Fleetwood","Rose","Aberg","MacIntyre"],_budget:19.5},
+  {name:"JOHN S",players:["FitzpatrickM","Fleetwood","KimSW","KimT"],_budget:19.3},
+  {name:"JOSH G",players:["Morikawa","Schauffele","Hatton","Reed"],_budget:17.8},
+  {name:"KELLY N",players:["FitzpatrickM","Schauffele","Hatton","KimT"],_budget:19.5},
+  {name:"KENDRA H",players:["Scheffler","Hovland","Niemann","Harman"],_budget:19.9},
+  {name:"KERRY MC",players:["Gotterup","Fleetwood","Rose","Lowry"],_budget:18.8},
+  {name:"KEVIN S *",players:["FitzpatrickM","Fleetwood","Rai","KimT"],_budget:19.8},
+  {name:"LARRY H **",players:["McIlroy","Rai","Lowry","McNealy"],_budget:19.6},
+  {name:"LEE H",players:["Gotterup","Rose","MacIntyre","Burns"],_budget:19.2},
+  {name:"LEE F",players:["McIlroy","FitzpatrickM","Spieth","Homa"],_budget:19.9},
+  {name:"LEE P",players:["FitzpatrickM","Morikawa","KimT","Cantlay"],_budget:18.7},
+  {name:"LES W *",players:["McIlroy","Aberg","Reed","Chacarra"],_budget:19.4},
+  {name:"LIAM C",players:["FitzpatrickM","Rose","Hatton","Lowry"],_budget:19.7},
+  {name:"LISA W *",players:["Henley","Koepka","Spaun","Hatton"],_budget:20.0},
+  {name:"LIZ W",players:["FitzpatrickM","Fleetwood","Lowry","FitzpatrickA"],_budget:17.3},
+  {name:"LOUIS R *",players:["FitzpatrickM","Clark","MacIntyre","Lee"],_budget:20.0},
+  {name:"LUCY W",players:["McIlroy","Fleetwood","Bridgeman","Penge"],_budget:20.0},
+  {name:"LOUIE W",players:["McIlroy","Aberg","Lowry","Spieth"],_budget:19.5},
+  {name:"MARK ROS",players:["Gotterup","Fleetwood","Aberg","Hatton"],_budget:19.9},
+  {name:"MICHAEL M",players:["Clark","Fleetwood","Hovland","MacIntyre"],_budget:19.4},
+  {name:"MICHAEL W",players:["FitzpatrickM","Morikawa","Fleetwood","FitzpatrickA"],_budget:19.5},
+  {name:"MICHAEL K",players:["FitzpatrickM","Fleetwood","Rose","FitzpatrickA"],_budget:19.2},
+  {name:"NATHAN M **",players:["FitzpatrickM","Rose","MacIntyre","Lowry"],_budget:19.6},
+  {name:"NATHAN B *",players:["Clark","Hovland","MacIntyre","Reed"],_budget:17.6},
+  {name:"OLLIE R",players:["Morikawa","Koepka","Hovland","Straka"],_budget:18.9},
+  {name:"PAT P",players:["McIlroy","Fleetwood","Cantlay","Fowler"],_budget:19.9},
+  {name:"PAUL G",players:["FitzpatrickM","Fleetwood","Hatton","Reed"],_budget:19.8},
+  {name:"PAUL M",players:["Gotterup","Morikawa","Fleetwood","Reed"],_budget:19.2},
+  {name:"PAUL W",players:["McIlroy","Hovland","English","Li"],_budget:18.6},
+  {name:"PETER A *",players:["Rose","Aberg","Hovland","Hatton"],_budget:19.2},
+  {name:"PETER W",players:["FitzpatrickM","Gotterup","HojgaardN","KimM"],_budget:17.3},
+  {name:"RAY N",players:["Fleetwood","Rose","Aberg","Hovland"],_budget:19.8},
+  {name:"ROBERT L",players:["Aberg","Spaun","Hatton","Reed"],_budget:17.5},
+  {name:"REGAN H",players:["FitzpatrickM","Aberg","Burns","Bhatia"],_budget:19.5},
+  {name:"RICHY P",players:["Henley","Gotterup","Hatton","KimT"],_budget:19.0},
+  {name:"RICKY S",players:["FitzpatrickM","Fleetwood","Hovland","Reed"],_budget:20.0},
+  {name:"RYAN B",players:["Clark","Fleetwood","Hovland","Reed"],_budget:18.3},
+  {name:"SAM G",players:["FitzpatrickM","Koepka","Hatton","KimT"],_budget:20.0},
+  {name:"SAM S",players:["FitzpatrickM","Rose","Burns","KimT"],_budget:19.8},
+  {name:"SAM W*",players:["McIlroy","DeChambeau","Kitayama","Smalley"],_budget:20.0},
+  {name:"SEAMUS H",players:["McIlroy","Fleetwood","SmithC","Harman"],_budget:19.8},
+  {name:"SEAN D",players:["FitzpatrickM","Fleetwood","Rose","HojgaardN"],_budget:20.0},
+  {name:"SEAN W",players:["Rose","MacIntyre","Rai","Lowry"],_budget:17.0},
+  {name:"SIDNEY F",players:["McIlroy","Hatton","SmithC","Niemann"],_budget:19.5},
+  {name:"SIMON H",players:["Fleetwood","Aberg","Schauffele","SmithC"],_budget:18.1},
+  {name:"SOPH L*<<<#",players:["FitzpatrickM","Fleetwood","MacIntyre","KimT"],_budget:19.9},
+  {name:"STE R",players:["Morikawa","Clark","Hovland","Hatton"],_budget:19.8},
+  {name:"STEPHEN S Jnr",players:["McIlroy","Schauffele","Bhatia","Fowler"],_budget:19.9},
+  {name:"STEPHEN S Snr",players:["FitzpatrickM","Morikawa","Thomas","Lowry"],_budget:19.7},
+  {name:"STEVE W",players:["McIlroy","FitzpatrickM","Lowry","Cink"],_budget:19.8},
+  {name:"STEVEY P *",players:["Morikawa","Fleetwood","MacIntyre","Lee"],_budget:18.4},
+  {name:"TEDDY F",players:["Gotterup","Aberg","Schauffele","Thomas"],_budget:19.1},
+  {name:"THOMAS D",players:["Fleetwood","Rose","Hovland","Schauffele"],_budget:19.5},
+  {name:"TIM L",players:["McIlroy","Clark","Reed","Nakajima"],_budget:19.8},
+  {name:"TINA L",players:["FitzpatrickM","Fleetwood","Rose","Day"],_budget:20.0},
+  {name:"VINNIE W",players:["FitzpatrickM","Fleetwood","Schauffele","Lowry"],_budget:19.8}
 ];
 
 const DEMO_SCORES = {};
@@ -809,6 +811,128 @@ const PGA_ARCHIVE_SCORES = [
   {name:"JESSICA F",score:22,players:["Young","Fleetwood","MacIntyre","Homa"]}
 ];
 
+// US Open 2026 — Final archived scores (for Sergeant of Majors)
+const USOPEN_ARCHIVE_SCORES = [
+  {name:"NATHAN B*",score:3},
+  {name:"JEFF K",score:3},
+  {name:"JACK M",score:5},
+  {name:"LUKE G",score:6},
+  {name:"PAUL G",score:6},
+  {name:"TIM L",score:6},
+  {name:"LEE H",score:8},
+  {name:"SIDNEY F",score:8},
+  {name:"PETER W",score:8},
+  {name:"EDDIE W **",score:9},
+  {name:"SIMON H",score:9},
+  {name:"MICHAEL K",score:10},
+  {name:"ROB C",score:10},
+  {name:"PETER A *",score:10},
+  {name:"JAMES D",score:10},
+  {name:"BEN F",score:10},
+  {name:"PAUL M",score:10},
+  {name:"JOHN S",score:11},
+  {name:"HARRY PR",score:11},
+  {name:"SOPH L*<<<#",score:11},
+  {name:"STEVEY P *",score:11},
+  {name:"JAMES H",score:12},
+  {name:"NATHAN M **",score:12},
+  {name:"SEAN W",score:12},
+  {name:"LEE F",score:12},
+  {name:"GEORGE WS *",score:12},
+  {name:"CHAY P",score:13},
+  {name:"CARL S",score:13},
+  {name:"MICHAEL M",score:13},
+  {name:"LIZ W",score:13},
+  {name:"SIMON P",score:13},
+  {name:"GARRY MC",score:13},
+  {name:"PAT P",score:13},
+  {name:"CHRIS DM",score:14},
+  {name:"SAM W*",score:14},
+  {name:"PAUL W",score:14},
+  {name:"CLIVE A",score:14},
+  {name:"HARRY DV",score:15},
+  {name:"BAILEY L",score:15},
+  {name:"DEAN B",score:15},
+  {name:"MICHAEL W",score:15},
+  {name:"EMMA W",score:15},
+  {name:"CONOR M",score:15},
+  {name:"DAVE S",score:16},
+  {name:"RAY N",score:16},
+  {name:"VINNIE W",score:16},
+  {name:"LOUIS R *",score:16},
+  {name:"MARK ROS",score:16},
+  {name:"JOE C ***",score:16},
+  {name:"DENISE P",score:16},
+  {name:"JAMIE W",score:16},
+  {name:"STEPHEN S Jnr",score:16},
+  {name:"TEDDY F",score:16},
+  {name:"HENRY D",score:16},
+  {name:"RICKY S",score:17},
+  {name:"SEAMUS H",score:17},
+  {name:"DAN C",score:17},
+  {name:"INGRID V",score:17},
+  {name:"DAVID H",score:17},
+  {name:"AMY W *",score:17},
+  {name:"BILLY W",score:17},
+  {name:"KIRSTY W",score:17},
+  {name:"ANNE H",score:17},
+  {name:"HAZEL D",score:17},
+  {name:"KERRY MC",score:18},
+  {name:"GREGG J",score:18},
+  {name:"HANNAH L *",score:18},
+  {name:"JACKIE C *",score:19},
+  {name:"REGAN H",score:19},
+  {name:"RYAN B",score:19},
+  {name:"ANDY H",score:19},
+  {name:"JOSH G",score:20},
+  {name:"DANNY M",score:20},
+  {name:"THOMAS D",score:20},
+  {name:"CHRISTIAN T",score:20},
+  {name:"CHARLENE M",score:20},
+  {name:"LUKE RN",score:20},
+  {name:"JACK H",score:20},
+  {name:"LUCY W",score:20},
+  {name:"DAVE W",score:20},
+  {name:"KENDRA H",score:20},
+  {name:"JAMIE S",score:21},
+  {name:"KEVIN S *",score:21},
+  {name:"BILLY C",score:21},
+  {name:"LIAM C",score:21},
+  {name:"SIMON G",score:21},
+  {name:"CHARLIEBM",score:21},
+  {name:"GLENN W **",score:21},
+  {name:"RICHY P",score:22},
+  {name:"CHARLIE WR",score:22},
+  {name:"SAM G",score:22},
+  {name:"BRODIE C",score:23},
+  {name:"DAVE C",score:23},
+  {name:"GARY M",score:23},
+  {name:"STEVE W",score:24},
+  {name:"MIKE WS",score:24},
+  {name:"KELLY N",score:24},
+  {name:"ELLEN P",score:24},
+  {name:"ALAN W <<<#",score:25},
+  {name:"GEORGE W",score:25},
+  {name:"HARRY P",score:25},
+  {name:"TINA L",score:25},
+  {name:"GEORGE B *",score:25},
+  {name:"ALFIE B",score:27},
+  {name:"LES W *",score:27},
+  {name:"JESSICA F",score:27},
+  {name:"DARREN M",score:28},
+  {name:"SAM S",score:28},
+  {name:"SEAN D",score:28},
+  {name:"SAM E",score:29},
+  {name:"POPPY W *",score:29},
+  {name:"STEPHEN S Snr",score:29},
+  {name:"MARK RAY",score:30},
+  {name:"LISA W *",score:30},
+  {name:"LARRY H **",score:31},
+  {name:"STE R",score:33},
+  {name:"ANDY B",score:33},
+  {name:"DANIEL V",score:34}
+];
+
 // US Open 2026 — Live scores from ESPN
 
 const HONOR_DATA = [
@@ -881,7 +1005,7 @@ async function loadFromSupabase() {
     }
     const prices = await sbFetch('prices?select=player_name,price');
     if (prices && prices.length > 0) { state.prices = {}; prices.forEach(p => state.prices[p.player_name] = parseFloat(p.price)); }
-    const picks = await sbFetch('picks?select=*&major_index=eq.2');
+    const picks = await sbFetch('picks?select=*&major_index=eq.3');
     if (picks && picks.length > 0) { state.picks = picks.map(p => ({ name: p.name, players: [p.player1, p.player2, p.player3, p.player4] })); attachBudgets(); }
     else { loadDemoPicks(); }
     const archives = await sbFetch('archived_majors?select=*');
@@ -1163,8 +1287,13 @@ function renderMgTrack() {
     if (i === 1 && typeof PGA_ARCHIVE_SCORES !== 'undefined' && PGA_ARCHIVE_SCORES.length) {
       archived = PGA_ARCHIVE_SCORES.slice().sort((a, b) => a.score - b.score);
     }
-    const isFinal = m.status === 'final' || (i === 1 && archived && archived.length);
-    const isActive = m.status === 'active' && !(i === 1 && archived && archived.length);
+    // US Open (index 2): use the verified hardcoded final scores
+    if (i === 2 && typeof USOPEN_ARCHIVE_SCORES !== 'undefined' && USOPEN_ARCHIVE_SCORES.length) {
+      archived = USOPEN_ARCHIVE_SCORES.slice().sort((a, b) => a.score - b.score);
+    }
+    const hardcodedFinal = (i === 1 && archived && archived.length) || (i === 2 && archived && archived.length);
+    const isFinal = m.status === 'final' || hardcodedFinal;
+    const isActive = m.status === 'active' && !hardcodedFinal;
     let bodyHtml = '';
 
     if (isFinal && archived && archived.length) {
@@ -1197,83 +1326,86 @@ function renderMgTrack() {
 }
 
 function renderMgStandings() {
-  // Strip decorators like *, **, ***, <<<#, <<< from names for matching
   const normEntrantName = n => n.replace(/[*#<>]+/g,'').trim();
   const excludeFromSergeant = ['KERRY MC'];
 
-  // Masters final scores (archived)
-  const mastersArchive = state.archivedMajors[0];
+  // Masters final scores (from Supabase archive)
   const mastersScores = {};
+  const mastersArchive = state.archivedMajors[0];
   if (mastersArchive && mastersArchive.length) {
     mastersArchive.forEach(e => { mastersScores[normEntrantName(e.name)] = e.score; });
   }
 
-  // PGA final scores (hardcoded archive — the tournament has finished)
+  // PGA final scores (hardcoded)
   const pgaScores = {};
   if (typeof PGA_ARCHIVE_SCORES !== 'undefined') {
     PGA_ARCHIVE_SCORES.forEach(e => { pgaScores[normEntrantName(e.name)] = e.score; });
   }
 
-  // Only show standings if we have at least Masters + PGA
-  if (!Object.keys(mastersScores).length || !Object.keys(pgaScores).length) {
+  // US Open final scores (hardcoded)
+  const usScores = {};
+  if (typeof USOPEN_ARCHIVE_SCORES !== 'undefined') {
+    USOPEN_ARCHIVE_SCORES.forEach(e => { usScores[normEntrantName(e.name)] = e.score; });
+  }
+
+  // Need at least Masters + PGA + US Open to show
+  if (!Object.keys(mastersScores).length || !Object.keys(pgaScores).length || !Object.keys(usScores).length) {
     document.getElementById('mg-standings-wrap').style.display = 'none';
     return;
   }
   document.getElementById('mg-standings-wrap').style.display = 'block';
 
-  // US Open is the current live major (index 2)
-  const usOpenLive = state.majorStates[2] && state.majorStates[2].status === 'active';
-  const usOpenFinal = state.majorStates[2] && state.majorStates[2].status === 'final';
-  const usOpenShown = usOpenLive || usOpenFinal;
+  // The Open is the current live major (index 3)
+  const openLive = state.majorStates[3] && state.majorStates[3].status === 'active';
+  const openFinal = state.majorStates[3] && state.majorStates[3].status === 'final';
+  const openShown = openLive || openFinal;
 
-  // Build current US Open live scores per entrant (by name)
-  const usOpenScores = {};
-  state.picks.forEach(p => { usOpenScores[normEntrantName(p.name)] = calcEntryScore(p); });
+  // The Open live scores from current picks
+  const openScores = {};
+  state.picks.forEach(p => { openScores[normEntrantName(p.name)] = calcEntryScore(p); });
 
-  // Combine — entrant must be in BOTH Masters and PGA to qualify
+  // Combine — entrant must have played Masters + PGA + US Open to qualify
   const combined = [];
-  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores)]);
+  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores), ...Object.keys(usScores)]);
   allNames.forEach(nm => {
     if (excludeFromSergeant.some(ex => nm.toUpperCase() === ex.toUpperCase() || nm.toUpperCase().startsWith(ex.toUpperCase()))) return;
     const ms = mastersScores[nm];
     const ps = pgaScores[nm];
-    // Must have played both Masters and PGA
-    if (ms === undefined || ps === undefined) return;
-    const us = usOpenShown && usOpenScores[nm] !== undefined ? usOpenScores[nm] : null;
-    const total = ms + ps + (us !== null ? us : 0);
-    combined.push({ name: nm, mastersScore: ms, pgaScore: ps, usScore: us, total: total });
+    const us = usScores[nm];
+    if (ms === undefined || ps === undefined || us === undefined) return;
+    const op = openShown && openScores[nm] !== undefined ? openScores[nm] : null;
+    const total = ms + ps + us + (op !== null ? op : 0);
+    combined.push({ name: nm, mastersScore: ms, pgaScore: ps, usScore: us, openScore: op, total: total });
   });
   combined.sort((a, b) => a.total - b.total);
 
   const medals = ['🥇','🥈'];
   const fmtS = s => s === null || s === undefined ? '–' : s === 0 ? 'E' : s > 0 ? '+' + s : String(s);
 
-  // Column layout depends on whether US Open is showing
-  const cols = usOpenShown ? '44px 1fr 52px 52px 52px 56px' : '44px 1fr 60px 60px 60px';
+  const cols = openShown ? '38px 1fr 44px 44px 44px 44px 50px' : '40px 1fr 50px 50px 50px 56px';
 
   document.getElementById('mg-standings-wrap').innerHTML = `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Combined Season Standings</div>
-      ${usOpenLive ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
+      ${openLive ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
     </div>
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA final${usOpenShown ? ' + US Open ' + (usOpenLive ? 'live' : 'final') : ''} · ${combined.length} eligible entrants</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA + US Open final${openShown ? ' + The Open ' + (openLive ? 'live' : 'final') : ''} · ${combined.length} eligible entrants</div>
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:2rem;">
-      <div style="display:grid;grid-template-columns:${cols};gap:0.4rem;padding:0.5rem 0.75rem;background:rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.2);">
-        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Pos</div>
-        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Entrant</div>
-        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;text-align:right;">MAS</div>
-        <div style="font-size:0.58rem;color:#3a8fd4;text-transform:uppercase;letter-spacing:0.08em;text-align:right;">PGA</div>
-        ${usOpenShown ? '<div style="font-size:0.58rem;color:#a0a0ff;text-transform:uppercase;letter-spacing:0.08em;text-align:right;">USO</div>' : ''}
-        <div style="font-size:0.58rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;text-align:right;">Total</div>
+      <div style="display:grid;grid-template-columns:${cols};gap:0.35rem;padding:0.5rem 0.6rem;background:rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.2);">
+        <div style="font-size:0.55rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;">Pos</div>
+        <div style="font-size:0.55rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;">Entrant</div>
+        <div style="font-size:0.55rem;color:#c9a84c;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">MAS</div>
+        <div style="font-size:0.55rem;color:#3a8fd4;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">PGA</div>
+        <div style="font-size:0.55rem;color:#a0a0ff;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">USO</div>
+        ${openShown ? '<div style="font-size:0.55rem;color:#d4884c;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">OPEN</div>' : ''}
+        <div style="font-size:0.55rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;text-align:right;">Total</div>
       </div>
       ${combined.map((e, i) => {
         const pos = i + 1;
-        const pd = pos <= 2 ? `<span style="font-size:1.1rem;">${medals[pos-1]}</span>` : `<span style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);">${pos}</span>`;
+        const pd = pos <= 2 ? `<span style="font-size:1rem;">${medals[pos-1]}</span>` : `<span style="font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:var(--gold);">${pos}</span>`;
         const tc = e.total < 0 ? 'color:var(--up)' : e.total > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        const pc = e.pgaScore < 0 ? 'color:var(--up)' : e.pgaScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        const mc = e.mastersScore < 0 ? 'color:var(--up)' : e.mastersScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        const uc = e.usScore === null ? 'color:var(--muted)' : e.usScore < 0 ? 'color:var(--up)' : e.usScore > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        return `<div style="display:grid;grid-template-columns:${cols};gap:0.4rem;align-items:center;padding:0.45rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.8rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.78rem;font-weight:600;${mc};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.78rem;font-weight:600;${pc};text-align:right;">${fmtS(e.pgaScore)}</div>${usOpenShown ? `<div style="font-size:0.78rem;font-weight:600;${uc};text-align:right;">${fmtS(e.usScore)}</div>` : ''}<div style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
+        const col = s => s === null ? 'color:var(--muted)' : s < 0 ? 'color:var(--up)' : s > 0 ? 'color:var(--down)' : 'color:var(--cream)';
+        return `<div style="display:grid;grid-template-columns:${cols};gap:0.35rem;align-items:center;padding:0.45rem 0.6rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.78rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.74rem;font-weight:600;${col(e.mastersScore)};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.pgaScore)};text-align:right;">${fmtS(e.pgaScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.usScore)};text-align:right;">${fmtS(e.usScore)}</div>${openShown ? `<div style="font-size:0.74rem;font-weight:600;${col(e.openScore)};text-align:right;">${fmtS(e.openScore)}</div>` : ''}<div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
       }).join('')}
     </div>`;
 }
@@ -1334,7 +1466,7 @@ function showEntrantStatus(type, msg) { const el = document.getElementById('entr
 async function removeEntrant(name) {
   if (!confirm('Remove '+name+' from the leaderboard?')) return;
   state.picks = state.picks.filter(e=>e.name!==name);
-  try { await sbFetch('picks?name=eq.'+encodeURIComponent(name)+'&major_index=eq.2','DELETE'); } catch(e){}
+  try { await sbFetch('picks?name=eq.'+encodeURIComponent(name)+'&major_index=eq.3','DELETE'); } catch(e){}
   renderPicksValidation(); renderAll();
 }
 

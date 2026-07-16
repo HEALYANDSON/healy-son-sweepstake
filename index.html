@@ -323,6 +323,7 @@
     <div class="section-sub">Season standings across all 4 Majors · Enter all 4 to be eligible</div>
     <div class="mg-track" id="mg-track"></div>
     <div id="mg-standings-wrap" style="margin-bottom:2rem;"></div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--muted);letter-spacing:0.05em;margin:1.5rem 0 1rem;border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;">Individual Major Results</div>
     <div id="mg-archives"></div>
     <div id="winners-image-section" style="margin-top:1.5rem;display:none;">
       <img id="winners-image" src="" style="max-width:100%;border-radius:10px;" alt="Winners">
@@ -1348,11 +1349,12 @@ function renderMgStandings() {
     USOPEN_ARCHIVE_SCORES.forEach(e => { usScores[normEntrantName(e.name)] = e.score; });
   }
 
-  // Need at least Masters + PGA + US Open to show
-  if (!Object.keys(mastersScores).length || !Object.keys(pgaScores).length || !Object.keys(usScores).length) {
+  // Need PGA + US Open at minimum (both hardcoded). Masters comes from Supabase archive.
+  if (!Object.keys(pgaScores).length || !Object.keys(usScores).length) {
     document.getElementById('mg-standings-wrap').style.display = 'none';
     return;
   }
+  const mastersLoaded = Object.keys(mastersScores).length > 0;
   document.getElementById('mg-standings-wrap').style.display = 'block';
 
   // The Open is the current live major (index 3)
@@ -1365,6 +1367,7 @@ function renderMgStandings() {
   state.picks.forEach(p => { openScores[normEntrantName(p.name)] = calcEntryScore(p); });
 
   // Combine — entrant MUST have entered ALL FOUR majors to qualify
+  // (if the Masters archive failed to load from Supabase, fall back to the 3 hardcoded + Open)
   const combined = [];
   const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores), ...Object.keys(usScores), ...Object.keys(openScores)]);
   allNames.forEach(nm => {
@@ -1373,10 +1376,12 @@ function renderMgStandings() {
     const ps = pgaScores[nm];
     const us = usScores[nm];
     const op = openScores[nm];
-    // Must have entered all four majors — Masters, PGA, US Open AND The Open
-    if (ms === undefined || ps === undefined || us === undefined || op === undefined) return;
-    const total = ms + ps + us + op;
-    combined.push({ name: nm, mastersScore: ms, pgaScore: ps, usScore: us, openScore: op, total: total });
+    // Must have entered PGA, US Open and The Open — plus Masters when its archive is available
+    if (ps === undefined || us === undefined || op === undefined) return;
+    if (mastersLoaded && ms === undefined) return;
+    const msVal = ms !== undefined ? ms : 0;
+    const total = msVal + ps + us + op;
+    combined.push({ name: nm, mastersScore: (ms !== undefined ? ms : null), pgaScore: ps, usScore: us, openScore: op, total: total });
   });
   combined.sort((a, b) => a.total - b.total);
 

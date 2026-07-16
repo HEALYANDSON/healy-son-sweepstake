@@ -1364,32 +1364,32 @@ function renderMgStandings() {
   const openScores = {};
   state.picks.forEach(p => { openScores[normEntrantName(p.name)] = calcEntryScore(p); });
 
-  // Combine — entrant must have played Masters + PGA + US Open to qualify
+  // Combine — entrant MUST have entered ALL FOUR majors to qualify
   const combined = [];
-  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores), ...Object.keys(usScores)]);
+  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores), ...Object.keys(usScores), ...Object.keys(openScores)]);
   allNames.forEach(nm => {
     if (excludeFromSergeant.some(ex => nm.toUpperCase() === ex.toUpperCase() || nm.toUpperCase().startsWith(ex.toUpperCase()))) return;
     const ms = mastersScores[nm];
     const ps = pgaScores[nm];
     const us = usScores[nm];
-    if (ms === undefined || ps === undefined || us === undefined) return;
-    const op = openShown && openScores[nm] !== undefined ? openScores[nm] : null;
-    const total = ms + ps + us + (op !== null ? op : 0);
+    const op = openScores[nm];
+    // Must have entered all four majors — Masters, PGA, US Open AND The Open
+    if (ms === undefined || ps === undefined || us === undefined || op === undefined) return;
+    const total = ms + ps + us + op;
     combined.push({ name: nm, mastersScore: ms, pgaScore: ps, usScore: us, openScore: op, total: total });
   });
   combined.sort((a, b) => a.total - b.total);
 
-  const medals = ['🥇','🥈'];
-  const fmtS = s => s === null || s === undefined ? '–' : s === 0 ? 'E' : s > 0 ? '+' + s : String(s);
-
-  const cols = openShown ? '38px 1fr 44px 44px 44px 44px 50px' : '40px 1fr 50px 50px 50px 56px';
+  // The Open is the current major — always show its column in the standings
+  const openShownForce = true;
+  const cols = '38px 1fr 44px 44px 44px 44px 50px';
 
   document.getElementById('mg-standings-wrap').innerHTML = `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Combined Season Standings</div>
-      ${openLive ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
+      ${!openFinal ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
     </div>
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA + US Open final${openShown ? ' + The Open ' + (openLive ? 'live' : 'final') : ''} · ${combined.length} eligible entrants</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA + US Open final + The Open ${openFinal ? 'final' : 'live'} · All 4 Majors required · ${combined.length} eligible entrants</div>
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:2rem;">
       <div style="display:grid;grid-template-columns:${cols};gap:0.35rem;padding:0.5rem 0.6rem;background:rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.2);">
         <div style="font-size:0.55rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;">Pos</div>
@@ -1397,7 +1397,7 @@ function renderMgStandings() {
         <div style="font-size:0.55rem;color:#c9a84c;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">MAS</div>
         <div style="font-size:0.55rem;color:#3a8fd4;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">PGA</div>
         <div style="font-size:0.55rem;color:#a0a0ff;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">USO</div>
-        ${openShown ? '<div style="font-size:0.55rem;color:#d4884c;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">OPEN</div>' : ''}
+        <div style="font-size:0.55rem;color:#d4884c;text-transform:uppercase;letter-spacing:0.06em;text-align:right;">OPEN</div>
         <div style="font-size:0.55rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;text-align:right;">Total</div>
       </div>
       ${combined.map((e, i) => {
@@ -1405,7 +1405,7 @@ function renderMgStandings() {
         const pd = pos <= 2 ? `<span style="font-size:1rem;">${medals[pos-1]}</span>` : `<span style="font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:var(--gold);">${pos}</span>`;
         const tc = e.total < 0 ? 'color:var(--up)' : e.total > 0 ? 'color:var(--down)' : 'color:var(--cream)';
         const col = s => s === null ? 'color:var(--muted)' : s < 0 ? 'color:var(--up)' : s > 0 ? 'color:var(--down)' : 'color:var(--cream)';
-        return `<div style="display:grid;grid-template-columns:${cols};gap:0.35rem;align-items:center;padding:0.45rem 0.6rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.78rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.74rem;font-weight:600;${col(e.mastersScore)};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.pgaScore)};text-align:right;">${fmtS(e.pgaScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.usScore)};text-align:right;">${fmtS(e.usScore)}</div>${openShown ? `<div style="font-size:0.74rem;font-weight:600;${col(e.openScore)};text-align:right;">${fmtS(e.openScore)}</div>` : ''}<div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
+        return `<div style="display:grid;grid-template-columns:${cols};gap:0.35rem;align-items:center;padding:0.45rem 0.6rem;border-bottom:1px solid rgba(255,255,255,0.04);${pos<=2?'background:rgba(201,168,76,0.04);':''}${pos===1?'border-left:3px solid var(--gold);':''}"><div style="text-align:center;">${pd}</div><div style="font-size:0.78rem;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div><div style="font-size:0.74rem;font-weight:600;${col(e.mastersScore)};text-align:right;">${fmtS(e.mastersScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.pgaScore)};text-align:right;">${fmtS(e.pgaScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.usScore)};text-align:right;">${fmtS(e.usScore)}</div><div style="font-size:0.74rem;font-weight:600;${col(e.openScore)};text-align:right;">${fmtS(e.openScore)}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;${tc};text-align:right;">${fmtS(e.total)}</div></div>`;
       }).join('')}
     </div>`;
 }

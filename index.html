@@ -1557,18 +1557,28 @@ function matchPlayerName(lastName, fullName) {
     'Tom Hoge':'Hoge','Dustin Johnson':'Johnson','Cameron Young':'Young',
     'Jacob Bridgeman':'Bridgeman','Joaquin Niemann':'Niemann',
     'Francisco Bide':'Bide','Francisco Bidé':'Bide',
-    'Stewart Cink':'Cink','Luke Donald':'Donald','Byeong Hun An':'An'
+    'Stewart Cink':'Cink','Luke Donald':'Donald','Byeong Hun An':'An',
+    'Wyndham Clark':'Clark','Darren Clarke':'__IGNORE__'
   };
   const norm = s => stripDiacritics((s||'').toLowerCase().trim());
   const normAliases = {};
   Object.entries(aliases).forEach(([k,v])=>{ normAliases[norm(k)] = v; });
   const normFull = norm(fullName), normLast = norm(lastName);
-  if (normFull && normAliases[normFull]) return normAliases[normFull];
-  if (normLast && normAliases[normLast]) return normAliases[normLast];
+  // Full-name alias takes priority (handles Wyndham Clark vs Darren Clarke)
+  if (normFull && normAliases[normFull]) { const v = normAliases[normFull]; return v === '__IGNORE__' ? null : v; }
+  if (normLast && normAliases[normLast]) { const v = normAliases[normLast]; return v === '__IGNORE__' ? null : v; }
   const priceKeys = Object.keys(state.prices);
+  // Exact last-name match against a price key
   if (normLast) { const exact = priceKeys.find(k=>norm(k)===normLast); if(exact) return exact; }
+  // Exact last-word-of-full-name match
   if (normFull) { const parts = normFull.split(' '); const lw = parts[parts.length-1]; if(lw.length>=3){const ff=priceKeys.find(k=>norm(k)===lw);if(ff) return ff;} }
-  if (normLast&&normLast.length>=4) { const prefix=normLast.substring(0,5); const partial=priceKeys.find(k=>norm(k).startsWith(prefix)); if(partial) return partial; }
+  // Prefix match — only when the price key is at least as long as the surname
+  // (prevents "Clarke" matching the "Clark" price key)
+  if (normLast&&normLast.length>=4) {
+    const prefix=normLast.substring(0,5);
+    const partial=priceKeys.find(k=>{ const nk=norm(k); return nk.startsWith(prefix) && nk.length>=normLast.length; });
+    if(partial) return partial;
+  }
   return null;
 }
 

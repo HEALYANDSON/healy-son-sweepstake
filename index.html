@@ -1374,23 +1374,6 @@ function renderMgStandings() {
     displayNames[k] = normEntrantName(p.name);
   });
 
-  // Diagnostic — how many names each major has, and overlap
-  console.log('SOM diagnostic:', {
-    masters: Object.keys(mastersScores).length,
-    pga: Object.keys(pgaScores).length,
-    usOpen: Object.keys(usScores).length,
-    open: Object.keys(openScores).length,
-    picksLoaded: state.picks.length
-  });
-  const _m = new Set(Object.keys(mastersScores));
-  const _p = new Set(Object.keys(pgaScores));
-  const _u = new Set(Object.keys(usScores));
-  const _o = new Set(Object.keys(openScores));
-  const inAll4 = [...(_o)].filter(k => _m.has(k) && _p.has(k) && _u.has(k));
-  console.log('SOM in all 4:', inAll4.length, '| in PGA+US+Open:', [...(_o)].filter(k => _p.has(k) && _u.has(k)).length);
-  console.log('SOM sample masters keys:', Object.keys(mastersScores).slice(0,5));
-  console.log('SOM sample open keys:', Object.keys(openScores).slice(0,5));
-
   // Combine — entrant MUST have entered ALL FOUR majors to qualify.
   // Names are matched via fuzzyKey so formatting differences between the
   // Masters archive and current picks don't cause false exclusions.
@@ -1412,6 +1395,8 @@ function renderMgStandings() {
   // The Open is the current major — always show its column in the standings
   const openShownForce = true;
   const cols = '38px 1fr 44px 44px 44px 44px 50px';
+  const medals = ['🥇','🥈'];
+  const fmtS = s => s === null || s === undefined ? '–' : s === 0 ? 'E' : s > 0 ? '+' + s : String(s);
 
   document.getElementById('mg-standings-wrap').innerHTML = `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">

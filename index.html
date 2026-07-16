@@ -1366,19 +1366,19 @@ function renderMgStandings() {
   const openScores = {};
   state.picks.forEach(p => { openScores[normEntrantName(p.name)] = calcEntryScore(p); });
 
-  // Combine — entrant MUST have entered ALL FOUR majors to qualify
-  // (if the Masters archive failed to load from Supabase, fall back to the 3 hardcoded + Open)
+  // Combine — entrant must have entered PGA + US Open + The Open (the three reliable sources).
+  // Masters score is included when its name matches the archive; a Masters-name mismatch
+  // should not wipe an otherwise-qualified entrant off the board.
   const combined = [];
-  const allNames = new Set([...Object.keys(mastersScores), ...Object.keys(pgaScores), ...Object.keys(usScores), ...Object.keys(openScores)]);
+  const allNames = new Set([...Object.keys(pgaScores), ...Object.keys(usScores), ...Object.keys(openScores)]);
   allNames.forEach(nm => {
     if (excludeFromSergeant.some(ex => nm.toUpperCase() === ex.toUpperCase() || nm.toUpperCase().startsWith(ex.toUpperCase()))) return;
-    const ms = mastersScores[nm];
     const ps = pgaScores[nm];
     const us = usScores[nm];
     const op = openScores[nm];
-    // Must have entered PGA, US Open and The Open — plus Masters when its archive is available
+    // Must have entered PGA, US Open and The Open
     if (ps === undefined || us === undefined || op === undefined) return;
-    if (mastersLoaded && ms === undefined) return;
+    const ms = mastersScores[nm];
     const msVal = ms !== undefined ? ms : 0;
     const total = msVal + ps + us + op;
     combined.push({ name: nm, mastersScore: (ms !== undefined ? ms : null), pgaScore: ps, usScore: us, openScore: op, total: total });

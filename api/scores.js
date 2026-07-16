@@ -2,8 +2,8 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const TOURNAMENT_ID = '401811952'; // US Open 2026 - Shinnecock Hills
-  const COURSE_PAR = 70; // Shinnecock Hills
+  const TOURNAMENT_ID = '401811957'; // The Open 2026 - Royal Birkdale
+  const COURSE_PAR = 70; // Royal Birkdale
 
   try {
     const url = `https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId=${TOURNAMENT_ID}`;

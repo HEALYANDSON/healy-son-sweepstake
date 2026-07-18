@@ -482,7 +482,26 @@ let state = {
   previousPositions: {},
   hasRefreshed: false,
   cutPlayers: new Set([
-    // The Open 2026 — cut players added after R2
+    // The Open 2026 — confirmed cut players after R2 (keys + full names)
+    'SmithC','Cameron Smith',
+    'English','Harris English',
+    'Rai','Aaron Rai',
+    'Rose','Justin Rose',
+    'Nakajima','Keita Nakajima',
+    'Clark','Wyndham Clark',
+    'McNealy','Maverick McNealy',
+    'KimT','Tom Kim',
+    'Niemann','Joaquin Niemann','Joaquín Niemann',
+    'Day','Jason Day',
+    'Li','Haotong Li',
+    'FitzpatrickM','Matt Fitzpatrick','Matthew Fitzpatrick',
+    'Bhatia','Akshay Bhatia',
+    'Hovland','Viktor Hovland',
+    'KimM','Michael Kim',
+    'Cink','Stewart Cink',
+    'Ham','Jeong-Woo Ham','Jeong Woo Ham',
+    'Harman','Brian Harman',
+    'Spieth','Jordan Spieth'
   ]),
   penalties: { cutScore: 6, dnfPenalty: null },
   majorStates: [
@@ -1204,9 +1223,25 @@ function buildLbEntry(e, pos) {
 
 function toggleLbEntry(id) { const el = document.getElementById(id); if (el) el.classList.toggle('expanded'); }
 
+function mergeIdenticalPicks(entries) {
+  // Combine entrants who have the exact same 4 players into a single row
+  const groups = {};
+  const order = [];
+  entries.forEach(e => {
+    const key = e.players.map(p => resolveKey(p)).slice().sort().join('|');
+    if (!groups[key]) { groups[key] = { ...e, _names: [e.name] }; order.push(key); }
+    else { groups[key]._names.push(e.name); }
+  });
+  return order.map(key => {
+    const g = groups[key];
+    if (g._names.length > 1) { g.name = g._names.join(' & '); g._merged = true; }
+    return g;
+  });
+}
+
 function renderLeaderboard(filter) {
   if (!state.picks.length) { document.getElementById('lb-sub').textContent = 'No picks loaded yet.'; document.getElementById('leaderboard-list').innerHTML = ''; return; }
-  if (filter === undefined) { if (_lbEntries.length) { _lbEntries.forEach((e,i) => { state.previousPositions[e.name] = i+1; }); } _lbEntries = state.picks.map(p => ({...p, score:calcEntryScore(p), budget:calcBudget(p)})); _lbEntries.sort((a,b) => a.score-b.score); }
+  if (filter === undefined) { if (_lbEntries.length) { _lbEntries.forEach((e,i) => { state.previousPositions[e.name] = i+1; }); } _lbEntries = mergeIdenticalPicks(state.picks).map(p => ({...p, score:calcEntryScore(p), budget:calcBudget(p)})); _lbEntries.sort((a,b) => a.score-b.score); }
   document.getElementById('lb-sub').textContent = `${_lbEntries.length} entries · Tap an entry to expand`;
   const q = (filter||'').toLowerCase().trim();
   const list = document.getElementById('leaderboard-list');

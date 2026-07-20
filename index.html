@@ -210,16 +210,16 @@
       <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ The Masters</span>
       <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ PGA</span>
       <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ US Open</span>
-      <span class="major-pill active">🏆 The Open</span>
+      <span class="major-pill inactive" style="text-decoration:line-through;opacity:0.5;">✓ The Open</span>
     </div>
-    <div class="deadline-card">
-      <div class="deadline-label">⛳ The Open 2026 · LIVE NOW</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--cream);letter-spacing:0.05em;margin:0.4rem 0;">ROYAL BIRKDALE · SOUTHPORT, ENGLAND</div>
-      <div style="font-size:0.75rem;color:var(--muted);">16–19 July 2026</div>
-      <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(58,143,212,0.3);font-size:0.78rem;color:#3a8fd4;font-weight:600;"><span class="live-dot"></span> Picks are closed · Tournament underway</div>
+    <div class="deadline-card" style="background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(138,109,42,0.1));border-color:var(--gold);">
+      <div class="deadline-label">🏆 2026 Season Complete</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--muted);letter-spacing:0.05em;margin:0.4rem 0 0.2rem;">Sergeant of Majors Champion</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold-light);letter-spacing:0.06em;line-height:1;">EDDIE W</div>
+      <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(201,168,76,0.3);font-size:0.75rem;color:var(--muted);">All four Majors complete · Final standings inside</div>
     </div>
-    <button class="enter-btn" onclick="enterApp()" style="width:100%;padding:0.9rem;font-size:1rem;letter-spacing:0.1em;border-radius:10px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;background:#1a4a7a;color:#fff;">
-      <span class="live-dot"></span> VIEW LIVE LEADERBOARD
+    <button class="enter-btn" onclick="enterApp()" style="width:100%;padding:0.9rem;font-size:1rem;letter-spacing:0.1em;border-radius:10px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+      🏆 VIEW FINAL RESULTS
     </button>
   </div>
 </div>
@@ -303,9 +303,11 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cream);letter-spacing:0.05em;">HARRY P</div>
         </div>
       </div>
-      <div style="text-align:center;margin-top:1.5rem;padding:1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:10px;">
-        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;">See the overall season champion in the</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Sergeant of Majors tab</div>
+      <div style="text-align:center;margin-top:1.75rem;padding:1.5rem 1.25rem;background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(138,109,42,0.12));border:1.5px solid var(--gold);border-radius:12px;box-shadow:0 0 24px rgba(201,168,76,0.15);">
+        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);margin-bottom:0.4rem;">⚔️ Sergeant of Majors Champion</div>
+        <div style="font-size:2.5rem;margin:0.3rem 0;">🏆</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2.6rem;color:var(--gold-light);letter-spacing:0.06em;line-height:1;">EDDIE W</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">2026 Season Champion · Lowest combined total across all four Majors</div>
       </div>
     </div>
     <div id="leaderboard-list" style="display:none;"></div>
@@ -1102,7 +1104,7 @@ const HONOR_DATA = [
   {year:'2023',players:'Steve Fowle',masters:'Glenn Ward',pga:'Nathan Marks',us:'Joe Cobley',open:'Louis Rumble & Kevin Smith'},
   {year:'2024',players:'Sam Woodruff',masters:'George Watts',pga:'Sophie Latham',us:'Les Whitton',open:'Glenn Ward'},
   {year:'2025',players:'Joe Cobley & Steve Palser',masters:'Poppy Wilson',pga:'Danny McMullen',us:'Joe Cobley',open:'Amy Warren'},
-  {year:'2026',players:'Hannah L',masters:'Jackie C',pga:'?',us:'?',open:'?'}
+  {year:'2026',players:'Hannah L',masters:'Jackie C',pga:'George B',us:'Nathan B',open:'Harry P'}
 ];
 
 const DEFAULT_TNC = `1. MISSED CUT

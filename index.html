@@ -953,6 +953,121 @@ const USOPEN_ARCHIVE_SCORES = [
   {name:"DANIEL V",score:34}
 ];
 
+// The Open 2026 — Final archived scores (for Sergeant of Majors)
+const OPEN_ARCHIVE_SCORES = [
+  {name:"EDDIE W **",score:-18},
+  {name:"HARRY P",score:-18},
+  {name:"CARL S",score:-16},
+  {name:"BAILEY L",score:-15},
+  {name:"HANNAH L *",score:-14},
+  {name:"AMY W *",score:-13},
+  {name:"JAMIE S",score:-13},
+  {name:"LUCY W",score:-13},
+  {name:"PAT P",score:-13},
+  {name:"PAUL M",score:-13},
+  {name:"SIMON H",score:-13},
+  {name:"BILLY C",score:-11},
+  {name:"JAMIE W",score:-11},
+  {name:"JOE R",score:-11},
+  {name:"CONOR M",score:-10},
+  {name:"DAVE S",score:-10},
+  {name:"GEORGE B *",score:-10},
+  {name:"JAMES H",score:-10},
+  {name:"LEE H",score:-10},
+  {name:"MARK ROS",score:-10},
+  {name:"STEVEY P *",score:-10},
+  {name:"CHAY P",score:-9},
+  {name:"GLENN W **",score:-9},
+  {name:"KERRY MC",score:-9},
+  {name:"ANNE H",score:-8},
+  {name:"DENISE P",score:-8},
+  {name:"HAZEL D",score:-8},
+  {name:"TEDDY F",score:-8},
+  {name:"VINNIE W",score:-8},
+  {name:"GARY M",score:-7},
+  {name:"JOHN S",score:-6},
+  {name:"LES W *",score:-6},
+  {name:"JESSICA F",score:-5},
+  {name:"RAY N",score:-5},
+  {name:"REGAN H",score:-5},
+  {name:"SAM W*",score:-5},
+  {name:"ALFIE B",score:-4},
+  {name:"DAVE W",score:-4},
+  {name:"GRAHAM H",score:-4},
+  {name:"ANDY H",score:-3},
+  {name:"DAVE C",score:-3},
+  {name:"EMMA W",score:-3},
+  {name:"GEORGE W",score:-3},
+  {name:"JOE C ***",score:-3},
+  {name:"LISA W *",score:-3},
+  {name:"STEPHEN S Jnr",score:-3},
+  {name:"THOMAS D",score:-3},
+  {name:"CHARLIE BM",score:-2},
+  {name:"GREGG J",score:-2},
+  {name:"HARRY DV",score:-2},
+  {name:"JACKIE C *",score:-2},
+  {name:"MICHAEL M",score:-2},
+  {name:"SOPH L*<<<#",score:-2},
+  {name:"ALAN W <<<#",score:-1},
+  {name:"BEN F",score:-1},
+  {name:"DAVID H",score:-1},
+  {name:"JACK M",score:-1},
+  {name:"JOSH G",score:-1},
+  {name:"ROBERT L",score:-1},
+  {name:"GEORGE WS *",score:0},
+  {name:"MICHAEL W",score:0},
+  {name:"RICHY P",score:0},
+  {name:"RYAN B",score:0},
+  {name:"SEAN D",score:0},
+  {name:"BRODIE C",score:1},
+  {name:"ELLEN P",score:1},
+  {name:"GARRY MC",score:1},
+  {name:"LIZ W",score:1},
+  {name:"RICKY S",score:1},
+  {name:"SEAN W",score:1},
+  {name:"CHARLIE WR",score:2},
+  {name:"JACK H",score:2},
+  {name:"KEVIN S *",score:2},
+  {name:"LARRY H **",score:2},
+  {name:"LEE P",score:2},
+  {name:"LOUIE W",score:2},
+  {name:"PAUL G",score:2},
+  {name:"SAM S",score:2},
+  {name:"STEPHEN S Snr",score:2},
+  {name:"CHRIS S",score:3},
+  {name:"NATHAN M **",score:3},
+  {name:"OLLIE R",score:3},
+  {name:"SEAMUS H",score:3},
+  {name:"CHRIS DM",score:4},
+  {name:"TINA L",score:4},
+  {name:"CHARLENE M",score:5},
+  {name:"JAMIE D",score:5},
+  {name:"JEFF K",score:5},
+  {name:"NATHAN B *",score:5},
+  {name:"TIM L",score:5},
+  {name:"CLIVE A",score:6},
+  {name:"DANIEL V",score:6},
+  {name:"DEAN B",score:6},
+  {name:"INGRID V",score:6},
+  {name:"JAMES D",score:6},
+  {name:"MICHAEL K",score:6},
+  {name:"PETER W",score:6},
+  {name:"LOUIS R *",score:7},
+  {name:"PETER A *",score:7},
+  {name:"ANDRE D",score:8},
+  {name:"CHRISTIAN T",score:9},
+  {name:"KELLY N",score:9},
+  {name:"PAUL W",score:9},
+  {name:"STE R",score:9},
+  {name:"STEVE W",score:9},
+  {name:"KENDRA H",score:10},
+  {name:"LIAM C",score:10},
+  {name:"SAM G",score:10},
+  {name:"SIDNEY F",score:10},
+  {name:"LEE F",score:11},
+  {name:"ANDY B",score:13}
+];
+
 // US Open 2026 — Live scores from ESPN
 
 const HONOR_DATA = [
@@ -1327,7 +1442,11 @@ function renderMgTrack() {
     if (i === 2 && typeof USOPEN_ARCHIVE_SCORES !== 'undefined' && USOPEN_ARCHIVE_SCORES.length) {
       archived = USOPEN_ARCHIVE_SCORES.slice().sort((a, b) => a.score - b.score);
     }
-    const hardcodedFinal = (i === 1 && archived && archived.length) || (i === 2 && archived && archived.length);
+    // The Open (index 3): use the verified hardcoded final scores
+    if (i === 3 && typeof OPEN_ARCHIVE_SCORES !== 'undefined' && OPEN_ARCHIVE_SCORES.length) {
+      archived = OPEN_ARCHIVE_SCORES.slice().sort((a, b) => a.score - b.score);
+    }
+    const hardcodedFinal = (i === 1 && archived && archived.length) || (i === 2 && archived && archived.length) || (i === 3 && archived && archived.length);
     const isFinal = m.status === 'final' || hardcodedFinal;
     const isActive = m.status === 'active' && !hardcodedFinal;
     let bodyHtml = '';
@@ -1396,18 +1515,22 @@ function renderMgStandings() {
   document.getElementById('mg-standings-wrap').style.display = 'block';
 
   // The Open is the current live major (index 3)
-  const openLive = state.majorStates[3] && state.majorStates[3].status === 'active';
-  const openFinal = state.majorStates[3] && state.majorStates[3].status === 'final';
-  const openShown = openLive || openFinal;
+  const openLive = false; // The Open complete — season finished
+  const openFinal = true;
+  const openShown = true;
 
-  // The Open live scores from current picks (keyed by fuzzy key, with display names kept)
+  // The Open final scores (hardcoded — tournament complete)
   const openScores = {};
   const displayNames = {};
-  state.picks.forEach(p => {
-    const k = fuzzyKey(p.name);
-    openScores[k] = calcEntryScore(p);
-    displayNames[k] = normEntrantName(p.name);
-  });
+  if (typeof OPEN_ARCHIVE_SCORES !== 'undefined') {
+    OPEN_ARCHIVE_SCORES.forEach(e => {
+      const k = fuzzyKey(e.name);
+      openScores[k] = e.score;
+      displayNames[k] = normEntrantName(e.name);
+    });
+  }
+  // Also keep display names from current picks as a fallback
+  state.picks.forEach(p => { const k = fuzzyKey(p.name); if (!displayNames[k]) displayNames[k] = normEntrantName(p.name); });
 
   // Combine — entrant MUST have entered ALL FOUR majors to qualify.
   // Names are matched via fuzzyKey so formatting differences between the
@@ -1436,7 +1559,7 @@ function renderMgStandings() {
   document.getElementById('mg-standings-wrap').innerHTML = `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Combined Season Standings</div>
-      ${!openFinal ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : ''}
+      ${!openFinal ? '<span style="font-size:0.7rem;background:rgba(76,175,132,0.15);color:var(--up);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;"><span class=\'live-dot\'></span> LIVE</span>' : '<span style="font-size:0.7rem;background:rgba(201,168,76,0.2);color:var(--gold);padding:0.2rem 0.6rem;border-radius:10px;font-weight:700;">🏆 SEASON COMPLETE</span>'}
     </div>
     <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;">Masters + PGA + US Open final + The Open ${openFinal ? 'final' : 'live'} · All 4 Majors required · ${combined.length} eligible entrants</div>
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:2rem;">

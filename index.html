@@ -274,30 +274,55 @@
 
   <!-- LEADERBOARD TAB -->
   <div class="tab-content active" id="tab-leaderboard">
-    <div class="masters-banner" style="background:linear-gradient(135deg,var(--pga-blue),var(--pga-navy));border-color:rgba(58,143,212,0.4);">
-      <div class="masters-banner-text" style="color:#3a8fd4;"><span class="live-dot"></span> THE OPEN 2026 · Royal Birkdale · 16–19 July</div>
-      <div class="masters-banner-sub">Live Sweepstake Leaderboard · Previous Majors in Sergeant of Majors tab</div>
+    <div class="masters-banner" style="background:linear-gradient(135deg,var(--gold),#8a6d2a);border-color:rgba(201,168,76,0.5);">
+      <div class="masters-banner-text" style="color:var(--deep);">🏆 2026 MAJOR SWEEPSTAKES · SEASON COMPLETE</div>
+      <div class="masters-banner-sub" style="color:rgba(13,26,46,0.7);">All four Majors finished · Final standings in Sergeant of Majors</div>
     </div>
-    <div class="section-title">Leaderboard</div>
-    <div class="section-sub" id="lb-sub">Loading entries…</div>
-    <div class="lb-search-wrap">
-      <span class="lb-search-icon">&#128269;</span>
-      <input class="lb-search" id="lb-search" type="text" placeholder="Search your name…" oninput="filterLeaderboard(this.value)" autocomplete="off">
-      <button class="lb-search-clear" id="lb-search-clear" onclick="clearLbSearch()">&#x2715;</button>
+    <div style="text-align:center;padding:2rem 1.5rem 1rem;">
+      <div style="font-size:3rem;margin-bottom:0.5rem;">🏌️‍♂️</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">SEASON FINISHED</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem;">Thanks for playing the 2026 HEALY&amp;SON Major Sweepstakes</div>
     </div>
-    <div id="leaderboard-list"></div>
+    <div style="max-width:520px;margin:0 auto 2rem;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold);letter-spacing:0.05em;text-align:center;margin-bottom:1rem;">🏆 2026 Major Winners</div>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(26,74,46,0.25),rgba(13,34,24,0.25));border:1px solid rgba(76,175,132,0.3);border-radius:10px;padding:0.85rem 1.1rem;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#4caf84;letter-spacing:0.05em;">The Masters</div><div style="font-size:0.65rem;color:var(--muted);">Augusta National</div></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cream);letter-spacing:0.05em;">JACKIE C</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(15,45,74,0.3),rgba(13,26,46,0.3));border:1px solid rgba(58,143,212,0.3);border-radius:10px;padding:0.85rem 1.1rem;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#3a8fd4;letter-spacing:0.05em;">PGA Championship</div><div style="font-size:0.65rem;color:var(--muted);">Aronimink</div></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cream);letter-spacing:0.05em;">GEORGE B</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(26,26,58,0.35),rgba(13,13,46,0.35));border:1px solid rgba(160,160,255,0.3);border-radius:10px;padding:0.85rem 1.1rem;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#a0a0ff;letter-spacing:0.05em;">US Open</div><div style="font-size:0.65rem;color:var(--muted);">Shinnecock Hills</div></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cream);letter-spacing:0.05em;">NATHAN B</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(42,26,13,0.35),rgba(26,13,0,0.35));border:1px solid rgba(212,136,76,0.3);border-radius:10px;padding:0.85rem 1.1rem;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#d4884c;letter-spacing:0.05em;">The Open</div><div style="font-size:0.65rem;color:var(--muted);">Royal Birkdale</div></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--cream);letter-spacing:0.05em;">HARRY P</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:1.5rem;padding:1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:10px;">
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;">See the overall season champion in the</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.05em;">⚔️ Sergeant of Majors tab</div>
+      </div>
+    </div>
+    <div id="leaderboard-list" style="display:none;"></div>
+    <div id="lb-sub" style="display:none;"></div>
   </div>
 
   <!-- LIVE SCORES TAB -->
   <div class="tab-content" id="tab-livescores">
-    <div class="section-title">Live Scores</div>
-    <div class="section-sub">The Open field · Live via ESPN · Auto-refreshes every 10 mins</div>
-    <div style="overflow-x:auto;">
-      <table class="ls-table" id="live-scores-table">
-        <thead><tr><th>Player</th><th>Price</th><th>Score</th></tr></thead>
-        <tbody id="live-scores-body"></tbody>
-      </table>
+    <div style="text-align:center;padding:3rem 1.5rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🏁</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:0.05em;line-height:1.1;">SEASON FINISHED</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.15em;margin:0.5rem 0 1.5rem;">2026 COMPLETE</div>
+      <div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:12px;padding:1.5rem;max-width:420px;margin:0 auto;font-size:0.8rem;color:var(--muted);line-height:1.7;">
+        All four Majors have concluded. Final results are locked in the <strong style="color:var(--gold);">Sergeant of Majors</strong> tab.
+      </div>
     </div>
+    <table style="display:none;" id="live-scores-table"><tbody id="live-scores-body"></tbody></table>
   </div>
 
   <!-- STATS TAB -->
@@ -505,10 +530,10 @@ let state = {
   ]),
   penalties: { cutScore: 6, dnfPenalty: null },
   majorStates: [
-    { name:'The Masters', status:'active' },
-    { name:'PGA Championship', status:'upcoming' },
-    { name:'US Open', status:'upcoming' },
-    { name:'The Open Championship', status:'upcoming' }
+    { name:'The Masters', status:'final' },
+    { name:'PGA Championship', status:'final' },
+    { name:'US Open', status:'final' },
+    { name:'The Open Championship', status:'final' }
   ],
   activeMajorIndex: 0,
   archivedMajors: {},
@@ -1133,7 +1158,7 @@ async function loadFromSupabase() {
         if (row.key === 'tnc') { state.tncContent = row.value; const te = document.getElementById('tnc-editor'); if(te) te.value = row.value; renderTnc(); }
         if (row.key === 'cut_score') state.penalties.cutScore = parseFloat(row.value);
         if (row.key === 'dnf_penalty') state.penalties.dnfPenalty = parseFloat(row.value);
-        if (row.key === 'major_states') { try { state.majorStates = JSON.parse(row.value); renderMgTrack(); renderMgAdminControls(); } catch(e){} }
+        if (row.key === 'major_states') { try { state.majorStates = JSON.parse(row.value); } catch(e){} }
         if (row.key === 'active_major_index') state.activeMajorIndex = parseInt(row.value)||0;
         if (row.key === 'winners_image') { state.winnersImage = row.value; if(row.value){ const wi = document.getElementById('winners-image'); if(wi) wi.src=row.value; const ws = document.getElementById('winners-image-section'); if(ws) ws.style.display='block'; } }
       });
@@ -1146,6 +1171,13 @@ async function loadFromSupabase() {
     const archives = await sbFetch('archived_majors?select=*');
     if (archives && archives.length > 0) { archives.forEach(a => state.archivedMajors[a.major_index] = a.data); }
   } catch(e) { console.log('Supabase load error', e); loadDemoPicks(); }
+  // 2026 season complete — all four majors final regardless of stored state
+  state.majorStates = [
+    { name:'The Masters', status:'final' },
+    { name:'PGA Championship', status:'final' },
+    { name:'US Open', status:'final' },
+    { name:'The Open Championship', status:'final' }
+  ];
   renderAll();
 }
 
